@@ -8,7 +8,7 @@
 
 | Layer      | Technology                                        |
 |------------|---------------------------------------------------|
-| Language   | Java 21                                           |
+| Language   | Java 25                                           |
 | Framework  | Spring Boot 4.1.0                                 |
 | Web        | Spring Web MVC                                    |
 | Templates  | Thymeleaf (+ Thymeleaf Spring Security extras)    |
@@ -23,7 +23,7 @@
 
 | Requirement | Version        | Notes                                             |
 |-------------|----------------|---------------------------------------------------|
-| JDK         | **21**         | Required. Older/newer JDKs will fail the build.   |
+| JDK         | **25**         | Required. Older/newer JDKs will fail the build.   |
 | Maven       | *not required* | The Maven Wrapper (`mvnw`) downloads Maven for you.|
 | MySQL       | 8.x (optional) | Only needed once DB persistence is enabled.       |
 | IDE         | any            | VS Code, IntelliJ IDEA, or Eclipse/STS all work.  |
@@ -34,7 +34,7 @@ Check your Java version:
 java -version
 ```
 
-It should report `openjdk version "21..."`. If not, install **Temurin 21 (Adoptium)** or your preferred JDK 21 and point `JAVA_HOME` at it.
+It should report `openjdk version "25..."`. If not, install **Temurin 25 (Adoptium)** or your preferred JDK 25 and point `JAVA_HOME` at it.
 
 ---
 
@@ -185,7 +185,7 @@ lenzoraClientApp/
 
 | Problem | Solution |
 |---------|----------|
-| `java: invalid source release: 21` | Your JDK isn't 21. Install JDK 21 and set `JAVA_HOME`. |
+| `java: invalid source release: 25` | Your JDK isn't 25. Install JDK 25 and set `JAVA_HOME`. |
 | Port 8081 already in use | Change `server.port` in `application.properties`, or stop the process using the port. |
 | First build very slow | Normal — Maven wrapper downloads the toolchain + dependencies once. |
 | Changes not showing in browser | DevTools live-reload needs the page to be re-opened; make sure you started with `spring-boot:run` (not the packaged JAR). |

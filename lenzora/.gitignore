@@ -1,6 +1,9 @@
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
+
+# Local environment config (never commit real credentials)
+.env
 !**/src/main/**/target/
 !**/src/test/**/target/
 
