@@ -24,4 +24,19 @@ public class Home {
 
         return "place-order";
     }
+
+    @GetMapping("/users")
+    public String showUsers(){
+        return "users";
+    }
+
+    @GetMapping("/reports")
+    public String showReports(){
+        return "reports";
+    }
+
+    @GetMapping("/settings")
+    public String showSettings(){
+        return "settings";
+    }
 }
