@@ -18,6 +18,11 @@ public class Home {
         return "index";
     }
 
+    @GetMapping("/login")
+    public String showLogin() {
+        return "login";
+    }
+
     // Place Order page
     @GetMapping("/place-order")
     public String showPlaceOrder() {
