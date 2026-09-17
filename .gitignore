@@ -25,3 +25,6 @@ replay_pid*
 
 # Local environment config (never commit real credentials)
 .env
+
+# IntelliJ IDEA
+.idea/
