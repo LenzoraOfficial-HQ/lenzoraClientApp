@@ -8,14 +8,20 @@
 
     <title>Lenzora - Place Order</title>
 
+    <!-- Bootstrap -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
     <style>
 
+        /* ================= GENERAL ================= */
+
         body {
             background-color: #f5f7fb;
+            color: #1f2937;
         }
+
+        /* ================= SIDEBAR ================= */
 
         .sidebar {
             min-height: 100vh;
@@ -42,19 +48,244 @@
             color: #0d6efd;
         }
 
+        /* ================= TOP BAR ================= */
+
         .top-bar {
             background-color: white;
             border-bottom: 1px solid #e5e7eb;
         }
 
-        .card {
+        /* ================= CONTENT ================= */
+
+        .page-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-weight: 600;
+        }
+
+        .page-description {
+            color: #6b7280;
+        }
+
+        /* ================= ORDER CARD ================= */
+
+        .order-card {
+            background-color: #ffffff;
             border: none;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* ================= SECTION ================= */
+
+        .form-section {
+            border: 1px solid #e5e7eb;
             border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            background-color: #ffffff;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .section-number {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background-color: #0d6efd;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .section-title {
+            margin: 0;
+            font-size: 19px;
+            font-weight: 600;
+        }
+
+        .section-description {
+            margin: 3px 0 0;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        /* ================= FORM ================= */
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 7px;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .form-control,
+        .form-select {
+            border-color: #d9dee7;
+            border-radius: 8px;
+            padding: 10px 12px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.12);
+        }
+
+        /* ================= PRESCRIPTION TABLE ================= */
+
+        .prescription-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .prescription-table th,
+        .prescription-table td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+        }
+
+        .prescription-table th {
+            background-color: #f8f9fa;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .prescription-table td:first-child {
+            background-color: #f8f9fa;
+            font-weight: 500;
+            width: 180px;
+        }
+
+        .prescription-table td:not(:first-child) {
+            width: 35%;
+        }
+
+        .prescription-table .form-control {
+            min-width: 100px;
+        }
+
+        /* ================= OPTION CARDS ================= */
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .option-item {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 11px 12px;
+            cursor: pointer;
+            background-color: #ffffff;
+            transition: 0.15s ease;
+        }
+
+        .option-item:hover {
+            background-color: #f8f9fa;
+            border-color: #b6c2d2;
+        }
+
+        .option-item input {
+            margin-right: 7px;
+        }
+
+        /* ================= FRAME ================= */
+
+        .frame-placeholder {
+            background-color: #f8f9fa;
+            border: 1px dashed #cfd6df;
+            border-radius: 10px;
+            padding: 18px;
+            color: #6b7280;
+        }
+
+        /* ================= REMARKS ================= */
+
+        .remarks {
+            min-height: 120px;
+        }
+
+        /* ================= ORDER INFO ================= */
+
+        .order-info {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .order-info-label {
+            color: #6b7280;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+
+        .order-info-value {
+            font-weight: 600;
+        }
+
+        /* ================= ACTIONS ================= */
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 10px 0 30px;
+        }
+
+        .btn {
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 992px) {
+
+            .sidebar {
+                min-height: auto;
+            }
+
+            .option-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 768px) {
+
+            .option-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .prescription-table {
+                font-size: 13px;
+            }
+
+            .prescription-table td:first-child {
+                width: 120px;
+            }
+
         }
 
     </style>
 
 </head>
+
 
 <body>
 
@@ -62,9 +293,11 @@
 
     <div class="row">
 
-        <!-- ================= SIDEBAR ================= -->
+        <!-- ================================================= -->
+        <!-- SIDEBAR -->
+        <!-- ================================================= -->
 
-        <div class="col-md-2 sidebar p-4">
+        <div class="col-lg-2 sidebar p-4">
 
             <div class="logo mb-4">
                 Lenzora
@@ -72,26 +305,23 @@
 
             <nav>
 
-                <!-- Dashboard -->
                 <a href="/" class="nav-link">
                     🏠 Dashboard
                 </a>
 
-                <!-- Place Order -->
                 <a href="/place-order" class="nav-link active">
                     🛒 Place Order
                 </a>
 
-                <!-- Other navigation items -->
-                <a href="#" class="nav-link">
+                <a href="/users" class="nav-link">
                     👥 Users
                 </a>
 
-                <a href="#" class="nav-link">
+                <a href="/reports" class="nav-link">
                     📊 Reports
                 </a>
 
-                <a href="#" class="nav-link">
+                <a href="/settings" class="nav-link">
                     ⚙️ Settings
                 </a>
 
@@ -100,9 +330,11 @@
         </div>
 
 
-        <!-- ================= MAIN CONTENT ================= -->
+        <!-- ================================================= -->
+        <!-- MAIN CONTENT -->
+        <!-- ================================================= -->
 
-        <div class="col-md-10 p-0">
+        <div class="col-lg-10 p-0">
 
             <!-- TOP BAR -->
 
@@ -131,185 +363,1358 @@
 
             <div class="p-4">
 
-                <h2 class="mb-1">
-                    Place New Order
-                </h2>
+                <div class="page-content">
 
-                <p class="text-muted mb-4">
-                    Create a new customer order.
-                </p>
+                    <!-- PAGE HEADER -->
 
+                    <div class="mb-4">
 
-                <!-- ================= ORDER FORM ================= -->
+                        <h2 class="page-title mb-1">
+                            Place New Order
+                        </h2>
 
-                <div class="card shadow-sm p-4">
+                        <p class="page-description mb-0">
+                            Enter the patient's prescription, lens and frame requirements.
+                        </p>
 
-                    <h5 class="mb-4">
-                        Order Details
-                    </h5>
-
-
-                    <div class="row g-3">
-
-                        <!-- Customer -->
-
-                        <div class="col-md-6">
-
-                            <label class="form-label">
-                                Customer
-                            </label>
-
-                            <select class="form-select">
-
-                                <option selected>
-                                    Select Customer
-                                </option>
-
-                                <option>
-                                    John Doe
-                                </option>
-
-                                <option>
-                                    Sarah Smith
-                                </option>
-
-                                <option>
-                                    Michael Lee
-                                </option>
-
-                                <option>
-                                    Emma Wilson
-                                </option>
-
-                            </select>
-
-                        </div>
+                    </div>
 
 
-                        <!-- Product -->
+                    <!-- ================================================= -->
+                    <!-- ORDER INFORMATION -->
+                    <!-- ================================================= -->
 
-                        <div class="col-md-6">
+                    <div class="order-info">
 
-                            <label class="form-label">
-                                Product
-                            </label>
+                        <div class="row">
 
-                            <select class="form-select">
+                            <div class="col-md-4">
 
-                                <option selected>
-                                    Select Product
-                                </option>
+                                <div class="order-info-label">
+                                    Order Number
+                                </div>
 
-                                <option>
-                                    Product A
-                                </option>
+                                <div class="order-info-value text-muted">
+                                    Generated on submission
+                                </div>
 
-                                <option>
-                                    Product B
-                                </option>
-
-                                <option>
-                                    Product C
-                                </option>
-
-                            </select>
-
-                        </div>
+                            </div>
 
 
-                        <!-- Quantity -->
+                            <div class="col-md-4">
 
-                        <div class="col-md-4">
+                                <div class="order-info-label">
+                                    Order Date
+                                </div>
 
-                            <label class="form-label">
-                                Quantity
-                            </label>
+                                <div class="order-info-value">
+                                    <span id="orderDate"></span>
+                                </div>
 
-                            <input type="number"
-                                   class="form-control"
-                                   value="1"
-                                   min="1">
-
-                        </div>
+                            </div>
 
 
-                        <!-- Order Date -->
+                            <div class="col-md-4">
 
-                        <div class="col-md-4">
+                                <div class="order-info-label">
+                                    Status
+                                </div>
 
-                            <label class="form-label">
-                                Order Date
-                            </label>
+                                <div class="order-info-value">
+                                    <span class="badge bg-secondary">
+                                        Draft
+                                    </span>
+                                </div>
 
-                            <input type="date"
-                                   class="form-control">
-
-                        </div>
-
-
-                        <!-- Payment Method -->
-
-                        <div class="col-md-4">
-
-                            <label class="form-label">
-                                Payment Method
-                            </label>
-
-                            <select class="form-select">
-
-                                <option selected>
-                                    Select Payment Method
-                                </option>
-
-                                <option>
-                                    Cash
-                                </option>
-
-                                <option>
-                                    Card
-                                </option>
-
-                                <option>
-                                    Online Payment
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-                        <!-- Delivery Address -->
-
-                        <div class="col-12">
-
-                            <label class="form-label">
-                                Delivery Address
-                            </label>
-
-                            <textarea class="form-control"
-                                      rows="3"
-                                      placeholder="Enter delivery address"></textarea>
-
-                        </div>
-
-
-                        <!-- Buttons -->
-
-                        <div class="col-12 mt-4">
-
-                            <button type="button"
-                                    class="btn btn-primary me-2">
-                                Place Order
-                            </button>
-
-                            <a href="/"
-                               class="btn btn-outline-secondary">
-                                Cancel
-                            </a>
+                            </div>
 
                         </div>
 
                     </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- ORDER FORM -->
+                    <!-- ================================================= -->
+
+                    <form id="orderForm">
+
+
+                        <!-- ================================================= -->
+                        <!-- 1. PATIENT / HOSPITAL REFERENCE -->
+                        <!-- ================================================= -->
+
+                        <div class="form-section">
+
+                            <div class="section-header">
+
+                                <div class="section-number">
+                                    1
+                                </div>
+
+                                <div>
+
+                                    <h3 class="section-title">
+                                        Patient / Hospital Reference
+                                    </h3>
+
+                                    <p class="section-description">
+                                        Patient information recorded for this order only.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="row g-3">
+
+
+                                <!-- Patient Reference -->
+
+                                <div class="col-md-6">
+
+                                    <label for="patientReference"
+                                           class="form-label">
+
+                                        Patient Reference
+                                        <span class="required">*</span>
+
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           id="patientReference"
+                                           name="patientReference"
+                                           placeholder="Enter patient reference"
+                                           required>
+
+                                </div>
+
+
+                                <!-- Patient Name -->
+
+                                <div class="col-md-6">
+
+                                    <label for="patientName"
+                                           class="form-label">
+
+                                        Patient Name
+
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           id="patientName"
+                                           name="patientName"
+                                           placeholder="Enter patient name">
+
+                                </div>
+
+
+                                <!-- Hospital / Clinic -->
+
+                                <div class="col-md-6">
+
+                                    <label for="hospitalName"
+                                           class="form-label">
+
+                                        Hospital / Clinic
+
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           id="hospitalName"
+                                           name="hospitalName"
+                                           placeholder="Enter hospital or clinic">
+
+                                </div>
+
+
+                                <!-- Hospital Reference -->
+
+                                <div class="col-md-6">
+
+                                    <label for="hospitalReference"
+                                           class="form-label">
+
+                                        Hospital Reference
+
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           id="hospitalReference"
+                                           name="hospitalReference"
+                                           placeholder="Enter hospital reference">
+
+                                </div>
+
+
+                                <!-- Notes -->
+
+                                <div class="col-12">
+
+                                    <label for="patientNotes"
+                                           class="form-label">
+
+                                        Notes
+
+                                    </label>
+
+                                    <textarea class="form-control"
+                                              id="patientNotes"
+                                              name="notes"
+                                              rows="3"
+                                              placeholder="Enter relevant notes"></textarea>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================================================= -->
+                        <!-- 2. PRESCRIPTION -->
+                        <!-- ================================================= -->
+
+                        <div class="form-section">
+
+                            <div class="section-header">
+
+                                <div class="section-number">
+                                    2
+                                </div>
+
+                                <div>
+
+                                    <h3 class="section-title">
+                                        Prescription (Rx)
+                                    </h3>
+
+                                    <p class="section-description">
+                                        Enter prescription measurements for both eyes.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="table-responsive">
+
+                                <table class="prescription-table">
+
+                                    <thead>
+
+                                    <tr>
+
+                                        <th>
+                                            Measurement
+                                        </th>
+
+                                        <th>
+                                            Right (R)
+                                        </th>
+
+                                        <th>
+                                            Left (L)
+                                        </th>
+
+                                    </tr>
+
+                                    </thead>
+
+
+                                    <tbody>
+
+
+                                    <!-- SPH -->
+
+                                    <tr>
+
+                                        <td>
+                                            Sphere (SPH)
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="rightSphere"
+                                                   step="0.01"
+                                                   min="-20"
+                                                   max="20"
+                                                   placeholder="-20.00 to +20.00">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="leftSphere"
+                                                   step="0.01"
+                                                   min="-20"
+                                                   max="20"
+                                                   placeholder="-20.00 to +20.00">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- CYL -->
+
+                                    <tr>
+
+                                        <td>
+                                            Cylinder (CYL)
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="rightCylinder"
+                                                   step="0.01"
+                                                   min="-20"
+                                                   max="20"
+                                                   placeholder="-20.00 to +20.00">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="leftCylinder"
+                                                   step="0.01"
+                                                   min="-20"
+                                                   max="20"
+                                                   placeholder="-20.00 to +20.00">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- AXIS -->
+
+                                    <tr>
+
+                                        <td>
+                                            Axis
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="rightAxis"
+                                                   min="1"
+                                                   max="180"
+                                                   placeholder="1 - 180">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="leftAxis"
+                                                   min="1"
+                                                   max="180"
+                                                   placeholder="1 - 180">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- ADD -->
+
+                                    <tr>
+
+                                        <td>
+                                            Add
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="rightAdd"
+                                                   step="0.01"
+                                                   min="0.50"
+                                                   max="4"
+                                                   placeholder="0.50 - 4.00">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="leftAdd"
+                                                   step="0.01"
+                                                   min="0.50"
+                                                   max="4"
+                                                   placeholder="0.50 - 4.00">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- PD -->
+
+                                    <tr>
+
+                                        <td>
+                                            PD (mm)
+                                        </td>
+
+                                        <td colspan="2">
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="pd"
+                                                   step="0.01"
+                                                   min="40"
+                                                   max="80"
+                                                   placeholder="40 - 80 mm">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- FIT HEIGHT -->
+
+                                    <tr>
+
+                                        <td>
+                                            Fit Height
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="rightFitHeight"
+                                                   step="0.01">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="leftFitHeight"
+                                                   step="0.01">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- SEG HEIGHT -->
+
+                                    <tr>
+
+                                        <td>
+                                            Seg Height
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="rightSegHeight"
+                                                   step="0.01">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="leftSegHeight"
+                                                   step="0.01">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- PRISM -->
+
+                                    <tr>
+
+                                        <td>
+                                            Prism
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="rightPrism"
+                                                   step="0.01">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="leftPrism"
+                                                   step="0.01">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- N-PD -->
+
+                                    <tr>
+
+                                        <td>
+                                            N-PD
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="rightNpd"
+                                                   step="0.01">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="leftNpd"
+                                                   step="0.01">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- CT -->
+
+                                    <tr>
+
+                                        <td>
+                                            CT
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="rightCt"
+                                                   step="0.01">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="leftCt"
+                                                   step="0.01">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- ET -->
+
+                                    <tr>
+
+                                        <td>
+                                            ET
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="rightEt"
+                                                   step="0.01">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="leftEt"
+                                                   step="0.01">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- DECENTRATION -->
+
+                                    <tr>
+
+                                        <td>
+                                            Decentration
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="rightDecentration"
+                                                   step="0.01">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   name="leftDecentration"
+                                                   step="0.01">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                            <div class="form-text mt-2">
+                                Sphere/Cylinder: -20.00 to +20.00 D.
+                                Axis: 1–180°.
+                                PD: 40–80 mm.
+                                Add: 0.50–4.00 D.
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================================================= -->
+                        <!-- 3. LENS DETAILS -->
+                        <!-- ================================================= -->
+
+                        <div class="form-section">
+
+                            <div class="section-header">
+
+                                <div class="section-number">
+                                    3
+                                </div>
+
+                                <div>
+
+                                    <h3 class="section-title">
+                                        Lens Details
+                                    </h3>
+
+                                    <p class="section-description">
+                                        Select the required lens type, index, options and coating.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- LENS INDEX -->
+
+                            <div class="mb-4">
+
+                                <label for="lensIndex"
+                                       class="form-label">
+
+                                    Lens Index
+
+                                </label>
+
+                                <select class="form-select"
+                                        id="lensIndex"
+                                        name="lensIndex">
+
+                                    <option value="">
+                                        Select lens index
+                                    </option>
+
+                                    <option value="1.5">
+                                        1.5
+                                    </option>
+
+                                    <option value="1.59Poly">
+                                        1.59 Poly
+                                    </option>
+
+                                    <option value="1.6">
+                                        1.6
+                                    </option>
+
+                                    <option value="1.67">
+                                        1.67
+                                    </option>
+
+                                    <option value="1.74">
+                                        1.74
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- LENS TYPE -->
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+                                    Lens Type
+                                </label>
+
+                                <div class="option-grid">
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="lensType"
+                                               value="DIGITAL_PROGRESSIVE">
+
+                                        Digital Progressive
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="lensType"
+                                               value="NORMAL_PROGRESSIVE">
+
+                                        Normal Progressive
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="lensType"
+                                               value="SINGLE_VISION">
+
+                                        Single Vision
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="lensType"
+                                               value="BF_FLAT_TOP">
+
+                                        BF - Flat Top
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="lensType"
+                                               value="BF_ROUND_SEG">
+
+                                        BF - Round Seg
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- OPTIONS -->
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+                                    Lens Options
+                                </label>
+
+                                <div class="option-grid">
+
+                                    <label class="option-item">
+
+                                        <input type="checkbox"
+                                               name="lensOptions"
+                                               value="TRANSITIONS_VI">
+
+                                        Transitions VI
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="checkbox"
+                                               name="lensOptions"
+                                               value="PHOTOCHROMIC">
+
+                                        Photochromic
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="checkbox"
+                                               name="lensOptions"
+                                               value="POLARIZED_STANDARD">
+
+                                        Polarized (Standard)
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="checkbox"
+                                               name="lensOptions"
+                                               value="XPERIO">
+
+                                        Xperio (Polarized Essilor)
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- COATING -->
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+                                    Coating
+                                </label>
+
+                                <div class="option-grid">
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="coating"
+                                               value="CRIZAL_MULTICOATING">
+
+                                        Crizal Multicoating
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="coating"
+                                               value="CRIZAL_UV">
+
+                                        Crizal UV Multicoating
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="coating"
+                                               value="PREVENCIA">
+
+                                        Prevencia Multicoating
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="coating"
+                                               value="NORMAL_MULTICOATING">
+
+                                        Normal Multicoating
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="coating"
+                                               value="TITUS_HARD">
+
+                                        Titus Hard Coating
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="coating"
+                                               value="NONE">
+
+                                        No Coating / Uncoat
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- TINT -->
+
+                            <div>
+
+                                <label class="form-label">
+                                    Tint
+                                </label>
+
+                                <div class="option-grid">
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="tint"
+                                               value="NONE">
+
+                                        No Tint
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="tint"
+                                               value="FULL">
+
+                                        Full
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="tint"
+                                               value="SHADED">
+
+                                        Shaded
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="tint"
+                                               value="GRADIENT">
+
+                                        Gradient
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================================================= -->
+                        <!-- 4. FRAME DETAILS -->
+                        <!-- ================================================= -->
+
+                        <div class="form-section">
+
+                            <div class="section-header">
+
+                                <div class="section-number">
+                                    4
+                                </div>
+
+                                <div>
+
+                                    <h3 class="section-title">
+                                        Frame Details
+                                    </h3>
+
+                                    <p class="section-description">
+                                        Select an available frame from the Lenzora catalogue.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- FRAME SELECTION -->
+
+                            <div class="mb-4">
+
+                                <label for="frameId"
+                                       class="form-label">
+
+                                    Frame
+                                    <span class="required">*</span>
+
+                                </label>
+
+                                <select class="form-select"
+                                        id="frameId"
+                                        name="frameId"
+                                        required>
+
+                                    <option value="">
+                                        Select an available frame
+                                    </option>
+
+                                    <!--
+                                        Real frame options will later
+                                        be loaded from the Frame Management module.
+                                    -->
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- FRAME INFORMATION -->
+
+                            <div class="frame-placeholder mb-4">
+
+                                <strong>
+                                    Frame information
+                                </strong>
+
+                                <p class="mb-0 mt-1">
+                                    Brand, model, material, colour, size,
+                                    image and price will be displayed here
+                                    after selecting a frame.
+                                </p>
+
+                            </div>
+
+
+                            <!-- FRAME MEASUREMENTS -->
+
+                            <div class="row g-3 mb-4">
+
+
+                                <div class="col-md-3">
+
+                                    <label for="frameASize"
+                                           class="form-label">
+
+                                        A Size
+
+                                    </label>
+
+                                    <input type="number"
+                                           class="form-control"
+                                           id="frameASize"
+                                           name="frameASize"
+                                           step="0.01">
+
+                                </div>
+
+
+                                <div class="col-md-3">
+
+                                    <label for="frameBSize"
+                                           class="form-label">
+
+                                        B Size
+
+                                    </label>
+
+                                    <input type="number"
+                                           class="form-control"
+                                           id="frameBSize"
+                                           name="frameBSize"
+                                           step="0.01">
+
+                                </div>
+
+
+                                <div class="col-md-3">
+
+                                    <label for="frameDSize"
+                                           class="form-label">
+
+                                        D Size
+
+                                    </label>
+
+                                    <input type="number"
+                                           class="form-control"
+                                           id="frameDSize"
+                                           name="frameDSize"
+                                           step="0.01">
+
+                                </div>
+
+
+                                <div class="col-md-3">
+
+                                    <label for="frameDiameter"
+                                           class="form-label">
+
+                                        Diameter
+
+                                    </label>
+
+                                    <input type="number"
+                                           class="form-control"
+                                           id="frameDiameter"
+                                           name="frameDiameter"
+                                           step="0.01">
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- FRAME MATERIAL / TYPE -->
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+                                    Frame Material
+                                </label>
+
+                                <div class="option-grid">
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="frameMaterial"
+                                               value="METAL">
+
+                                        Metal
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="frameMaterial"
+                                               value="PLASTIC">
+
+                                        Plastic
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="frameMaterial"
+                                               value="WOOD">
+
+                                        Wood
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- FRAME RIM TYPE -->
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+                                    Frame Rim Type
+                                </label>
+
+                                <div class="option-grid">
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="frameRimType"
+                                               value="FULL">
+
+                                        Full
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="frameRimType"
+                                               value="HALF">
+
+                                        Half
+
+                                    </label>
+
+
+                                    <label class="option-item">
+
+                                        <input type="radio"
+                                               name="frameRimType"
+                                               value="RIMLESS">
+
+                                        Rimless
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- FRAME SHAPE -->
+
+                            <div>
+
+                                <label for="frameShape"
+                                       class="form-label">
+
+                                    Shape
+
+                                </label>
+
+                                <select class="form-select"
+                                        id="frameShape"
+                                        name="frameShape">
+
+                                    <option value="">
+                                        Select frame shape
+                                    </option>
+
+                                    <option value="OBLONG">
+                                        Oblong
+                                    </option>
+
+                                    <option value="OVAL_ROUND">
+                                        Oval / Round
+                                    </option>
+
+                                    <option value="AVIATOR">
+                                        Aviator
+                                    </option>
+
+                                    <option value="CATS_EYE">
+                                        Cats Eye
+                                    </option>
+
+                                    <option value="SYMMETRICAL_OVAL">
+                                        Symmetrical Oval
+                                    </option>
+
+                                    <option value="CUT_AWAY_RECTANGLE">
+                                        Cut Away Rectangle
+                                    </option>
+
+                                    <option value="RECTANGLE">
+                                        Rectangle
+                                    </option>
+
+                                    <option value="NASAL_CUT_AWAY_OVAL">
+                                        Nasal Cut Away Oval
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================================================= -->
+                        <!-- 5. REMARKS -->
+                        <!-- ================================================= -->
+
+                        <div class="form-section">
+
+                            <div class="section-header">
+
+                                <div class="section-number">
+                                    5
+                                </div>
+
+                                <div>
+
+                                    <h3 class="section-title">
+                                        Remarks
+                                    </h3>
+
+                                    <p class="section-description">
+                                        Add any additional instructions for this order.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <textarea class="form-control remarks"
+                                      name="remarks"
+                                      placeholder="Enter additional order remarks"></textarea>
+
+                        </div>
+
+
+                        <!-- ================================================= -->
+                        <!-- ACTIONS -->
+                        <!-- ================================================= -->
+
+                        <div class="form-actions">
+
+                            <a href="/"
+                               class="btn btn-outline-secondary">
+
+                                Cancel
+
+                            </a>
+
+
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    id="reviewOrderBtn">
+
+                                Review Order
+
+                            </button>
+
+                        </div>
+
+
+                    </form>
 
                 </div>
 
@@ -320,6 +1725,31 @@
     </div>
 
 </div>
+
+
+<!-- ========================================================= -->
+<!-- SIMPLE DATE DISPLAY -->
+<!-- ========================================================= -->
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const today = new Date();
+
+        const formattedDate =
+            today.getFullYear() +
+            "-" +
+            String(today.getMonth() + 1).padStart(2, "0") +
+            "-" +
+            String(today.getDate()).padStart(2, "0");
+
+        document.getElementById("orderDate").textContent =
+            formattedDate;
+
+    });
+
+</script>
 
 </body>
 
