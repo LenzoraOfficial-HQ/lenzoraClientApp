@@ -61,6 +61,7 @@
             left: 0;
             width: 100%;
             height: 5px;
+
             background: linear-gradient(
                     90deg,
                     #b8860b,
@@ -188,6 +189,48 @@
         }
 
 
+        /* ================= GOOGLE LOGIN ================= */
+
+        .google-login-button {
+            width: 100%;
+            height: 48px;
+
+            border: 1px solid #d8d8d8;
+            border-radius: 9px;
+
+            background-color: white;
+            color: #333;
+
+            font-size: 15px;
+            font-weight: 600;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+
+            text-decoration: none;
+
+            transition: all 0.2s ease;
+
+            margin-top: 15px;
+        }
+
+
+        .google-login-button:hover {
+            background-color: #f8f8f8;
+            border-color: #bdbdbd;
+
+            transform: translateY(-1px);
+        }
+
+
+        .google-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+
         /* ================= FOOTER ================= */
 
         .welcome-text {
@@ -239,6 +282,7 @@
         <form method="post" action="/login">
 
             <!-- CSRF TOKEN -->
+
             <input type="hidden"
                    th:name="${_csrf.parameterName}"
                    th:value="${_csrf.token}">
@@ -292,6 +336,20 @@
             </button>
 
         </form>
+
+
+        <!-- GOOGLE LOGIN -->
+
+        <a href="/oauth2/authorization/google"
+           class="google-login-button">
+
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                 alt="Google"
+                 class="google-icon">
+
+            Continue with Google
+
+        </a>
 
 
         <!-- FOOTER -->
