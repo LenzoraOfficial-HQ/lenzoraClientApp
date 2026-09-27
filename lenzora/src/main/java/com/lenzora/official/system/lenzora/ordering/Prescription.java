@@ -74,10 +74,6 @@ public class Prescription extends AuditableEntity {
 
     /**
      * The order line these measurements belong to.
-     *
-     * <p>For now this is the bare id, not a link to {@code OrderItem}, so
-     * this file needs no class that has not reached main yet. Replace it
-     * with a {@code @ManyToOne OrderItem} once that entity is here.</p>
      */
     @Column(name = "order_item_id", nullable = false)
     private Long orderItemId;
