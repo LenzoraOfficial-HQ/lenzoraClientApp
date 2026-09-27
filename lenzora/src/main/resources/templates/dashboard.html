@@ -5,17 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
 
+    <!-- Shared theme colours -->
+    <link rel="stylesheet" th:href="@{/css/lenzora-theme.css}">
+
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: var(--lenzora-font);
         }
 
         body {
-            background-color: #f4f6f8;
-            color: #333;
+            background-color: var(--lenzora-bg);
+            color: var(--lenzora-text);
         }
 
         /* Sidebar */
@@ -25,8 +28,8 @@
             top: 0;
             width: 240px;
             height: 100vh;
-            background-color: #1e293b;
-            color: white;
+            background-color: var(--lenzora-sidebar);
+            color: var(--lenzora-sidebar-text);
             padding: 25px 20px;
         }
 
@@ -47,7 +50,7 @@
         }
 
         .sidebar li:hover {
-            background-color: #334155;
+            background-color: rgba(255, 255, 255, 0.06);
         }
 
         /* Main content */
@@ -68,7 +71,7 @@
         }
 
         .profile {
-            background-color: white;
+            background-color: var(--lenzora-surface);
             padding: 10px 18px;
             border-radius: 8px;
         }
@@ -82,14 +85,14 @@
         }
 
         .card {
-            background-color: white;
+            background-color: var(--lenzora-surface);
             padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-radius: var(--lenzora-radius);
+            box-shadow: var(--lenzora-shadow-soft);
         }
 
         .card h3 {
-            color: #64748b;
+            color: var(--lenzora-text-muted);
             font-size: 15px;
             margin-bottom: 10px;
         }
@@ -101,10 +104,10 @@
 
         /* Recent activity */
         .activity {
-            background-color: white;
+            background-color: var(--lenzora-surface);
             padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-radius: var(--lenzora-radius);
+            box-shadow: var(--lenzora-shadow-soft);
         }
 
         .activity h2 {
@@ -113,7 +116,7 @@
 
         .activity-item {
             padding: 15px 0;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid var(--lenzora-border);
         }
 
         .activity-item:last-child {
@@ -150,11 +153,11 @@
     <h2>My App</h2>
 
     <ul>
-        <li>🏠 Dashboard</li>
-        <li>👤 Users</li>
-        <li>📦 Products</li>
-        <li>📊 Reports</li>
-        <li>⚙️ Settings</li>
+        <li><i class="bi bi-house-door"></i> Dashboard</li>
+        <li><i class="bi bi-person"></i> Users</li>
+        <li><i class="bi bi-box-seam"></i> Products</li>
+        <li><i class="bi bi-bar-chart"></i> Reports</li>
+        <li><i class="bi bi-gear"></i> Settings</li>
     </ul>
 </div>
 
@@ -166,7 +169,7 @@
         <h1>Dashboard</h1>
 
         <div class="profile">
-            Welcome, Admin 👋
+            Welcome, Admin
         </div>
     </div>
 

@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "LenzoraApplication",
+            "request": "launch",
+            "mainClass": "com.lenzora.official.system.lenzora.LenzoraApplication",
+            "projectName": "lenzora",
+            // .env sits in lenzora/ and is read from the working directory,
+            // so the module folder must be the cwd.
+            "cwd": "${workspaceFolder}/lenzora"
+        }
+    ]
+}

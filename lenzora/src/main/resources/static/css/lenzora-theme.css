@@ -1,0 +1,530 @@
+/*
+ * Lenzora shared theme.
+ * Every screen links this file, so all colours are changed here and nowhere else.
+ * Dark navy sidebar, light content, metallic gold brand accent.
+ */
+
+/* Bootstrap Icons - the icon set used across the screens. */
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css');
+
+:root {
+    /* Palette */
+    --lenzora-black: #0a0a0a;
+    --lenzora-navy-deep: #0b1220;
+    --lenzora-navy: #152238;
+    --lenzora-navy-soft: #1c2c46;
+    --lenzora-slate: #5a6b85;
+    --lenzora-gold: #d4af37;
+    --lenzora-blue: #2f6fdb;
+    --lenzora-amber: #d99a1f;
+    --lenzora-green: #2f9e63;
+
+    /* Roles */
+    --lenzora-bg: #f1f3f7;
+    --lenzora-surface: #ffffff;
+    --lenzora-surface-alt: #f7f8fa;
+    --lenzora-sidebar: #000000;
+    --lenzora-sidebar-text: #cfd3da;
+    --lenzora-border: #e3e7ee;
+    --lenzora-text: #1b2434;
+    --lenzora-text-muted: #6b7a90;
+    --lenzora-nav-text: var(--lenzora-sidebar-text);
+    --lenzora-accent: var(--lenzora-gold);
+    --lenzora-accent-strong: #c39d2c;
+    --lenzora-accent-ink: var(--lenzora-black);
+    --lenzora-accent-soft: rgba(212, 175, 55, 0.18);
+    --lenzora-danger: #d64550;
+    --lenzora-success: var(--lenzora-green);
+    --lenzora-warning: var(--lenzora-amber);
+    --lenzora-info: var(--lenzora-blue);
+    --lenzora-shadow: 0 8px 24px rgba(16, 24, 40, 0.08);
+    --lenzora-shadow-soft: 0 1px 2px rgba(16, 24, 40, 0.05), 0 4px 12px -4px rgba(16, 24, 40, 0.1);
+    --lenzora-shadow-md: 0 2px 4px rgba(16, 24, 40, 0.04), 0 14px 32px -10px rgba(16, 24, 40, 0.18);
+    --lenzora-shadow-lg: 0 10px 44px -14px rgba(16, 24, 40, 0.3);
+    --lenzora-radius: 16px;
+    --lenzora-radius-sm: 10px;
+
+    /* Type */
+    --lenzora-font: 'Bell MT', Georgia, 'Times New Roman', serif;
+
+    /* Gradients */
+    --lenzora-sidebar-gradient: linear-gradient(180deg, #101010 0%, #000000 55%, #000000 100%);
+    --lenzora-gold-gradient: linear-gradient(135deg, #ecd07a 0%, #d4af37 48%, #b8901d 100%);
+    --lenzora-metric-blue: radial-gradient(130% 100% at 88% -12%, rgba(255, 255, 255, 0.32), transparent 62%), linear-gradient(140deg, #5b9bf3 0%, #2f6fdb 100%);
+    --lenzora-metric-navy: radial-gradient(130% 100% at 88% -12%, rgba(255, 255, 255, 0.22), transparent 60%), linear-gradient(140deg, #2b4c80 0%, #16305c 100%);
+    --lenzora-metric-ink: radial-gradient(130% 100% at 88% -12%, rgba(255, 255, 255, 0.16), transparent 58%), linear-gradient(140deg, #1b2b46 0%, #0a1220 100%);
+    --lenzora-metric-gold: radial-gradient(130% 100% at 88% -12%, rgba(255, 255, 255, 0.45), transparent 62%), linear-gradient(140deg, #e9cd72 0%, #c9a227 100%);
+
+    /* Glass and hairlines */
+    --lenzora-glass: rgba(255, 255, 255, 0.72);
+    --lenzora-hairline: rgba(16, 24, 40, 0.06);
+
+    /* Bootstrap 5.3 - the screens load Bootstrap, these repaint it */
+    --bs-body-bg: var(--lenzora-bg);
+    --bs-body-color: var(--lenzora-text);
+    --bs-emphasis-color: var(--lenzora-text);
+    --bs-secondary-color: var(--lenzora-text-muted);
+    --bs-secondary-bg: var(--lenzora-surface);
+    --bs-tertiary-bg: var(--lenzora-surface-alt);
+    --bs-border-color: var(--lenzora-border);
+    --bs-border-color-translucent: rgba(90, 107, 133, 0.35);
+    --bs-heading-color: var(--lenzora-text);
+    --bs-primary: var(--lenzora-accent);
+    --bs-primary-rgb: 212, 175, 55;
+    --bs-link-color: var(--lenzora-blue);
+    --bs-link-color-rgb: 47, 111, 219;
+    --bs-link-hover-color: #1f57b3;
+    --bs-link-hover-color-rgb: 31, 87, 179;
+    --bs-card-bg: var(--lenzora-surface);
+    --bs-card-color: var(--lenzora-text);
+    --bs-card-border-color: var(--lenzora-border);
+    --bs-card-cap-bg: var(--lenzora-surface-alt);
+    --bs-table-color: var(--lenzora-text);
+    --bs-table-bg: transparent;
+    --bs-table-border-color: var(--lenzora-border);
+    --bs-table-striped-bg: rgba(90, 107, 133, 0.12);
+    --bs-table-striped-color: var(--lenzora-text);
+    --bs-table-hover-bg: var(--lenzora-accent-soft);
+    --bs-table-hover-color: var(--lenzora-text);
+}
+
+body {
+    background-color: var(--lenzora-bg);
+    background-image: radial-gradient(1200px 600px at 100% -10%, rgba(47, 111, 219, 0.06), transparent 70%);
+    color: var(--lenzora-text);
+    font-family: var(--lenzora-font);
+    font-size: 14.5px;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+/* Dark sidebar, light content */
+.sidebar {
+    background-color: var(--lenzora-sidebar);
+    background-image: var(--lenzora-sidebar-gradient);
+    border-right: none;
+    border-top-right-radius: 28px;
+    border-bottom-right-radius: 28px;
+    box-shadow: var(--lenzora-shadow-lg);
+    color: var(--lenzora-sidebar-text);
+    z-index: 2;
+}
+
+.logo {
+    position: relative;
+    color: #ffffff;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.logo::after {
+    content: "";
+    display: block;
+    width: 34px;
+    height: 3px;
+    margin-top: 10px;
+    border-radius: 3px;
+    background-image: var(--lenzora-gold-gradient);
+}
+
+.nav-link {
+    position: relative;
+    color: var(--lenzora-nav-text);
+    border-radius: 12px;
+    transition: background-color 0.16s ease, color 0.16s ease, transform 0.16s ease;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.07);
+    color: #ffffff;
+    transform: translateX(2px);
+}
+
+.nav-link.active {
+    background-color: transparent;
+    background-image: linear-gradient(90deg,
+        rgba(212, 175, 55, 0.62) 0%,
+        rgba(212, 175, 55, 0.22) 42%,
+        rgba(212, 175, 55, 0) 100%);
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: inset 3px 0 0 var(--lenzora-gold);
+}
+
+/* Top bar: frosted glass over the content */
+.top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background-color: var(--lenzora-glass);
+    background-image: none;
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    border-bottom: 1px solid var(--lenzora-hairline);
+}
+
+.search-box {
+    position: relative;
+    width: min(420px, 60%);
+}
+
+.search-box .form-control {
+    height: 44px;
+    border: 1px solid var(--lenzora-hairline);
+    border-radius: 999px;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: var(--lenzora-shadow-soft);
+    padding-left: 42px;
+}
+
+.search-box .form-control:focus {
+    border-color: var(--lenzora-accent);
+    box-shadow: 0 0 0 4px var(--lenzora-accent-soft);
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--lenzora-text-muted);
+    pointer-events: none;
+}
+
+.icon-button {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--lenzora-hairline);
+    border-radius: 50%;
+    background-color: #ffffff;
+    box-shadow: var(--lenzora-shadow-soft);
+    color: var(--lenzora-text-muted);
+    font-size: 17px;
+    line-height: 1;
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.icon-button:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--lenzora-shadow-md);
+}
+
+.icon-button::after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    right: 9px;
+    width: 9px;
+    height: 9px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    background-color: #f97316;
+}
+
+.avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: var(--lenzora-accent);
+    background-image: var(--lenzora-gold-gradient);
+    color: #1a1400;
+    font-size: 17px;
+    box-shadow: var(--lenzora-shadow-soft);
+}
+
+/* Page header */
+.eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--lenzora-text-muted);
+    margin-bottom: 6px;
+}
+
+.date-chip {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: rgba(255, 255, 255, 0.85);
+    background-image: none;
+    border: 1px solid var(--lenzora-hairline);
+    border-radius: var(--lenzora-radius);
+    padding: 10px 18px;
+    box-shadow: var(--lenzora-shadow-soft);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    white-space: nowrap;
+}
+
+.date-chip-icon {
+    font-size: 18px;
+    line-height: 1;
+    color: var(--lenzora-accent-strong);
+}
+
+.date-chip-chevron {
+    font-size: 13px;
+    line-height: 1;
+    color: var(--lenzora-text-muted);
+}
+
+.status-dot {
+    font-size: 8px;
+    vertical-align: middle;
+}
+
+.date-chip-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    color: var(--lenzora-text-muted);
+}
+
+.date-chip-value {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+/* Bootstrap's .card and .table declare these locally, so they need one here */
+.card,
+.stat-card {
+    background-color: var(--lenzora-surface);
+    border: 1px solid var(--lenzora-hairline);
+    border-radius: var(--lenzora-radius);
+    box-shadow: var(--lenzora-shadow-soft);
+}
+
+/* Metric cards - the coloured, gradient tiles at the top of a dashboard */
+.metric-card {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+    border: none;
+    border-radius: var(--lenzora-radius);
+    padding: 20px 22px 22px;
+    color: #ffffff;
+    box-shadow: var(--lenzora-shadow-md);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--lenzora-shadow-lg);
+}
+
+.metric-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    background-color: rgba(255, 255, 255, 0.18);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    font-size: 19px;
+    line-height: 1;
+}
+
+.metric-label {
+    margin: 16px 0 6px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    opacity: 0.88;
+}
+
+.metric-value {
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+}
+
+.metric-trend {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #9ff0bd;
+}
+
+.metric-spark {
+    position: absolute;
+    right: 18px;
+    bottom: 16px;
+    opacity: 0.75;
+}
+
+.metric-card--blue {
+    background-image: var(--lenzora-metric-blue);
+}
+
+.metric-card--navy {
+    background-image: var(--lenzora-metric-navy);
+}
+
+.metric-card--ink {
+    background-image: var(--lenzora-metric-ink);
+}
+
+.metric-card--gold {
+    background-image: var(--lenzora-metric-gold);
+    color: #2a2103;
+}
+
+.metric-card--gold .metric-icon {
+    background-color: rgba(0, 0, 0, 0.12);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.metric-card--gold .metric-trend {
+    color: #1c6b3d;
+}
+
+.metric-card--gold .metric-spark polyline {
+    stroke: rgba(0, 0, 0, 0.45);
+}
+
+.table {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--lenzora-text);
+    --bs-table-border-color: var(--lenzora-border);
+    --bs-table-striped-bg: var(--lenzora-surface-alt);
+    --bs-table-striped-color: var(--lenzora-text);
+    --bs-table-hover-bg: var(--lenzora-surface-alt);
+    --bs-table-hover-color: var(--lenzora-text);
+}
+
+.table > thead th {
+    background-color: var(--lenzora-surface-alt);
+    color: var(--lenzora-text-muted);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+/* Accent button, the only action colour */
+.btn {
+    border-radius: var(--lenzora-radius-sm);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: transform 0.14s ease, box-shadow 0.14s ease, filter 0.14s ease;
+}
+
+.btn-accent {
+    background-color: var(--lenzora-accent);
+    background-image: var(--lenzora-gold-gradient);
+    border-color: transparent;
+    color: #1a1400;
+    box-shadow: 0 10px 22px -10px rgba(212, 175, 55, 0.9);
+}
+
+.btn-accent:hover,
+.btn-accent:focus {
+    background-color: var(--lenzora-accent-strong);
+    background-image: var(--lenzora-gold-gradient);
+    border-color: transparent;
+    color: #1a1400;
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+}
+
+/* Bootstrap's button variants carry their own literal colours */
+.btn-primary {
+    --bs-btn-bg: transparent;
+    --bs-btn-border-color: transparent;
+    --bs-btn-color: #1a1400;
+    --bs-btn-hover-bg: transparent;
+    --bs-btn-hover-border-color: transparent;
+    --bs-btn-hover-color: #1a1400;
+    --bs-btn-active-bg: transparent;
+    --bs-btn-active-border-color: transparent;
+    --bs-btn-active-color: #1a1400;
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: transparent;
+    --bs-btn-disabled-color: #1a1400;
+    background-image: var(--lenzora-gold-gradient);
+    box-shadow: 0 10px 22px -10px rgba(212, 175, 55, 0.9);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--lenzora-accent-strong);
+    --bs-btn-border-color: rgba(212, 175, 55, 0.55);
+    --bs-btn-hover-bg: var(--lenzora-accent);
+    --bs-btn-hover-border-color: var(--lenzora-accent);
+    --bs-btn-hover-color: #1a1400;
+    --bs-btn-active-bg: var(--lenzora-accent-strong);
+    --bs-btn-active-border-color: var(--lenzora-accent-strong);
+    --bs-btn-active-color: #1a1400;
+}
+
+.btn-outline-secondary {
+    --bs-btn-color: var(--lenzora-slate);
+    --bs-btn-border-color: rgba(90, 107, 133, 0.45);
+    --bs-btn-hover-bg: var(--lenzora-slate);
+    --bs-btn-hover-border-color: var(--lenzora-slate);
+    --bs-btn-hover-color: #ffffff;
+    --bs-btn-active-bg: var(--lenzora-slate);
+    --bs-btn-active-border-color: var(--lenzora-slate);
+    --bs-btn-active-color: #ffffff;
+}
+
+/* Badges as soft translucent pills */
+.badge {
+    border-radius: 999px;
+    padding: 0.5em 0.85em;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.bg-success {
+    background-color: rgba(47, 158, 99, 0.15) !important;
+    color: #1d7a4c !important;
+}
+
+.bg-warning {
+    background-color: rgba(217, 154, 31, 0.18) !important;
+    color: #8a5f05 !important;
+}
+
+.bg-info {
+    background-color: rgba(47, 111, 219, 0.15) !important;
+    color: #1f57b3 !important;
+}
+
+.bg-secondary {
+    background-color: rgba(90, 107, 133, 0.16) !important;
+    color: #46536b !important;
+}
+
+.text-muted,
+.text-secondary {
+    color: var(--lenzora-text-muted) !important;
+}
