@@ -3,6 +3,7 @@ package com.lenzora.official.system.lenzora.config;
 import com.lenzora.official.system.lenzora.service.CustomOAuth2UserService;
 import com.lenzora.official.system.lenzora.service.CustomUserDetailsService;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,6 +19,10 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
+
+    /** Google client id, empty when Google sign-in is not configured. */
+    @Value("${spring.security.oauth2.client.registration.google.client-id:}")
+    private String googleClientId;
 
     public SecurityConfig(CustomOAuth2UserService customOAuth2UserService) {
         this.customOAuth2UserService = customOAuth2UserService;
@@ -36,6 +41,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/login",
+                                "/register",
                                 "/oauth2/**"
                         ).permitAll()
                         .anyRequest().authenticated()
@@ -48,19 +54,22 @@ public class SecurityConfig {
                         .permitAll()
                 )
 
-                // Google login
-                .oauth2Login(oauth -> oauth
-                        .loginPage("/login")
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .oidcUserService(customOAuth2UserService)
-                        )
-                        .defaultSuccessUrl("/", true)
-                )
-
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login")
                         .permitAll()
                 );
+
+        // Google sign-in only when its credentials are configured.
+        if (googleClientId != null && !googleClientId.isBlank()) {
+
+            http.oauth2Login(oauth -> oauth
+                    .loginPage("/login")
+                    .userInfoEndpoint(userInfo -> userInfo
+                            .oidcUserService(customOAuth2UserService)
+                    )
+                    .defaultSuccessUrl("/", true)
+            );
+        }
 
         return http.build();
     }
