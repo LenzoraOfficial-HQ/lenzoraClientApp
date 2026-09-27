@@ -8,14 +8,20 @@
 
     <title>Lenzora - Place Order</title>
 
+    <!-- Bootstrap -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
     <style>
 
+        /* ================= GENERAL ================= */
+
         body {
             background-color: #f5f7fb;
+            color: #1f2937;
         }
+
+        /* ================= SIDEBAR ================= */
 
         .sidebar {
             min-height: 100vh;
@@ -42,19 +48,244 @@
             color: #0d6efd;
         }
 
+        /* ================= TOP BAR ================= */
+
         .top-bar {
             background-color: white;
             border-bottom: 1px solid #e5e7eb;
         }
 
-        .card {
+        /* ================= CONTENT ================= */
+
+        .page-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            font-weight: 600;
+        }
+
+        .page-description {
+            color: #6b7280;
+        }
+
+        /* ================= ORDER CARD ================= */
+
+        .order-card {
+            background-color: #ffffff;
             border: none;
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* ================= SECTION ================= */
+
+        .form-section {
+            border: 1px solid #e5e7eb;
             border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            background-color: #ffffff;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .section-number {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background-color: #0d6efd;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .section-title {
+            margin: 0;
+            font-size: 19px;
+            font-weight: 600;
+        }
+
+        .section-description {
+            margin: 3px 0 0;
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        /* ================= FORM ================= */
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 7px;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .form-control,
+        .form-select {
+            border-color: #d9dee7;
+            border-radius: 8px;
+            padding: 10px 12px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.12);
+        }
+
+        /* ================= PRESCRIPTION TABLE ================= */
+
+        .prescription-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .prescription-table th,
+        .prescription-table td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+        }
+
+        .prescription-table th {
+            background-color: #f8f9fa;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .prescription-table td:first-child {
+            background-color: #f8f9fa;
+            font-weight: 500;
+            width: 180px;
+        }
+
+        .prescription-table td:not(:first-child) {
+            width: 35%;
+        }
+
+        .prescription-table .form-control {
+            min-width: 100px;
+        }
+
+        /* ================= OPTION CARDS ================= */
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .option-item {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 11px 12px;
+            cursor: pointer;
+            background-color: #ffffff;
+            transition: 0.15s ease;
+        }
+
+        .option-item:hover {
+            background-color: #f8f9fa;
+            border-color: #b6c2d2;
+        }
+
+        .option-item input {
+            margin-right: 7px;
+        }
+
+        /* ================= FRAME ================= */
+
+        .frame-placeholder {
+            background-color: #f8f9fa;
+            border: 1px dashed #cfd6df;
+            border-radius: 10px;
+            padding: 18px;
+            color: #6b7280;
+        }
+
+        /* ================= REMARKS ================= */
+
+        .remarks {
+            min-height: 120px;
+        }
+
+        /* ================= ORDER INFO ================= */
+
+        .order-info {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 24px;
+        }
+
+        .order-info-label {
+            color: #6b7280;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+
+        .order-info-value {
+            font-weight: 600;
+        }
+
+        /* ================= ACTIONS ================= */
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 10px 0 30px;
+        }
+
+        .btn {
+            border-radius: 8px;
+            padding: 10px 20px;
+        }
+
+        /* ================= RESPONSIVE ================= */
+
+        @media (max-width: 992px) {
+
+            .sidebar {
+                min-height: auto;
+            }
+
+            .option-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 768px) {
+
+            .option-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .prescription-table {
+                font-size: 13px;
+            }
+
+            .prescription-table td:first-child {
+                width: 120px;
+            }
+
         }
 
     </style>
 
 </head>
+
 
 <body>
 
@@ -62,9 +293,11 @@
 
     <div class="row">
 
-        <!-- ================= SIDEBAR ================= -->
+        <!-- ================================================= -->
+        <!-- SIDEBAR -->
+        <!-- ================================================= -->
 
-        <div class="col-md-2 sidebar p-4">
+        <div class="col-lg-2 sidebar p-4">
 
             <div class="logo mb-4">
                 Lenzora
@@ -72,26 +305,23 @@
 
             <nav>
 
-                <!-- Dashboard -->
                 <a href="/" class="nav-link">
                     🏠 Dashboard
                 </a>
 
-                <!-- Place Order -->
                 <a href="/place-order" class="nav-link active">
                     🛒 Place Order
                 </a>
 
-                <!-- Other navigation items -->
-                <a href="#" class="nav-link">
+                <a href="/users" class="nav-link">
                     👥 Users
                 </a>
 
-                <a href="#" class="nav-link">
+                <a href="/reports" class="nav-link">
                     📊 Reports
                 </a>
 
-                <a href="#" class="nav-link">
+                <a href="/settings" class="nav-link">
                     ⚙️ Settings
                 </a>
 
@@ -100,9 +330,11 @@
         </div>
 
 
-        <!-- ================= MAIN CONTENT ================= -->
+        <!-- ================================================= -->
+        <!-- MAIN CONTENT -->
+        <!-- ================================================= -->
 
-        <div class="col-md-10 p-0">
+        <div class="col-lg-10 p-0">
 
             <!-- TOP BAR -->
 
@@ -131,185 +363,1382 @@
 
             <div class="p-4">
 
-                <h2 class="mb-1">
-                    Place New Order
-                </h2>
+                <div class="page-content">
 
-                <p class="text-muted mb-4">
-                    Create a new customer order.
-                </p>
+                    <!-- PAGE HEADER -->
 
+                    <div class="mb-4">
 
-                <!-- ================= ORDER FORM ================= -->
+                        <h2 class="page-title mb-1">
+                            Place New Order
+                        </h2>
 
-                <div class="card shadow-sm p-4">
+                        <p class="page-description mb-0">
+                            Enter the patient's prescription, lens and frame requirements.
+                        </p>
 
-                    <h5 class="mb-4">
-                        Order Details
-                    </h5>
-
-
-                    <div class="row g-3">
-
-                        <!-- Customer -->
-
-                        <div class="col-md-6">
-
-                            <label class="form-label">
-                                Customer
-                            </label>
-
-                            <select class="form-select">
-
-                                <option selected>
-                                    Select Customer
-                                </option>
-
-                                <option>
-                                    John Doe
-                                </option>
-
-                                <option>
-                                    Sarah Smith
-                                </option>
-
-                                <option>
-                                    Michael Lee
-                                </option>
-
-                                <option>
-                                    Emma Wilson
-                                </option>
-
-                            </select>
-
-                        </div>
+                    </div>
 
 
-                        <!-- Product -->
+                    <!-- ================================================= -->
+                    <!-- ORDER INFORMATION -->
+                    <!-- ================================================= -->
 
-                        <div class="col-md-6">
+                    <div class="order-info">
 
-                            <label class="form-label">
-                                Product
-                            </label>
+                        <div class="row">
 
-                            <select class="form-select">
+                            <div class="col-md-4">
 
-                                <option selected>
-                                    Select Product
-                                </option>
+                                <div class="order-info-label">
+                                    Order Number
+                                </div>
 
-                                <option>
-                                    Product A
-                                </option>
+                                <div class="order-info-value text-muted">
+                                    Generated on submission
+                                </div>
 
-                                <option>
-                                    Product B
-                                </option>
-
-                                <option>
-                                    Product C
-                                </option>
-
-                            </select>
-
-                        </div>
+                            </div>
 
 
-                        <!-- Quantity -->
+                            <div class="col-md-4">
 
-                        <div class="col-md-4">
+                                <div class="order-info-label">
+                                    Order Date
+                                </div>
 
-                            <label class="form-label">
-                                Quantity
-                            </label>
+                                <div class="order-info-value">
+                                    <span id="orderDate"></span>
+                                </div>
 
-                            <input type="number"
-                                   class="form-control"
-                                   value="1"
-                                   min="1">
-
-                        </div>
+                            </div>
 
 
-                        <!-- Order Date -->
+                            <div class="col-md-4">
 
-                        <div class="col-md-4">
+                                <div class="order-info-label">
+                                    Status
+                                </div>
 
-                            <label class="form-label">
-                                Order Date
-                            </label>
+                                <div class="order-info-value">
+                                    <span class="badge bg-secondary">
+                                        Draft
+                                    </span>
+                                </div>
 
-                            <input type="date"
-                                   class="form-control">
-
-                        </div>
-
-
-                        <!-- Payment Method -->
-
-                        <div class="col-md-4">
-
-                            <label class="form-label">
-                                Payment Method
-                            </label>
-
-                            <select class="form-select">
-
-                                <option selected>
-                                    Select Payment Method
-                                </option>
-
-                                <option>
-                                    Cash
-                                </option>
-
-                                <option>
-                                    Card
-                                </option>
-
-                                <option>
-                                    Online Payment
-                                </option>
-
-                            </select>
-
-                        </div>
-
-
-                        <!-- Delivery Address -->
-
-                        <div class="col-12">
-
-                            <label class="form-label">
-                                Delivery Address
-                            </label>
-
-                            <textarea class="form-control"
-                                      rows="3"
-                                      placeholder="Enter delivery address"></textarea>
-
-                        </div>
-
-
-                        <!-- Buttons -->
-
-                        <div class="col-12 mt-4">
-
-                            <button type="button"
-                                    class="btn btn-primary me-2">
-                                Place Order
-                            </button>
-
-                            <a href="/"
-                               class="btn btn-outline-secondary">
-                                Cancel
-                            </a>
+                            </div>
 
                         </div>
 
                     </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- FLASH MESSAGES                                    -->
+                    <!-- ================================================= -->
+
+                    <div th:if="${successMessage}"
+                         class="alert alert-success"
+                         th:text="${successMessage}"></div>
+
+                    <div th:if="${errorMessage}"
+                         class="alert alert-danger"
+                         th:text="${errorMessage}"></div>
+
+
+                    <!-- ================================================= -->
+                    <!-- ORDER FORM                                        -->
+                    <!-- ================================================= -->
+
+                    <!-- Hidden while the order module is absent. -->
+                    <div th:unless="${orderForm != null}"
+                         class="alert alert-warning">
+                        Order placement is not available yet.
+                    </div>
+
+                    <form id="orderForm"
+                          th:if="${orderForm != null}"
+                          th:action="@{/orders}"
+                          th:object="${orderForm}"
+                          method="post">
+
+
+                        <!-- Validation summary. MUST stay inside the form:
+                             #fields needs the th:object binding context. -->
+                        <div th:if="${#fields.hasErrors('*')}"
+                             class="alert alert-danger">
+                            Please correct the highlighted fields.
+                        </div>
+
+
+                        <!-- ================================================= -->
+                        <!-- 1. JOB TYPE                                       -->
+                        <!-- Writes app_order.job_type. The choice decides     -->
+                        <!-- which of the later sections are needed, so this   -->
+                        <!-- section must stay first.                          -->
+                        <!-- ================================================= -->
+
+                        <div class="form-section">
+
+                            <div class="section-header">
+
+                                <div class="section-number">
+                                    1
+                                </div>
+
+                                <div>
+
+                                    <h3 class="section-title">
+                                        Job Type
+                                    </h3>
+
+                                    <p class="section-description">
+                                        What has the patient asked for? This decides which
+                                        details are needed below.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="option-grid">
+
+                                <label class="option-item"
+                                       th:each="jt : ${jobTypes}">
+
+                                    <input type="radio"
+                                           th:field="*{jobType}"
+                                           th:value="${jt}"
+                                           class="job-type-radio">
+
+                                    <span th:text="${jt.label}">
+                                        New Spectacle
+                                    </span>
+
+                                </label>
+
+                            </div>
+
+                            <div class="text-danger small"
+                                 th:if="${#fields.hasErrors('jobType')}"
+                                 th:errors="*{jobType}"></div>
+
+                        </div>
+
+
+                        <!-- ================================================= -->
+                        <!-- 2. PATIENT / HOSPITAL REFERENCE -->
+                        <!-- ================================================= -->
+
+                        <div class="form-section" id="patientSection">
+
+                            <div class="section-header">
+
+                                <div class="section-number">
+                                    2
+                                </div>
+
+                                <div>
+
+                                    <h3 class="section-title">
+                                        Patient / Hospital Reference
+                                    </h3>
+
+                                    <p class="section-description">
+                                        Patient information recorded for this order only.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="row g-3">
+
+
+                                <!-- Patient Reference -->
+
+                                <div class="col-md-6">
+
+                                    <label for="patientReference"
+                                           class="form-label">
+
+                                        Patient Reference
+                                        <span class="required">*</span>
+
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{patientReference}"
+                                           placeholder="Enter patient reference">
+
+                                    <div class="text-danger small"
+                                         th:if="${#fields.hasErrors('patientReference')}"
+                                         th:errors="*{patientReference}"></div>
+
+                                </div>
+
+
+                                <!-- Patient Name -->
+
+                                <div class="col-md-6">
+
+                                    <label for="patientName"
+                                           class="form-label">
+
+                                        Patient Name
+                                        <span class="required">*</span>
+
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{patientName}"
+                                           placeholder="Enter patient name">
+
+                                    <div class="text-danger small"
+                                         th:if="${#fields.hasErrors('patientName')}"
+                                         th:errors="*{patientName}"></div>
+
+                                </div>
+
+
+                                <!-- Patient Contact -->
+
+                                <div class="col-md-6">
+
+                                    <label for="patientContact"
+                                           class="form-label">
+
+                                        Patient Contact
+                                        <span class="required">*</span>
+
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{patientContact}"
+                                           placeholder="e.g. +94771234567">
+
+                                    <div class="text-danger small"
+                                         th:if="${#fields.hasErrors('patientContact')}"
+                                         th:errors="*{patientContact}"></div>
+
+                                </div>
+
+
+                                <!-- Hospital / Clinic -->
+
+                                <div class="col-md-6">
+
+                                    <label for="hospitalName"
+                                           class="form-label">
+
+                                        Hospital / Clinic
+                                        <span class="required">*</span>
+
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{hospitalName}"
+                                           placeholder="Enter hospital or clinic">
+
+                                    <div class="text-danger small"
+                                         th:if="${#fields.hasErrors('hospitalName')}"
+                                         th:errors="*{hospitalName}"></div>
+
+                                </div>
+
+
+                                <!-- Hospital Reference -->
+
+                                <div class="col-md-6">
+
+                                    <label for="hospitalReference"
+                                           class="form-label">
+
+                                        Hospital Reference
+
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{hospitalReference}"
+                                           placeholder="Enter hospital reference">
+
+                                </div>
+
+
+                                <!-- Sent From -->
+
+                                <div class="col-md-6">
+
+                                    <label for="fromLocation"
+                                           class="form-label">
+
+                                        Sent From (Branch)
+                                        <span class="required">*</span>
+
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{fromLocation}"
+                                           placeholder="e.g. Colombo South">
+
+                                    <div class="text-danger small"
+                                         th:if="${#fields.hasErrors('fromLocation')}"
+                                         th:errors="*{fromLocation}"></div>
+
+                                </div>
+
+
+                                <!-- Serial Number -->
+
+                                <div class="col-md-3">
+
+                                    <label for="serialNo"
+                                           class="form-label">
+
+                                        Clinic Serial No
+
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{serialNo}"
+                                           placeholder="Clinic serial">
+
+                                </div>
+
+
+                                <!-- Job Number -->
+
+                                <div class="col-md-3">
+
+                                    <label for="jobNo"
+                                           class="form-label">
+
+                                        Workshop Job No
+
+                                    </label>
+
+                                    <input type="text"
+                                           class="form-control"
+                                           th:field="*{jobNo}"
+                                           placeholder="Workshop job number">
+
+                                </div>
+
+
+                                <!-- Notes -->
+
+                                <div class="col-12">
+
+                                    <label for="notes"
+                                           class="form-label">
+
+                                        Notes
+
+                                    </label>
+
+                                    <textarea class="form-control"
+                                              rows="3"
+                                              th:field="*{notes}"
+                                              placeholder="Enter relevant notes"></textarea>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================================================= -->
+                        <!-- 3. PRESCRIPTION -->
+                        <!-- ================================================= -->
+
+                        <div class="form-section" id="prescriptionSection">
+
+                            <div class="section-header">
+
+                                <div class="section-number">
+                                    3
+                                </div>
+
+                                <div>
+
+                                    <h3 class="section-title">
+                                        Prescription (Rx)
+                                    </h3>
+
+                                    <p class="section-description">
+                                        Enter prescription measurements for both eyes.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="table-responsive">
+
+                                <table class="prescription-table">
+
+                                    <thead>
+
+                                    <tr>
+
+                                        <th>
+                                            Measurement
+                                        </th>
+
+                                        <th>
+                                            Right (R)
+                                        </th>
+
+                                        <th>
+                                            Left (L)
+                                        </th>
+
+                                    </tr>
+
+                                    </thead>
+
+
+                                    <tbody>
+
+
+                                    <!-- SPH -->
+
+                                    <tr>
+
+                                        <td>
+                                            Sphere (SPH)
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{right.sph}"
+                                                   step="0.01"
+                                                   min="-20"
+                                                   max="20"
+                                                   placeholder="-20.00 to +20.00">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{left.sph}"
+                                                   step="0.01"
+                                                   min="-20"
+                                                   max="20"
+                                                   placeholder="-20.00 to +20.00">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- CYL -->
+
+                                    <tr>
+
+                                        <td>
+                                            Cylinder (CYL)
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{right.cyl}"
+                                                   step="0.01"
+                                                   min="-20"
+                                                   max="20"
+                                                   placeholder="-20.00 to +20.00">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{left.cyl}"
+                                                   step="0.01"
+                                                   min="-20"
+                                                   max="20"
+                                                   placeholder="-20.00 to +20.00">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- AXIS -->
+
+                                    <tr>
+
+                                        <td>
+                                            Axis
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{right.axis}"
+                                                   min="1"
+                                                   max="180"
+                                                   placeholder="1 - 180">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{left.axis}"
+                                                   min="1"
+                                                   max="180"
+                                                   placeholder="1 - 180">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- ADD -->
+
+                                    <tr>
+
+                                        <td>
+                                            Add
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{right.addValue}"
+                                                   step="0.01"
+                                                   min="0.5"
+                                                   max="4"
+                                                   placeholder="0.50 - 4.00">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{left.addValue}"
+                                                   step="0.01"
+                                                   min="0.5"
+                                                   max="4"
+                                                   placeholder="0.50 - 4.00">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- PD -->
+
+                                    <tr>
+
+                                        <td>
+                                            PD (mm)
+                                        </td>
+
+                                        <td colspan="2">
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{pd}"
+                                                   step="0.01"
+                                                   min="40"
+                                                   max="80"
+                                                   placeholder="40 - 80 mm">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- FIT HEIGHT -->
+
+                                    <tr>
+
+                                        <td>
+                                            Fit Height
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{right.fitHeight}"
+                                                   step="0.01">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{left.fitHeight}"
+                                                   step="0.01">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- SEG HEIGHT -->
+
+                                    <tr>
+
+                                        <td>
+                                            Seg Height
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{right.segHeight}"
+                                                   step="0.01">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{left.segHeight}"
+                                                   step="0.01">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- PRISM -->
+
+                                    <tr>
+
+                                        <td>
+                                            Prism
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{right.prism}"
+                                                   step="0.01">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{left.prism}"
+                                                   step="0.01">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- N-PD -->
+
+                                    <tr>
+
+                                        <td>
+                                            N-PD
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{right.npd}"
+                                                   step="0.01">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{left.npd}"
+                                                   step="0.01">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- CT -->
+
+                                    <tr>
+
+                                        <td>
+                                            CT
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{right.ct}"
+                                                   step="0.01">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{left.ct}"
+                                                   step="0.01">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- ET -->
+
+                                    <tr>
+
+                                        <td>
+                                            ET
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{right.et}"
+                                                   step="0.01">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{left.et}"
+                                                   step="0.01">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    <!-- DECENTRATION -->
+
+                                    <tr>
+
+                                        <td>
+                                            Decentration
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{right.decentration}"
+                                                   step="0.01">
+
+                                        </td>
+
+                                        <td>
+
+                                            <input type="number"
+                                                   class="form-control"
+                                                   th:field="*{left.decentration}"
+                                                   step="0.01">
+
+                                        </td>
+
+                                    </tr>
+
+
+                                    </tbody>
+
+                                </table>
+
+                            </div>
+
+                            <div class="form-text mt-2">
+                                Sphere/Cylinder: -20.00 to +20.00 D.
+                                Axis: 1-180&deg;.
+                                PD: 40-80 mm.
+                                Add: 0.50-4.00 D.
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================================================= -->
+                        <!-- 4. LENS DETAILS -->
+                        <!-- ================================================= -->
+
+                        <div class="form-section" id="lensSection">
+
+                            <div class="section-header">
+
+                                <div class="section-number">
+                                    4
+                                </div>
+
+                                <div>
+
+                                    <h3 class="section-title">
+                                        Lens Details
+                                    </h3>
+
+                                    <p class="section-description">
+                                        Select the required lens type, index, options and coating.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- LENS INDEX -->
+
+                            <div class="mb-4">
+
+                                <label for="lensIndex"
+                                       class="form-label">
+
+                                    Lens Index
+
+                                </label>
+
+                                <select class="form-select"
+                                        th:field="*{lensIndex}">
+
+                                    <option value="">
+                                        Select lens index
+                                    </option>
+
+                                    <option th:each="idx : ${lensIndexes}"
+                                            th:value="${idx}"
+                                            th:text="${idx}"></option>
+
+                                </select>
+
+                            </div>
+
+
+                            <!-- LENS TYPE -->
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+                                    Lens Type
+                                </label>
+
+                                <div class="option-grid">
+
+                                    <label class="option-item"
+                                           th:each="t : ${lensTypes}">
+
+                                        <input type="radio"
+                                               th:field="*{lensType}"
+                                               th:value="${t}">
+
+                                        <span th:text="${t.label}">
+                                            Digital Progressive
+                                        </span>
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- OPTIONS -->
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+                                    Lens Options
+                                </label>
+
+                                <div class="option-grid">
+
+                                    <label class="option-item"
+                                           th:each="opt : ${lensOptions}">
+
+                                        <input type="checkbox"
+                                               th:field="*{lensOptionCodes}"
+                                               th:value="${opt.code}">
+
+                                        <span th:text="${opt.label}">
+                                            Transitions VI
+                                        </span>
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- COATING -->
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+                                    Coating
+                                </label>
+
+                                <div class="option-grid">
+
+                                    <label class="option-item"
+                                           th:each="c : ${coatings}">
+
+                                        <input type="radio"
+                                               th:field="*{coating}"
+                                               th:value="${c}">
+
+                                        <span th:text="${c.label}">
+                                            Crizal Multicoating
+                                        </span>
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- TINT -->
+
+                            <div>
+
+                                <label class="form-label">
+                                    Tint
+                                </label>
+
+                                <div class="option-grid">
+
+                                    <label class="option-item"
+                                           th:each="t : ${tints}">
+
+                                        <input type="radio"
+                                               th:field="*{tint}"
+                                               th:value="${t}">
+
+                                        <span th:text="${t.label}">
+                                            No Tint
+                                        </span>
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================================================= -->
+                        <!-- 5. FRAME DETAILS -->
+                        <!-- ================================================= -->
+
+                        <div class="form-section" id="frameSection">
+
+                            <div class="section-header">
+
+                                <div class="section-number">
+                                    5
+                                </div>
+
+                                <div>
+
+                                    <h3 class="section-title">
+                                        Frame Details
+                                    </h3>
+
+                                    <p class="section-description">
+                                        Select an available frame from the Lenzora catalogue,
+                                        or describe the frame the patient brought in.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- PATIENT'S OWN FRAME -->
+                            <!-- Shown instead of the catalogue dropdown when the
+                                 job is a lens replacement. order_item.frame_id
+                                 stays NULL and this text becomes
+                                 order_item.frame_description. -->
+
+                            <div class="row g-3 mb-4"
+                                 id="ownFrameBox"
+                                 style="display: none;">
+
+                                <div class="col-12">
+
+                                    <label for="ownFrameDescription"
+                                           class="form-label">
+
+                                        Frame the patient brought in
+                                        <span class="required">*</span>
+
+                                    </label>
+
+                                    <textarea class="form-control"
+                                              rows="2"
+                                              th:field="*{ownFrameDescription}"
+                                              placeholder="Brand, model, colour, size - the only record of the frame for this job"></textarea>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- FRAME SELECTION + PRICING -->
+
+                            <div class="row g-3 mb-4"
+                                 id="catalogueFrameBox">
+
+                                <div class="col-md-8">
+
+                                    <label for="frameId"
+                                           class="form-label">
+
+                                        Frame
+                                        <span class="required">*</span>
+
+                                    </label>
+
+                                    <select class="form-select"
+                                            th:field="*{frameId}">
+
+                                        <option value="">
+                                            -- Select an available frame --
+                                        </option>
+
+                                        <option th:each="f : ${frames}"
+                                                th:value="${f.id}"
+                                                th:data-brand="${f.brand}"
+                                                th:data-model="${f.model}"
+                                                th:data-colour="${f.colour}"
+                                                th:data-size="${f.size}"
+                                                th:data-material="${f.material}"
+                                                th:data-price="${f.price}"
+                                                th:text="${f.label + ' - Rs ' + #numbers.formatDecimal(f.price,1,'COMMA',2,'POINT')}">
+                                        </option>
+
+                                    </select>
+
+                                    <div class="text-danger small"
+                                         th:if="${#fields.hasErrors('frameId')}"
+                                         th:errors="*{frameId}"></div>
+
+                                </div>
+
+
+                                <div class="col-md-2">
+
+                                    <label for="quantity"
+                                           class="form-label">
+
+                                        Quantity
+
+                                    </label>
+
+                                    <input type="number"
+                                           class="form-control"
+                                           th:field="*{quantity}"
+                                           min="1">
+
+                                </div>
+
+
+                                <div class="col-md-2">
+
+                                    <label for="unitPrice"
+                                           class="form-label">
+
+                                        Unit Price
+
+                                    </label>
+
+                                    <input type="number"
+                                           class="form-control"
+                                           th:field="*{unitPrice}"
+                                           step="0.01"
+                                           min="0"
+                                           placeholder="auto">
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- FRAME INFORMATION -->
+
+                            <div class="frame-placeholder mb-4">
+
+                                <strong>
+                                    Frame information
+                                </strong>
+
+                                <p class="mb-0 mt-1">
+                                    Brand, model, material, colour, size and price
+                                    will be displayed here after selecting a frame.
+                                </p>
+
+                            </div>
+
+
+                            <!-- FRAME MEASUREMENTS -->
+
+                            <div class="row g-3 mb-4">
+
+
+                                <div class="col-md-3">
+
+                                    <label for="frameASize"
+                                           class="form-label">
+
+                                        A Size
+
+                                    </label>
+
+                                    <input type="number"
+                                           class="form-control"
+                                           th:field="*{frameASize}"
+                                           step="0.01">
+
+                                </div>
+
+
+                                <div class="col-md-3">
+
+                                    <label for="frameBSize"
+                                           class="form-label">
+
+                                        B Size
+
+                                    </label>
+
+                                    <input type="number"
+                                           class="form-control"
+                                           th:field="*{frameBSize}"
+                                           step="0.01">
+
+                                </div>
+
+
+                                <div class="col-md-3">
+
+                                    <label for="frameDSize"
+                                           class="form-label">
+
+                                        D Size
+
+                                    </label>
+
+                                    <input type="number"
+                                           class="form-control"
+                                           th:field="*{frameDSize}"
+                                           step="0.01">
+
+                                </div>
+
+
+                                <div class="col-md-3">
+
+                                    <label for="frameDiameter"
+                                           class="form-label">
+
+                                        Diameter
+
+                                    </label>
+
+                                    <input type="number"
+                                           class="form-control"
+                                           th:field="*{frameDiameter}"
+                                           step="0.01">
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- FRAME MATERIAL -->
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+                                    Frame Material
+                                </label>
+
+                                <div class="option-grid">
+
+                                    <label class="option-item"
+                                           th:each="m : ${materials}">
+
+                                        <input type="radio"
+                                               th:field="*{frameMaterial}"
+                                               th:value="${m}">
+
+                                        <span th:text="${m.label}">
+                                            Metal
+                                        </span>
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- FRAME RIM TYPE -->
+
+                            <div class="mb-4">
+
+                                <label class="form-label">
+                                    Frame Rim Type
+                                </label>
+
+                                <div class="option-grid">
+
+                                    <label class="option-item"
+                                           th:each="r : ${rimTypes}">
+
+                                        <input type="radio"
+                                               th:field="*{frameRimType}"
+                                               th:value="${r}">
+
+                                        <span th:text="${r.label}">
+                                            Full
+                                        </span>
+
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- FRAME SHAPE -->
+
+                            <div>
+
+                                <label for="frameShape"
+                                       class="form-label">
+
+                                    Shape
+
+                                </label>
+
+                                <select class="form-select"
+                                        th:field="*{frameShape}">
+
+                                    <option value="">
+                                        Select frame shape
+                                    </option>
+
+                                    <option th:each="s : ${shapes}"
+                                            th:value="${s}"
+                                            th:text="${s.label}"></option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- ================================================= -->
+                        <!-- 6. REMARKS -->
+                        <!-- ================================================= -->
+
+                        <div class="form-section">
+
+                            <div class="section-header">
+
+                                <div class="section-number">
+                                    6
+                                </div>
+
+                                <div>
+
+                                    <h3 class="section-title">
+                                        Remarks
+                                    </h3>
+
+                                    <p class="section-description">
+                                        Add any additional instructions for this order.
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+
+                            <textarea class="form-control remarks"
+                                      th:field="*{remarks}"
+                                      placeholder="Enter additional order remarks"></textarea>
+
+                        </div>
+
+
+                        <!-- ================================================= -->
+                        <!-- ACTIONS -->
+                        <!-- ================================================= -->
+
+                        <div class="form-actions">
+
+                            <a href="/"
+                               class="btn btn-outline-secondary">
+
+                                Cancel
+
+                            </a>
+
+
+                            <!-- Review Order is a normal form submit: it posts the
+                                 whole form to POST /orders, which is where the order
+                                 header, the frame/lens line and the eye
+                                 prescriptions are written to the database.
+                                 A separate review screen can be added later. -->
+                            <button type="submit"
+                                    class="btn btn-primary"
+                                    id="reviewOrderBtn">
+
+                                Review Order
+
+                            </button>
+
+                        </div>
+
+
+                    </form>
 
                 </div>
 
@@ -320,6 +1749,114 @@
     </div>
 
 </div>
+
+
+<!-- ========================================================= -->
+<!-- SIMPLE DATE DISPLAY -->
+<!-- ========================================================= -->
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // ---------- order date ----------
+        const today = new Date();
+
+        document.getElementById("orderDate").textContent =
+            today.getFullYear() +
+            "-" +
+            String(today.getMonth() + 1).padStart(2, "0") +
+            "-" +
+            String(today.getDate()).padStart(2, "0");
+
+        // ---------- frame info panel + price prefill ----------
+        const frameSelect = document.getElementById("frameId");
+        const info        = document.querySelector(".frame-placeholder");
+        const qtyInput    = document.getElementById("quantity");
+
+        if (qtyInput && !qtyInput.value) {
+            qtyInput.value = 1;
+        }
+
+        // ---------- job type: show only the sections that job needs ----------
+        // This mirrors the database rule in trg_items_job_type_guard, so the
+        // user is never asked for a field the table does not want:
+        //   NEW_SPECTACLE     -> frame + lens + prescription
+        //   FRAME_REPLACEMENT -> frame only (the existing lenses are re-glazed)
+        //   LENS_REPLACEMENT  -> lens + prescription, in the patient's own frame
+        const jobRadios           = document.querySelectorAll(".job-type-radio");
+        const prescriptionSection = document.getElementById("prescriptionSection");
+        const lensSection         = document.getElementById("lensSection");
+        const catalogueFrameBox   = document.getElementById("catalogueFrameBox");
+        const ownFrameBox         = document.getElementById("ownFrameBox");
+
+        function show(box, visible) {
+            if (box) {
+                box.style.display = visible ? "" : "none";
+            }
+        }
+
+        function applyJobType() {
+
+            let chosen = "";
+
+            jobRadios.forEach(function (radio) {
+                if (radio.checked) {
+                    chosen = radio.value;
+                }
+            });
+
+            const lensIsNeeded     = (chosen !== "FRAME_REPLACEMENT");
+            const patientOwnFrame  = (chosen === "LENS_REPLACEMENT");
+
+            show(prescriptionSection, lensIsNeeded);
+            show(lensSection, lensIsNeeded);
+            show(catalogueFrameBox, !patientOwnFrame);
+            show(ownFrameBox, patientOwnFrame);
+            show(info, !patientOwnFrame);
+        }
+
+        jobRadios.forEach(function (radio) {
+            radio.addEventListener("change", applyJobType);
+        });
+
+        applyJobType();
+
+        if (!frameSelect || !info) {
+            return;
+        }
+
+        frameSelect.addEventListener("change", function () {
+
+            const opt = this.options[this.selectedIndex];
+
+            if (!opt || !opt.value) {
+                return;
+            }
+
+            const price = opt.dataset.price || "0";
+
+            info.innerHTML =
+                "<strong>" +
+                (opt.dataset.brand || "") + " " + (opt.dataset.model || "") +
+                "</strong>" +
+                "<p class='mb-0 mt-1'>" +
+                "Material: " + (opt.dataset.material || "-") +
+                " &middot; Colour: " + (opt.dataset.colour || "-") +
+                " &middot; Size: " + (opt.dataset.size || "-") +
+                " &middot; Catalogue price: Rs " + price +
+                "</p>";
+
+            // NOTE: Unit Price is deliberately NOT prefilled. Leaving it blank
+            // means the server-side PricingPolicy prices the line (frame price
+            // plus progressive/coating surcharges). Typing a value here is an
+            // explicit manual override.
+
+        });
+
+    });
+
+</script>
 
 </body>
 
