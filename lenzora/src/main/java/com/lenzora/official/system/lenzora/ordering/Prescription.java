@@ -5,9 +5,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.math.BigDecimal;
@@ -72,11 +75,10 @@ public class Prescription extends AuditableEntity {
     @Column(name = "prescription_id")
     private Long id;
 
-    /**
-     * The order line these measurements belong to.
-     */
-    @Column(name = "order_item_id", nullable = false)
-    private Long orderItemId;
+    /** The order line these measurements belong to. */
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "order_item_id", nullable = false)
+    private OrderItem orderItem;
 
     /** Which kind of lens this eye was measured for. */
     @Enumerated(EnumType.STRING)
@@ -197,11 +199,11 @@ public class Prescription extends AuditableEntity {
     }
 
     /**
-     * Called by OrderItem.attach(...) once OrderItem is on main.
-     * @param pOrderItemId the id of the line these measurements belong to
+     * Called by OrderItem.attach(...)
+     * @param pItem the line these measurements belong to
      */
-    void assignTo(Long pOrderItemId) {
-        this.orderItemId = pOrderItemId;
+    void assignTo(OrderItem pItem) {
+        this.orderItem = pItem;
     }
 
     // _____________________________________________________________________________________
@@ -287,10 +289,10 @@ public class Prescription extends AuditableEntity {
     public Long getId() { return id; }
 
     /**
-     * Get the order line id
-     * @return the owning order line id
+     * Get the order line
+     * @return the owning order line
      */
-    public Long getOrderItemId() { return orderItemId; }
+    public OrderItem getOrderItem() { return orderItem; }
 
     /**
      * Get lens type
