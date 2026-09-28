@@ -1,0 +1,13 @@
+package com.lenzora.official.system.lenzora.s2;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class LenzoraS2Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(LenzoraS2Application.class, args);
+    }
+
+}
