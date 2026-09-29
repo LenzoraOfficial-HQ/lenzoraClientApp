@@ -528,12 +528,3 @@ h6 {
 .text-secondary {
     color: var(--lenzora-text-muted) !important;
 }
-
-/* Place-order page: the option-driven controls stay inert until the order
-   module brings the catalogue and lens data. Delete this block to re-enable. */
-#orderForm .form-select,
-#orderForm .option-grid {
-    pointer-events: none;
-    opacity: 0.5;
-    cursor: not-allowed;
-}

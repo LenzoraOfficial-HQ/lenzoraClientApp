@@ -187,6 +187,71 @@ public class OrderItem extends AuditableEntity {
         }
     }
 
+    /**
+     * The frame materials. The names must match order_item.frame_material.
+     */
+    public enum FrameMaterial {
+
+        METAL("Metal"),
+        PLASTIC("Plastic"),
+        WOOD("Wood");
+
+        private final String label;
+
+        FrameMaterial(String label) {
+            this.label = label;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+    }
+
+    /**
+     * The frame rim types. The names must match order_item.frame_rim_type.
+     */
+    public enum FrameRimType {
+
+        FULL("Full"),
+        HALF("Half"),
+        RIMLESS("Rimless");
+
+        private final String label;
+
+        FrameRimType(String label) {
+            this.label = label;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+    }
+
+    /**
+     * The frame shapes. The names must match order_item.frame_shape.
+     */
+    public enum FrameShape {
+
+        OBLONG("Oblong"),
+        OVAL_OR_ROUND("Oval or Round"),
+        AVIATOR("Aviator"),
+        CATS_EYE("Cat's Eye"),
+        SYMMETRICAL_OVAL("Symmetrical Oval"),
+        CUT_AWAY_RECTANGLE("Cut Away Rectangle"),
+        RECTANGLE("Rectangle"),
+        NASAL_CUT_AWAY_OVAL("Nasal Cut Away Oval");
+
+        private final String label;
+
+        FrameShape(String label) {
+            this.label = label;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+    }
+
     /** The database id, filled in by MySQL on insert. */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

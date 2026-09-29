@@ -1241,7 +1241,7 @@
 
                                         <input type="checkbox"
                                                th:field="*{lensOptionCodes}"
-                                               th:value="${opt.code}">
+                                               th:value="${opt.lensCode}">
 
                                         <span th:text="${opt.label}">
                                             Transitions VI
@@ -1393,14 +1393,14 @@
                                         </option>
 
                                         <option th:each="f : ${frames}"
-                                                th:value="${f.id}"
+                                                th:value="${f.frameId}"
                                                 th:data-brand="${f.brand}"
                                                 th:data-model="${f.model}"
                                                 th:data-colour="${f.colour}"
                                                 th:data-size="${f.size}"
                                                 th:data-material="${f.material}"
                                                 th:data-price="${f.price}"
-                                                th:text="${f.label + ' - Rs ' + #numbers.formatDecimal(f.price,1,'COMMA',2,'POINT')}">
+                                                th:text="${f.brand + ' ' + f.model + (f.size == null ? '' : ' (' + f.size + ')') + (f.colour == null ? '' : ' · ' + f.colour) + ' - Rs ' + #numbers.formatDecimal(f.price,1,'COMMA',2,'POINT')}">
                                         </option>
 
                                     </select>

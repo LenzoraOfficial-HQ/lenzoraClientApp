@@ -1,5 +1,9 @@
 package com.lenzora.official.system.lenzora.ordering;
 
+import com.lenzora.official.system.lenzora.catalogue.domain.Frame;
+import com.lenzora.official.system.lenzora.catalogue.domain.LensOption;
+import com.lenzora.official.system.lenzora.catalogue.infrastructure.FrameRepository;
+import com.lenzora.official.system.lenzora.catalogue.infrastructure.LensOptionRepository;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,8 +13,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /** The web layer for placing an order. */
 @Controller
@@ -18,8 +25,16 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    public OrderController(OrderService pOrderService) {
+    /** Reads the frames the customer can choose from. */
+    private final FrameRepository frameRepository;
+
+    /** Reads the lens options shown as checkboxes. */
+    private final LensOptionRepository lensOptionRepository;
+
+    public OrderController(OrderService pOrderService, FrameRepository pFrameRepository, LensOptionRepository pLensOptionRepository) {
         this.orderService = pOrderService;
+        this.frameRepository = pFrameRepository;
+        this.lensOptionRepository = pLensOptionRepository;
     }
 
     /**
@@ -74,15 +89,59 @@ public class OrderController {
      * @param model the data handed to place-order.html
      */
     private void addDropDowns(Model model) {
-        model.addAttribute("frames", Collections.emptyList());
-        model.addAttribute("lensOptions", Collections.emptyList());
+        model.addAttribute("frames", orderableFrames());
+        model.addAttribute("lensOptions", activeLensOptions());
         model.addAttribute("jobTypes", Order.JobType.values());
         model.addAttribute("lensIndexes", Arrays.asList("1.5", "1.59Poly", "1.6", "1.67", "1.74"));
         model.addAttribute("lensTypes", OrderItem.LensType.values());
         model.addAttribute("coatings", OrderItem.CoatingType.values());
         model.addAttribute("tints", OrderItem.TintType.values());
-        model.addAttribute("materials", Collections.emptyList());
-        model.addAttribute("rimTypes", Collections.emptyList());
-        model.addAttribute("shapes", Collections.emptyList());
+        model.addAttribute("materials", OrderItem.FrameMaterial.values());
+        model.addAttribute("rimTypes", OrderItem.FrameRimType.values());
+        model.addAttribute("shapes", OrderItem.FrameShape.values());
+    }
+
+    /**
+     * Gives the frames the catalogue still offers and the workshop can supply.
+     * @return the frames that may be ordered, sorted by brand and model
+     */
+    private List<Frame> orderableFrames() {
+        List<Frame> wanted = new ArrayList<Frame>();
+        for (Frame frame : frameRepository.findAll()) {
+            if (Boolean.TRUE.equals(frame.getActive()) && Boolean.TRUE.equals(frame.getAvailable())) {
+                wanted.add(frame);
+            }
+        }
+        Collections.sort(wanted, new Comparator<Frame>() {
+            @Override
+            public int compare(Frame pLeft, Frame pRight) {
+                int byBrand = pLeft.getBrand().compareToIgnoreCase(pRight.getBrand());
+                if (byBrand != 0) {
+                    return byBrand;
+                }
+                return pLeft.getModel().compareToIgnoreCase(pRight.getModel());
+            }
+        });
+        return wanted;
+    }
+
+    /**
+     * Gives the lens options that are still offered.
+     * @return the active lens options, sorted by label
+     */
+    private List<LensOption> activeLensOptions() {
+        List<LensOption> wanted = new ArrayList<LensOption>();
+        for (LensOption option : lensOptionRepository.findAll()) {
+            if (Boolean.TRUE.equals(option.getActive())) {
+                wanted.add(option);
+            }
+        }
+        Collections.sort(wanted, new Comparator<LensOption>() {
+            @Override
+            public int compare(LensOption pLeft, LensOption pRight) {
+                return pLeft.getLabel().compareToIgnoreCase(pRight.getLabel());
+            }
+        });
+        return wanted;
     }
 }
