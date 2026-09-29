@@ -4,96 +4,85 @@ import com.lenzora.official.system.lenzora.entity.AppUser;
 import com.lenzora.official.system.lenzora.entity.UserRole;
 import com.lenzora.official.system.lenzora.entity.UserStatus;
 import com.lenzora.official.system.lenzora.repository.AppUserRepository;
-import com.lenzora.official.system.lenzora.repository.UserRepository;
-import com.lenzora.official.system.lenzora.model.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-/**
- * Service class for managing application users.
- * Handles business logic and coordinates operations for the app_user table.
- */
 @Service
 public class UserService {
 
     private final AppUserRepository userRepository;
-    private final UserRepository loginUserRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(
-            AppUserRepository userRepository,
-            UserRepository loginUserRepository,
-            PasswordEncoder passwordEncoder) {
+    // Constructor to inject required dependencies
+    public UserService(AppUserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.loginUserRepository = loginUserRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     /**
-     * Registers a new user in the system with a PENDING status.
-     *
-     * @param user The user entity populated with registration details.
-     * @return The saved AppUser entity.
-     * @throws IllegalArgumentException if the email is already in use.
+     * Registers a new user with default PENDING status and hashed password.
      */
     @Transactional
     public AppUser registerUser(AppUser user) {
+        // Validate password length
         if (user.getPasswordHash() == null || user.getPasswordHash().length() < 8) {
-            throw new IllegalArgumentException("Password must be at least 8 characters.");
+            throw new IllegalArgumentException("Password must be at least 8 characters long.");
         }
+
+        // Check if email already exists
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Email is already registered.");
         }
-        
-        // Ensure new users always start as PENDING and ORTHOPTIST as defined in the schema
+
+        // Set default status and role
         user.setUserStatus(UserStatus.PENDING);
         user.setUserRole(UserRole.ORTHOPTIST);
-        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
-        user.setCreatedAt(LocalDateTime.now());
-        user.setUpdatedAt(LocalDateTime.now());
-        
+
+        // Encrypt the password before saving
+        String encodedPassword = passwordEncoder.encode(user.getPasswordHash());
+        user.setPasswordHash(encodedPassword);
+
+        // Save to database
         return userRepository.save(user);
     }
 
     /**
-     * Approves a pending user account, setting their status to ACTIVE.
-     *
-     * @param targetUserId The ID of the user being approved.
-     * @param adminId The ID of the admin performing the approval.
-     * @return The updated AppUser entity.
+     * Approves a pending user and marks them as ACTIVE.
      */
     @Transactional
     public AppUser approveUser(Long targetUserId, String adminEmail) {
+        // Find target user
         AppUser targetUser = userRepository.findById(targetUserId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + targetUserId));
 
-        User loginAdmin = loginUserRepository.findByEmail(adminEmail)
-                .orElseThrow(() -> new IllegalArgumentException("Admin not found"));
-        if (!"ADMIN".equals(loginAdmin.getRole())) {
-            throw new IllegalArgumentException("Admin access required");
-        }
+        // Find approving admin
         AppUser adminUser = userRepository.findByEmail(adminEmail)
-                .orElseThrow(() -> new IllegalArgumentException("Admin profile not found"));
-        if (targetUser.getUserStatus() != UserStatus.PENDING) {
-            throw new IllegalArgumentException("Only pending users can be approved");
+                .orElseThrow(() -> new IllegalArgumentException("Admin account not found."));
+
+        // Verify the approver is an ADMIN
+        if (adminUser.getUserRole() != UserRole.ADMIN) {
+            throw new IllegalArgumentException("Access denied: Only administrators can approve users.");
         }
 
+        // Ensure user is actually pending
+        if (targetUser.getUserStatus() != UserStatus.PENDING) {
+            throw new IllegalArgumentException("Only pending users can be approved.");
+        }
+
+        // Update target user's status and approval details
         targetUser.setUserStatus(UserStatus.ACTIVE);
         targetUser.setApprovedBy(adminUser);
         targetUser.setApprovedAt(LocalDateTime.now());
-        targetUser.setUpdatedAt(LocalDateTime.now());
 
         return userRepository.save(targetUser);
     }
 
     /**
-     * Retrieves a user by their ID.
-     *
-     * @param userId The ID of the user to find.
-     * @return An Optional containing the user if found.
+     * Finds a user by ID.
      */
     public Optional<AppUser> getUserById(Long userId) {
         return userRepository.findById(userId);

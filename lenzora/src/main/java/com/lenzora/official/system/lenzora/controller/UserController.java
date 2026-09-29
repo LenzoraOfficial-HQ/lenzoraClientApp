@@ -3,16 +3,15 @@ package com.lenzora.official.system.lenzora.controller;
 import com.lenzora.official.system.lenzora.entity.AppUser;
 import com.lenzora.official.system.lenzora.service.UserRegistrationService;
 import com.lenzora.official.system.lenzora.service.UserService;
-import java.time.LocalDateTime;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
+
+import java.time.LocalDateTime;
 
 /**
- * REST Controller for managing user operations.
- * Exposes endpoints to interact with the app_user table from the frontend.
+ * Controller handling user registration, approval, and profile retrieval.
  */
 @RestController
 @RequestMapping("/api/users")
@@ -27,36 +26,35 @@ public class UserController {
     }
 
     /**
-     * Endpoint to register a new user. The user will be saved with a PENDING status.
-     * 
-     * @param user The user details sent from the frontend as JSON.
-     * @return The saved user data or a bad request if the email exists.
+     * Registers a new user.
      */
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserRegistrationRequest request) {
-        String problem = registrationService.register(
-                request.firstName(), request.lastName(), request.email(),
-                request.password(), request.confirmPassword());
-        if (!problem.isEmpty()) {
-            return ResponseEntity.badRequest().body(problem);
+        String error = registrationService.register(
+                request.firstName(),
+                request.lastName(),
+                request.email(),
+                request.password(),
+                request.confirmPassword()
+        );
+
+        // If there's an error message, return it with 400 Bad Request
+        if (!error.isEmpty()) {
+            return ResponseEntity.badRequest().body(error);
         }
+
         return ResponseEntity.status(201).body("Registration successful.");
     }
 
     /**
-     * Endpoint for an admin to approve a pending user account.
-     * 
-     * @param targetUserId The ID of the user to be approved.
-     * @param adminId The ID of the admin performing the action.
-     * @return The updated user record.
+     * Approves a pending user (Admin only).
      */
     @PutMapping("/{targetUserId}/approve")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> approveUser(
-            @PathVariable Long targetUserId,
-            Authentication authentication) {
+    public ResponseEntity<?> approveUser(@PathVariable Long targetUserId, Authentication authentication) {
         try {
-            AppUser approvedUser = userService.approveUser(targetUserId, authentication.getName());
+            String adminEmail = authentication.getName();
+            AppUser approvedUser = userService.approveUser(targetUserId, adminEmail);
             return ResponseEntity.ok(UserResponse.from(approvedUser));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -64,27 +62,26 @@ public class UserController {
     }
 
     /**
-     * Endpoint to fetch a specific user by their ID.
-     * 
-     * @param userId The ID of the user.
-     * @return The user data if found, or a 404 Not Found status.
+     * Gets user details by ID (Admin only).
      */
     @GetMapping("/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserResponse> getUser(@PathVariable Long userId) {
-        Optional<AppUser> userOpt = userService.getUserById(userId);
-        return userOpt.map(UserResponse::from).map(ResponseEntity::ok)
-                      .orElseGet(() -> ResponseEntity.notFound().build());
+        return userService.getUserById(userId)
+                .map(user -> ResponseEntity.ok(UserResponse.from(user)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    // DTO for incoming registration requests
     public record UserRegistrationRequest(
             String firstName,
             String lastName,
             String email,
             String password,
-            String confirmPassword) {
-    }
+            String confirmPassword
+    ) {}
 
+    // DTO for outgoing user data (hides sensitive fields like passwordHash)
     public record UserResponse(
             Long userId,
             String firstName,
@@ -97,9 +94,9 @@ public class UserController {
             String branch,
             LocalDateTime approvedAt,
             LocalDateTime createdAt,
-            LocalDateTime updatedAt) {
-
-        private static UserResponse from(AppUser user) {
+            LocalDateTime updatedAt
+    ) {
+        public static UserResponse from(AppUser user) {
             return new UserResponse(
                     user.getUserId(),
                     user.getFirstName(),
@@ -112,7 +109,8 @@ public class UserController {
                     user.getBranch(),
                     user.getApprovedAt(),
                     user.getCreatedAt(),
-                    user.getUpdatedAt());
+                    user.getUpdatedAt()
+            );
         }
     }
 }

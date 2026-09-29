@@ -2,15 +2,15 @@ package com.lenzora.official.system.lenzora.controller;
 
 import com.lenzora.official.system.lenzora.entity.AuditLog;
 import com.lenzora.official.system.lenzora.repository.AuditLogRepository;
-import java.time.LocalDateTime;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * REST Controller for viewing system audit logs.
- * Exposes data from the audit_logs table.
+ * Controller for viewing system audit logs (Admin only).
  */
 @RestController
 @RequestMapping("/api/audit")
@@ -24,28 +24,32 @@ public class AuditController {
     }
 
     /**
-     * Endpoint to retrieve all audit logs associated with a specific user.
-     * 
-     * @param userId The ID of the user.
-     * @return A list of audit logs.
+     * Gets all audit logs for a specific user.
      */
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<AuditLogResponse>> getUserAuditLogs(@PathVariable Long userId) {
-        List<AuditLog> logs = auditLogRepository.findByUser_UserId(userId);
-        return ResponseEntity.ok(logs.stream().map(AuditLogResponse::from).toList());
+        List<AuditLogResponse> response = auditLogRepository.findByUser_UserId(userId)
+                .stream()
+                .map(AuditLogResponse::from)
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
-    
+
     /**
-     * Endpoint to retrieve all audit logs in the system.
-     * 
-     * @return A list of all audit logs.
+     * Gets all audit logs in the system.
      */
     @GetMapping("/all")
     public ResponseEntity<List<AuditLogResponse>> getAllAuditLogs() {
-        List<AuditLog> logs = auditLogRepository.findAll();
-        return ResponseEntity.ok(logs.stream().map(AuditLogResponse::from).toList());
+        List<AuditLogResponse> response = auditLogRepository.findAll()
+                .stream()
+                .map(AuditLogResponse::from)
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 
+    // DTO for returning audit log data
     public record AuditLogResponse(
             Long logId,
             Long userId,
@@ -54,13 +58,21 @@ public class AuditController {
             String entityId,
             String details,
             String ipAddress,
-            LocalDateTime createdAt) {
+            LocalDateTime createdAt
+    ) {
+        public static AuditLogResponse from(AuditLog log) {
+            Long userId = (log.getUser() != null) ? log.getUser().getUserId() : null;
 
-        private static AuditLogResponse from(AuditLog log) {
-            Long userId = log.getUser() == null ? null : log.getUser().getUserId();
             return new AuditLogResponse(
-                    log.getLogId(), userId, log.getAuditAction(), log.getEntityName(),
-                    log.getEntityId(), log.getDetails(), log.getIpAddress(), log.getCreatedAt());
+                    log.getLogId(),
+                    userId,
+                    log.getAuditAction(),
+                    log.getEntityName(),
+                    log.getEntityId(),
+                    log.getDetails(),
+                    log.getIpAddress(),
+                    log.getCreatedAt()
+            );
         }
     }
 }
