@@ -11,8 +11,6 @@ import java.util.List;
  * <p>This repository provides standard CRUD operations and
  * email-delivery-specific queries for the {@link EmailDelivery} entity.</p>
  *
- * @author S2
- * @version 1.0
  */
 public interface EmailDeliveryRepository extends JpaRepository<EmailDelivery, Long> {
 

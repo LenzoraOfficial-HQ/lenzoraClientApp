@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
  * attempts,
  * sending time, and any error that occurred during delivery.</p>
  *
- * @author S2
- * @version 1.0
  */
 @Entity
 @Table(name = "email_delivery")

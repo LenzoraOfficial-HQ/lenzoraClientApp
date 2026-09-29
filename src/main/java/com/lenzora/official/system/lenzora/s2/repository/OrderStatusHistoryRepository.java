@@ -11,8 +11,6 @@ import java.util.List;
  * <p>This repository provides database operations for the
  * {@link OrderStatusHistory} entity using Spring Data JPA.</p>
  *
- * @author S2
- * @version 1.0
  */
 
 public interface OrderStatusHistoryRepository extends JpaRepository<OrderStatusHistory, Long>{

@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
  * the related order, notification type, title, message, read status,
  * and creation time.</p>
  *
- * @author S2
- * @version 1.0
  */
 @Entity
 @Table(name = "notifications")

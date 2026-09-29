@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
  * status, the user who made the change, the time of the change,
  * and an optional note.</p>
  *
- * @author S2
- * @version 1.0
  */
 @Entity
 @Table(name = "order_status_history")

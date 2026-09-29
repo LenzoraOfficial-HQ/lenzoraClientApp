@@ -11,8 +11,6 @@ import java.util.List;
  * <p>This repository provides standard CRUD operations and
  * notification-specific queries for the {@link Notification} entity.</p>
  *
- * @author S2
- * @version 1.0
  */
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
