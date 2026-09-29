@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Lenzora - Catalogue</title>
+
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+  <!-- Shared theme colours -->
+  <link rel="stylesheet" th:href="@{/css/lenzora-theme.css}">
+
+  <style>
+
+    .sidebar {
+      min-height: 100vh;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="container-fluid">
+
+  <div class="row">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <div th:replace="~{fragments/shell :: sidebar('catalogue')}"></div>
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <div class="col-md-10 p-0">
+
+      <!-- TOP BAR -->
+
+      <div th:replace="~{fragments/shell :: topbar}"></div>
+
+
+      <!-- PAGE CONTENT -->
+
+      <div class="p-4">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+          <div>
+
+            <div class="eyebrow">
+              Welcome back
+            </div>
+
+            <h2 class="mb-1">
+              Catalogue
+            </h2>
+
+            <p class="text-muted mb-0">
+              The frames, lens options and suppliers the Place Order screen reads.
+            </p>
+
+          </div>
+
+          <div class="date-chip">
+
+            <i class="bi bi-calendar3 date-chip-icon"></i>
+
+            <span class="date-chip-label">
+              Today
+            </span>
+
+            <span class="date-chip-value"
+                  th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy')}">
+              27 Sep 2026
+            </span>
+
+            <i class="bi bi-chevron-down date-chip-chevron"></i>
+
+          </div>
+
+        </div>
+
+
+        <!-- ================= MESSAGES ================= -->
+
+        <div class="alert alert-success"
+             th:if="${successMessage}"
+             th:text="${successMessage}">
+          Saved.
+        </div>
+
+        <div class="alert alert-danger"
+             th:if="${errorMessage}"
+             th:text="${errorMessage}">
+          Something was wrong.
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- FRAMES -->
+        <!-- ================================================= -->
+
+        <div class="card shadow-sm p-4 mb-4">
+
+          <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <div>
+
+              <h5 class="mb-0">
+                Frames
+              </h5>
+
+              <p class="text-muted mb-0 small">
+                Only active and available frames are offered on the order form.
+              </p>
+
+            </div>
+
+            <span class="badge bg-secondary"
+                  th:text="${#lists.size(frames) + ' frame(s)'}">
+              8 frames
+            </span>
+          </div>
+
+
+          <!-- EDIT FORM -->
+
+          <div th:if="${frameForm != null}">
+
+            <form th:action="@{/catalogue/frames/{id}(id=${frameForm.frameId})}"
+                  th:object="${frameForm}"
+                  method="post">
+
+              <div class="row g-3">
+
+                <div class="col-md-3">
+                  <label class="form-label" for="brand">Brand</label>
+                  <input type="text" class="form-control" id="brand" th:field="*{brand}" required>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label" for="model">Model</label>
+                  <input type="text" class="form-control" id="model" th:field="*{model}" required>
+                </div>
+
+                <div class="col-md-2">
+                  <label class="form-label" for="colour">Colour</label>
+                  <input type="text" class="form-control" id="colour" th:field="*{colour}" required>
+                </div>
+
+                <div class="col-md-2">
+                  <label class="form-label" for="size">Size</label>
+                  <input type="text" class="form-control" id="size" th:field="*{size}">
+                </div>
+
+                <div class="col-md-2">
+                  <label class="form-label" for="material">Material</label>
+                  <input type="text" class="form-control" id="material" th:field="*{material}">
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label" for="price">Price (Rs)</label>
+                  <input type="number" step="0.01" min="0" class="form-control" id="price" th:field="*{price}" required>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label" for="supplierId">Supplier</label>
+                  <select class="form-select" id="supplierId" name="supplierId" required>
+                    <option value="">-- Choose a supplier --</option>
+                    <option th:each="s : ${suppliers}"
+                            th:value="${s.supplierId}"
+                            th:selected="${frameForm.supplier != null and frameForm.supplier.supplierId == s.supplierId}"
+                            th:text="${s.supplierName}">
+                      Lenzora Supplies
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label" for="imageUrl">Image URL</label>
+                  <input type="text" class="form-control" id="imageUrl" th:field="*{imageUrl}">
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end gap-4 pb-2">
+
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="available" th:field="*{available}">
+                    <label class="form-check-label" for="available">Available</label>
+                  </div>
+
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="active" th:field="*{active}">
+                    <label class="form-check-label" for="active">Active</label>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="mt-4 d-flex gap-2">
+
+                <button type="submit" class="btn btn-primary">
+                  Save Frame
+                </button>
+
+                <a class="btn btn-outline-secondary" th:href="@{/catalogue}">
+                  Cancel
+                </a>
+
+              </div>
+
+            </form>
+
+          </div>
+
+
+          <!-- LIST -->
+
+          <div class="table-responsive" th:unless="${frameForm != null}">
+
+            <table class="table align-middle">
+
+              <thead>
+
+              <tr>
+                <th>Id</th>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Colour</th>
+                <th>Size</th>
+                <th>Material</th>
+                <th>Price</th>
+                <th>Supplier</th>
+                <th>Available</th>
+                <th>Active</th>
+                <th>Action</th>
+              </tr>
+
+              </thead>
+
+              <tbody>
+
+              <tr th:each="f : ${frames}">
+
+                <td th:text="${f.frameId}">1</td>
+
+                <td th:text="${f.brand}">Guess</td>
+
+                <td th:text="${f.model}">GU50051</td>
+
+                <td th:text="${f.colour}">Blue</td>
+
+                <td th:text="${f.size}">51-16</td>
+
+                <td th:text="${f.material}">Metal</td>
+
+                <td th:text="${'Rs ' + #numbers.formatDecimal(f.price,1,'COMMA',2,'POINT')}">
+                  Rs 27,500.00
+                </td>
+
+                <td th:text="${f.supplier != null ? f.supplier.supplierName : '-'}">
+                  Lenzora Supplies
+                </td>
+
+                <td>
+                  <span class="badge bg-success" th:if="${f.available}">Yes</span>
+                  <span class="badge bg-secondary" th:unless="${f.available}">No</span>
+                </td>
+
+                <td>
+                  <span class="badge bg-success" th:if="${f.active}">Yes</span>
+                  <span class="badge bg-secondary" th:unless="${f.active}">No</span>
+                </td>
+
+                <td>
+                  <a class="btn btn-sm btn-outline-primary"
+                     th:href="@{/catalogue(edit='frame',id=${f.frameId})}">
+                    Edit
+                  </a>
+                </td>
+
+              </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- LENS OPTIONS -->
+        <!-- ================================================= -->
+
+        <div class="card shadow-sm p-4 mb-4">
+
+          <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <div>
+
+              <h5 class="mb-0">
+                Lens Options
+              </h5>
+
+              <p class="text-muted mb-0 small">
+                The checkboxes shown on the order form. Only active options are offered.
+              </p>
+
+            </div>
+
+            <span class="badge bg-secondary"
+                  th:text="${#lists.size(lensOptions) + ' option(s)'}">
+              6 options
+            </span>
+
+          </div>
+
+
+          <!-- EDIT FORM -->
+
+          <div th:if="${lensForm != null}">
+
+            <form th:action="@{/catalogue/lens-options/{id}(id=${lensForm.lensOptionId})}"
+                  th:object="${lensForm}"
+                  method="post">
+
+              <div class="row g-3">
+
+                <div class="col-md-3">
+                  <label class="form-label" for="lensCode">Code</label>
+                  <input type="text" class="form-control" id="lensCode" th:field="*{lensCode}" required>
+                </div>
+
+                <div class="col-md-4">
+                  <label class="form-label" for="label">Label</label>
+                  <input type="text" class="form-control" id="label" th:field="*{label}" required>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label" for="extraCharge">Extra charge (Rs)</label>
+                  <input type="number" step="0.01" min="0" class="form-control" id="extraCharge" th:field="*{extraCharge}" required>
+                </div>
+
+                <div class="col-md-2 d-flex align-items-end pb-2">
+
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="active" th:field="*{active}">
+                    <label class="form-check-label" for="active">Active</label>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="mt-4 d-flex gap-2">
+
+                <button type="submit" class="btn btn-primary">
+                  Save Lens Option
+                </button>
+
+                <a class="btn btn-outline-secondary" th:href="@{/catalogue}">
+                  Cancel
+                </a>
+
+              </div>
+
+            </form>
+
+          </div>
+
+
+          <!-- LIST -->
+
+          <div class="table-responsive" th:unless="${lensForm != null}">
+
+            <table class="table align-middle">
+
+              <thead>
+
+              <tr>
+                <th>Id</th>
+                <th>Code</th>
+                <th>Label</th>
+                <th>Extra charge</th>
+                <th>Active</th>
+                <th>Action</th>
+              </tr>
+
+              </thead>
+
+              <tbody>
+
+              <tr th:each="o : ${lensOptions}">
+
+                <td th:text="${o.lensOptionId}">1</td>
+
+                <td th:text="${o.lensCode}">AR_MULTICOAT</td>
+
+                <td th:text="${o.label}">Anti-reflective multicoat</td>
+
+                <td th:text="${'Rs ' + #numbers.formatDecimal(o.extraCharge,1,'COMMA',2,'POINT')}">
+                  Rs 0.00
+                </td>
+
+                <td>
+                  <span class="badge bg-success" th:if="${o.active}">Yes</span>
+                  <span class="badge bg-secondary" th:unless="${o.active}">No</span>
+                </td>
+
+                <td>
+                  <a class="btn btn-sm btn-outline-primary"
+                     th:href="@{/catalogue(edit='lensOption',id=${o.lensOptionId})}">
+                    Edit
+                  </a>
+                </td>
+
+              </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- SUPPLIERS -->
+        <!-- ================================================= -->
+
+        <div class="card shadow-sm p-4">
+
+          <div class="d-flex justify-content-between align-items-center mb-3">
+
+            <div>
+
+              <h5 class="mb-0">
+                Suppliers
+              </h5>
+
+              <p class="text-muted mb-0 small">
+                Every frame belongs to one supplier. Supplier emails never carry patient details.
+              </p>
+
+            </div>
+
+            <span class="badge bg-secondary"
+                  th:text="${#lists.size(suppliers) + ' supplier(s)'}">
+              4 suppliers
+            </span>
+
+          </div>
+
+
+          <!-- EDIT FORM -->
+
+          <div th:if="${supplierForm != null}">
+
+            <form th:action="@{/catalogue/suppliers/{id}(id=${supplierForm.supplierId})}"
+                  th:object="${supplierForm}"
+                  method="post">
+
+              <div class="row g-3">
+
+                <div class="col-md-4">
+                  <label class="form-label" for="supplierName">Supplier name</label>
+                  <input type="text" class="form-control" id="supplierName" th:field="*{supplierName}" required>
+                </div>
+
+                <div class="col-md-4">
+                  <label class="form-label" for="contactPerson">Contact person</label>
+                  <input type="text" class="form-control" id="contactPerson" th:field="*{contactPerson}">
+                </div>
+
+                <div class="col-md-4">
+                  <label class="form-label" for="supplierEmail">Email</label>
+                  <input type="email" class="form-control" id="supplierEmail" th:field="*{supplierEmail}" required>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label" for="phone">Phone</label>
+                  <input type="text" class="form-control" id="phone" th:field="*{phone}">
+                </div>
+
+                <div class="col-md-2">
+                  <label class="form-label" for="streetNo">Street no</label>
+                  <input type="text" class="form-control" id="streetNo" th:field="*{streetNo}">
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label" for="streetName">Street name</label>
+                  <input type="text" class="form-control" id="streetName" th:field="*{streetName}">
+                </div>
+
+                <div class="col-md-2">
+                  <label class="form-label" for="city">City</label>
+                  <input type="text" class="form-control" id="city" th:field="*{city}">
+                </div>
+
+                <div class="col-md-2">
+                  <label class="form-label" for="postalCode">Postal code</label>
+                  <input type="text" class="form-control" id="postalCode" th:field="*{postalCode}">
+                </div>
+
+                <div class="col-md-12">
+
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="active" th:field="*{active}">
+                    <label class="form-check-label" for="active">Active</label>
+                  </div>
+
+                </div>
+
+              </div>
+
+              <div class="mt-4 d-flex gap-2">
+
+                <button type="submit" class="btn btn-primary">
+                  Save Supplier
+                </button>
+
+                <a class="btn btn-outline-secondary" th:href="@{/catalogue}">
+                  Cancel
+                </a>
+
+              </div>
+
+            </form>
+
+          </div>
+
+
+          <!-- LIST -->
+
+          <div class="table-responsive" th:unless="${supplierForm != null}">
+
+            <table class="table align-middle">
+
+              <thead>
+
+              <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Contact person</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>City</th>
+                <th>Active</th>
+                <th>Action</th>
+              </tr>
+
+              </thead>
+
+              <tbody>
+
+              <tr th:each="s : ${suppliers}">
+
+                <td th:text="${s.supplierId}">1</td>
+
+                <td th:text="${s.supplierName}">Lenzora Supplies</td>
+
+                <td th:text="${s.contactPerson}">Nimal</td>
+
+                <td th:text="${s.supplierEmail}">supply@lenzora.lk</td>
+
+                <td th:text="${s.phone}">0112345678</td>
+
+                <td th:text="${s.city}">Colombo</td>
+
+                <td>
+                  <span class="badge bg-success" th:if="${s.active}">Yes</span>
+                  <span class="badge bg-secondary" th:unless="${s.active}">No</span>
+                </td>
+
+                <td>
+                  <a class="btn btn-sm btn-outline-primary"
+                     th:href="@{/catalogue(edit='supplier',id=${s.supplierId})}">
+                    Edit
+                  </a>
+                </td>
+
+              </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
