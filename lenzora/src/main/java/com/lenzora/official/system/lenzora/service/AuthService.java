@@ -1,9 +1,23 @@
 package com.lenzora.official.system.lenzora.service;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import com.lenzora.official.system.lenzora.entity.AppUser;
+import com.lenzora.official.system.lenzora.entity.PasswordResetToken;
+import com.lenzora.official.system.lenzora.repository.AppUserRepository;
+import com.lenzora.official.system.lenzora.repository.PasswordResetTokenRepository;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.HexFormat;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service class for handling authentication-related tasks.
@@ -14,10 +28,24 @@ public class AuthService {
 
     private final AppUserRepository userRepository;
     private final PasswordResetTokenRepository tokenRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JavaMailSender mailSender;
+    private final String mailHost;
+    private final String mailFrom;
 
-    public AuthService(AppUserRepository userRepository, PasswordResetTokenRepository tokenRepository) {
+    public AuthService(
+            AppUserRepository userRepository,
+            PasswordResetTokenRepository tokenRepository,
+            PasswordEncoder passwordEncoder,
+            JavaMailSender mailSender,
+            @Value("${spring.mail.host:}") String mailHost,
+            @Value("${spring.mail.from:}") String mailFrom) {
         this.userRepository = userRepository;
         this.tokenRepository = tokenRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.mailSender = mailSender;
+        this.mailHost = mailHost;
+        this.mailFrom = mailFrom;
     }
 
     /**
@@ -27,29 +55,37 @@ public class AuthService {
      * @return The raw token string to be sent to the user via email, or null if user not found.
      */
     @Transactional
-    public String createPasswordResetToken(String email) {
+    public void createPasswordResetToken(String email) {
+        if (email == null || email.isBlank()) {
+            return;
+        }
+        if (mailHost.isBlank() || mailFrom.isBlank()) {
+            throw new IllegalStateException("Password reset email is not configured");
+        }
+
         Optional<AppUser> userOpt = userRepository.findByEmail(email);
         if (userOpt.isEmpty()) {
-            return null; // In production, avoid revealing if an email exists for security reasons
+            return;
         }
 
         AppUser user = userOpt.get();
         String rawToken = UUID.randomUUID().toString();
-        
-        // In a real application, you MUST hash the token before saving it to the database
-        // String hashedToken = passwordEncoder.encode(rawToken);
-        String hashedToken = rawToken; // Placeholder for actual hashing logic
 
         PasswordResetToken resetToken = new PasswordResetToken();
         resetToken.setUser(user);
-        resetToken.setTokenHash(hashedToken);
-        // Set expiration to 24 hours from now
-        resetToken.setExpiresAt(LocalDateTime.now().plusHours(24)); 
+        resetToken.setTokenHash(hashToken(rawToken));
+        resetToken.setExpiresAt(LocalDateTime.now().plusHours(1));
         resetToken.setCreatedAt(LocalDateTime.now());
 
         tokenRepository.save(resetToken);
-        
-        return rawToken; 
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(mailFrom);
+        message.setTo(user.getEmail());
+        message.setSubject("Lenzora password reset");
+        message.setText("Use this token with the password reset form: " + rawToken
+                + "\nThis token expires in one hour.");
+        mailSender.send(message);
     }
 
     /**
@@ -61,11 +97,12 @@ public class AuthService {
      */
     @Transactional
     public boolean resetPassword(String rawToken, String newPassword) {
-        // In a real application, hash the incoming rawToken to look it up in the database
-        // String hashedToken = hashMethod(rawToken);
-        String hashedToken = rawToken; // Placeholder
+        if (rawToken == null || rawToken.isBlank()
+                || newPassword == null || newPassword.length() < 8) {
+            return false;
+        }
 
-        Optional<PasswordResetToken> tokenOpt = tokenRepository.findByTokenHash(hashedToken);
+        Optional<PasswordResetToken> tokenOpt = tokenRepository.findByTokenHash(hashToken(rawToken));
         
         if (tokenOpt.isEmpty()) {
             return false;
@@ -80,9 +117,7 @@ public class AuthService {
 
         AppUser user = token.getUser();
         
-        // Hash the new password before saving
-        // user.setPasswordHash(passwordEncoder.encode(newPassword));
-        user.setPasswordHash(newPassword); // Placeholder for actual password hashing
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
         user.setUpdatedAt(LocalDateTime.now());
         
         userRepository.save(user);
@@ -92,5 +127,15 @@ public class AuthService {
         tokenRepository.save(token);
 
         return true;
+    }
+
+    private String hashToken(String rawToken) {
+        try {
+            byte[] digest = MessageDigest.getInstance("SHA-256")
+                    .digest(rawToken.getBytes(StandardCharsets.UTF_8));
+            return HexFormat.of().formatHex(digest);
+        } catch (NoSuchAlgorithmException exception) {
+            throw new IllegalStateException("SHA-256 is unavailable", exception);
+        }
     }
 }

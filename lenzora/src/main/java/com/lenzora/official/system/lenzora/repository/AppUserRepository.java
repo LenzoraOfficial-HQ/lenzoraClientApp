@@ -1,7 +1,10 @@
 package com.lenzora.official.system.lenzora.repository;
+
+import com.lenzora.official.system.lenzora.entity.AppUser;
+import com.lenzora.official.system.lenzora.entity.UserRole;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import java.util.Optional;
 
 /**
  * Repository interface for the AppUser entity.

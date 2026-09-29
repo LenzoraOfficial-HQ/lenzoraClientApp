@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
@@ -42,11 +44,17 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/login",
                                 "/register",
+                                "/api/users/register",
+                                "/api/auth/forgot-password",
+                                "/api/auth/reset-password",
                                 "/css/**",
                                 "/oauth2/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
+                .csrf(csrf -> csrf.ignoringRequestMatchers(
+                        "/api/auth/forgot-password",
+                        "/api/auth/reset-password"))
 
                 // Manual email + password login
                 .formLogin(form -> form

@@ -1,8 +1,10 @@
 package com.lenzora.official.system.lenzora.repository;
+
+import com.lenzora.official.system.lenzora.entity.PasswordResetToken;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import java.util.Optional;
-import java.time.LocalDateTime;
 
 /**
  * Repository interface for the PasswordResetToken entity.

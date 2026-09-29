@@ -1,8 +1,14 @@
 package com.lenzora.official.system.lenzora.service;
+
 import com.lenzora.official.system.lenzora.entity.AppUser;
+import com.lenzora.official.system.lenzora.entity.UserRole;
+import com.lenzora.official.system.lenzora.entity.UserStatus;
 import com.lenzora.official.system.lenzora.repository.AppUserRepository;
+import com.lenzora.official.system.lenzora.repository.UserRepository;
+import com.lenzora.official.system.lenzora.model.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -14,9 +20,16 @@ import java.util.Optional;
 public class UserService {
 
     private final AppUserRepository userRepository;
+    private final UserRepository loginUserRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(AppUserRepository userRepository) {
+    public UserService(
+            AppUserRepository userRepository,
+            UserRepository loginUserRepository,
+            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.loginUserRepository = loginUserRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -28,6 +41,9 @@ public class UserService {
      */
     @Transactional
     public AppUser registerUser(AppUser user) {
+        if (user.getPasswordHash() == null || user.getPasswordHash().length() < 8) {
+            throw new IllegalArgumentException("Password must be at least 8 characters.");
+        }
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Email is already registered.");
         }
@@ -35,6 +51,7 @@ public class UserService {
         // Ensure new users always start as PENDING and ORTHOPTIST as defined in the schema
         user.setUserStatus(UserStatus.PENDING);
         user.setUserRole(UserRole.ORTHOPTIST);
+        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
         
@@ -49,12 +66,20 @@ public class UserService {
      * @return The updated AppUser entity.
      */
     @Transactional
-    public AppUser approveUser(Long targetUserId, Long adminId) {
+    public AppUser approveUser(Long targetUserId, String adminEmail) {
         AppUser targetUser = userRepository.findById(targetUserId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-                
-        AppUser adminUser = userRepository.findById(adminId)
+
+        User loginAdmin = loginUserRepository.findByEmail(adminEmail)
                 .orElseThrow(() -> new IllegalArgumentException("Admin not found"));
+        if (!"ADMIN".equals(loginAdmin.getRole())) {
+            throw new IllegalArgumentException("Admin access required");
+        }
+        AppUser adminUser = userRepository.findByEmail(adminEmail)
+                .orElseThrow(() -> new IllegalArgumentException("Admin profile not found"));
+        if (targetUser.getUserStatus() != UserStatus.PENDING) {
+            throw new IllegalArgumentException("Only pending users can be approved");
+        }
 
         targetUser.setUserStatus(UserStatus.ACTIVE);
         targetUser.setApprovedBy(adminUser);
