@@ -23,7 +23,7 @@ public class AuditService {
     }
 
     /**
-     * Records a new audit log entry in the database[cite: 1].
+     * Records a new audit log entry in the database.
      *
      * @param userId     The ID of the user performing the action (can be null for unauthenticated or system actions).
      * @param action     The specific action performed (e.g., 'CREATE', 'UPDATE', 'LOGIN').
