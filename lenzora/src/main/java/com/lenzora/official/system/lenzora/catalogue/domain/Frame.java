@@ -1,4 +1,3 @@
-```java
 package com.lenzora.official.system.lenzora.catalogue.domain;
 
 import com.lenzora.official.system.lenzora.shared.AuditableEntity;
@@ -329,4 +328,4 @@ public class Frame extends AuditableEntity {
         this.active = active;
     }
 }
-```
+
