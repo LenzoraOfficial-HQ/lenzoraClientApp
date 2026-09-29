@@ -1,14 +1,10 @@
 
 package com.lenzora.official.system.lenzora;
 
-import com.lenzora.official.system.lenzora.ordering.PlaceOrderForm;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.List;
 
 @Controller
 public class Home {
@@ -37,25 +33,8 @@ public class Home {
         return "login";
     }
 
-    // Place Order page. The drop-down and radio lists arrive with the order module.
-    @GetMapping("/place-order")
-    public String showPlaceOrder(Model model) {
-
-        model.addAttribute("orderForm", new PlaceOrderForm());
-
-        model.addAttribute("frames", List.of());
-        model.addAttribute("lensOptions", List.of());
-        model.addAttribute("jobTypes", List.of());
-        model.addAttribute("lensIndexes", List.of());
-        model.addAttribute("lensTypes", List.of());
-        model.addAttribute("coatings", List.of());
-        model.addAttribute("tints", List.of());
-        model.addAttribute("materials", List.of());
-        model.addAttribute("rimTypes", List.of());
-        model.addAttribute("shapes", List.of());
-
-        return "place-order";
-    }
+    // NOTE: /place-order now lives in OrderController (it needs the lookup data).
+    // Keeping it here as well would cause "Ambiguous mapping" at startup.
 
     @GetMapping("/users")
     public String showUsers(){
