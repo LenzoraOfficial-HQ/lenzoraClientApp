@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Notification Management | Lenzora</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" th:href="@{/css/lenzora-theme.css}">
+
+    <style>
+        body {
+            background: #edf0f6;
+            color: #202b3e;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .eyebrow {
+            color: #75849d;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .page-title {
+            font-size: 34px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .page-description {
+            color: #75849d;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #efd477, #bd941b);
+            color: #111;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+            font-weight: bold;
+        }
+
+        .btn-gold:hover {
+            background: #d4ad32;
+            color: #111;
+        }
+
+        .summary-card {
+            border: none;
+            border-radius: 20px;
+            padding: 24px;
+            color: white;
+            height: 100%;
+            box-shadow: 0 6px 18px rgba(25, 41, 67, 0.10);
+        }
+
+        .card-blue {
+            background: linear-gradient(135deg, #659df0, #3274df);
+        }
+
+        .card-navy {
+            background: linear-gradient(135deg, #354f78, #192943);
+        }
+
+        .card-ink {
+            background: linear-gradient(135deg, #263348, #0c1422);
+        }
+
+        .card-gold {
+            background: linear-gradient(135deg, #efd477, #c9a227);
+            color: #171717;
+        }
+
+        .summary-icon {
+            font-size: 25px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .summary-label {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .summary-number {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .content-panel {
+            background: white;
+            border-radius: 22px;
+            padding: 25px;
+            box-shadow: 0 5px 18px rgba(25, 41, 67, 0.05);
+        }
+
+        .filter-label {
+            color: #75849d;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .form-control,
+        .form-select {
+            border-color: #dfe4ed;
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #d4ad32;
+            box-shadow: 0 0 0 0.2rem rgba(212, 173, 50, 0.15);
+        }
+
+        .table thead th {
+            background: #f5f7fa;
+            color: #75849d;
+            font-size: 12px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            padding: 15px;
+        }
+
+        .table tbody td {
+            padding: 16px 15px;
+            vertical-align: middle;
+        }
+
+        .badge-type {
+            background: #e5edff;
+            color: #315fa8;
+            border-radius: 20px;
+            padding: 7px 10px;
+            font-size: 11px;
+        }
+
+        .badge-read {
+            background: #e0f2e8;
+            color: #237447;
+            border-radius: 20px;
+            padding: 7px 10px;
+        }
+
+        .badge-unread {
+            background: #fff1c9;
+            color: #96700b;
+            border-radius: 20px;
+            padding: 7px 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 45px 20px;
+            color: #75849d;
+        }
+
+        .empty-state i {
+            font-size: 42px;
+            color: #d4ad32;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 18px;
+            }
+
+            .page-title {
+                font-size: 27px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- Sidebar -->
+        <div th:replace="~{fragments/shell :: sidebar('notifications')}"></div>
+
+        <!-- Main area -->
+        <div class="col-md-10 p-0">
+
+            <!-- Top navigation -->
+            <div th:replace="~{fragments/shell :: topbar}"></div>
+
+            <main class="main-content">
+
+                <!-- Page heading -->
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+
+                    <div>
+                        <div class="eyebrow">Communication Centre</div>
+
+                        <h1 class="page-title">
+                            Notification Management
+                        </h1>
+
+                        <p class="page-description mb-0">
+                            Create, track, and manage user notifications.
+                        </p>
+                    </div>
+
+                    <a th:href="@{/admin/notifications/create}"
+                       class="btn btn-gold">
+                        <i class="bi bi-plus-circle me-2"></i>
+                        Create Notification
+                    </a>
+
+                </div>
+
+
+                <!-- Summary cards -->
+                <div class="row g-4 mb-4">
+
+                    <div class="col-xl-3 col-sm-6">
+                        <div class="summary-card card-blue">
+                            <div class="summary-icon">
+                                <i class="bi bi-bell"></i>
+                            </div>
+
+                            <p class="summary-label">Total Notifications</p>
+                            <p class="summary-number"
+                               th:text="${totalCount != null ? totalCount : 0}">0</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-sm-6">
+                        <div class="summary-card card-navy">
+                            <div class="summary-icon">
+                                <i class="bi bi-envelope"></i>
+                            </div>
+
+                            <p class="summary-label">Unread Notifications</p>
+                            <p class="summary-number"
+                               th:text="${unreadCount != null ? unreadCount : 0}">0</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-sm-6">
+                        <div class="summary-card card-ink">
+                            <div class="summary-icon">
+                                <i class="bi bi-check2-circle"></i>
+                            </div>
+
+                            <p class="summary-label">Read Notifications</p>
+                            <p class="summary-number"
+                               th:text="${readCount != null ? readCount : 0}">0</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-sm-6">
+                        <div class="summary-card card-gold">
+                            <div class="summary-icon">
+                                <i class="bi bi-gear"></i>
+                            </div>
+
+                            <p class="summary-label">System Notifications</p>
+                            <p class="summary-number"
+                               th:text="${systemCount != null ? systemCount : 0}">0</p>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- Search and filters -->
+                <section class="content-panel mb-4">
+
+                    <h5 class="fw-bold mb-4">
+                        <i class="bi bi-funnel me-2" style="color: #c9a227;"></i>
+                        Search and Filter
+                    </h5>
+
+                    <form th:action="@{/admin/notifications}" method="get">
+
+                        <div class="row g-3">
+
+                            <div class="col-lg-4">
+                                <label class="filter-label">Search</label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       name="search"
+                                       th:value="${search}"
+                                       placeholder="Search title or message...">
+                            </div>
+
+                            <div class="col-lg-3">
+                                <label class="filter-label">Notification Type</label>
+
+                                <select class="form-select" name="type">
+                                    <option value="">All Types</option>
+
+                                    <option value="ORDER_STATUS"
+                                            th:selected="${type == 'ORDER_STATUS'}">
+                                        Order Status
+                                    </option>
+
+                                    <option value="ACCOUNT"
+                                            th:selected="${type == 'ACCOUNT'}">
+                                        Account
+                                    </option>
+
+                                    <option value="SYSTEM"
+                                            th:selected="${type == 'SYSTEM'}">
+                                        System
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-3">
+                                <label class="filter-label">Read Status</label>
+
+                                <select class="form-select" name="readStatus">
+                                    <option value="">All Statuses</option>
+
+                                    <option value="unread"
+                                            th:selected="${readStatus == 'unread'}">
+                                        Unread
+                                    </option>
+
+                                    <option value="read"
+                                            th:selected="${readStatus == 'read'}">
+                                        Read
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="col-lg-2 d-flex align-items-end gap-2">
+
+                                <button type="submit" class="btn btn-gold w-100">
+                                    <i class="bi bi-search me-1"></i>
+                                    Search
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <!-- Notifications table -->
+                <section class="content-panel">
+
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+
+                        <h5 class="fw-bold mb-0">
+                            <i class="bi bi-list-ul me-2"
+                               style="color: #c9a227;"></i>
+                            All Notifications
+                        </h5>
+
+                        <span class="text-muted small">
+                            Records:
+                            <strong th:text="${notifications != null ? notifications.size() : 0}">0</strong>
+                        </span>
+
+                    </div>
+
+                    <div class="table-responsive"
+                         th:if="${notifications != null and !#lists.isEmpty(notifications)}">
+
+                        <table class="table align-middle">
+
+                            <thead>
+                            <tr>
+                                <th>Recipient</th>
+                                <th>Title</th>
+                                <th>Type</th>
+                                <th>Order ID</th>
+                                <th>Read Status</th>
+                                <th>Created At</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr th:each="notification : ${notifications}">
+
+                                <td>
+                                    <span th:text="${notification.userId}">
+                                        Recipient ID
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="fw-semibold"
+                                         th:text="${notification.title}">
+                                        Notification title
+                                    </div>
+
+                                    <small class="text-muted"
+                                           th:text="${notification.message}">
+                                        Notification message
+                                    </small>
+                                </td>
+
+                                <td>
+                                    <span class="badge-type"
+                                          th:text="${notification.type}">
+                                        SYSTEM
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span th:if="${notification.orderId != null}"
+                                          th:text="${notification.orderId}">
+                                        Order ID
+                                    </span>
+
+                                    <span th:if="${notification.orderId == null}"
+                                          class="text-muted">—</span>
+                                </td>
+
+                                <td>
+                                    <span th:if="${notification.isRead}"
+                                          class="badge-read">Read</span>
+
+                                    <span th:unless="${notification.isRead}"
+                                          class="badge-unread">Unread</span>
+                                </td>
+
+                                <td>
+                                    <span th:if="${notification.createdAt != null}"
+                                          th:text="${#temporals.format(notification.createdAt, 'dd MMM yyyy, hh:mm a')}">
+                                        Date
+                                    </span>
+                                </td>
+
+                            </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+
+                    <!-- Empty state -->
+                    <div class="empty-state"
+                         th:if="${notifications == null or #lists.isEmpty(notifications)}">
+
+                        <i class="bi bi-bell"></i>
+
+                        <h5 class="fw-bold mt-3">
+                            No notifications found
+                        </h5>
+
+                        <p class="mb-3">
+                            Notifications will appear here once they have been created.
+                        </p>
+
+                        <a th:href="@{/admin/notifications/create}"
+                           class="btn btn-gold">
+                            <i class="bi bi-plus-circle me-2"></i>
+                            Create Your First Notification
+                        </a>
+
+                    </div>
+
+                </section>
+
+            </main>
+
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
