@@ -4,6 +4,7 @@ import com.lenzora.official.system.lenzora.catalogue.domain.Frame;
 import com.lenzora.official.system.lenzora.catalogue.domain.LensOption;
 import com.lenzora.official.system.lenzora.catalogue.infrastructure.FrameRepository;
 import com.lenzora.official.system.lenzora.catalogue.infrastructure.LensOptionRepository;
+import com.lenzora.official.system.lenzora.config.HospitalSettings;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,10 +32,15 @@ public class OrderController {
     /** Reads the lens options shown as checkboxes. */
     private final LensOptionRepository lensOptionRepository;
 
-    public OrderController(OrderService pOrderService, FrameRepository pFrameRepository, LensOptionRepository pLensOptionRepository) {
+    /** Keeps the hospital details the administrator saved. */
+    private final HospitalSettings hospitalSettings;
+
+    public OrderController(OrderService pOrderService, FrameRepository pFrameRepository,
+                           LensOptionRepository pLensOptionRepository, HospitalSettings pHospitalSettings) {
         this.orderService = pOrderService;
         this.frameRepository = pFrameRepository;
         this.lensOptionRepository = pLensOptionRepository;
+        this.hospitalSettings = pHospitalSettings;
     }
 
     /**
@@ -45,9 +51,10 @@ public class OrderController {
     @GetMapping("/place-order")
     public String showForm(Model model) {
         if (!model.containsAttribute("orderForm")) {
-            model.addAttribute("orderForm", new PlaceOrderForm());
+            model.addAttribute("orderForm", emptyForm());
         }
         addDropDowns(model);
+        addHospital(model);
         return "place-order";
     }
 
@@ -65,7 +72,15 @@ public class OrderController {
 
         if (errors.hasErrors()) {
             addDropDowns(model);
+            addHospital(model);
             return "place-order";
+        }
+
+        // The hospital details are kept by the administrator, so the boxes the page
+        // sent back are ignored and the saved ones are used.
+        if (hospitalSettings.hasDetails()) {
+            form.setHospitalName(hospitalSettings.getName());
+            form.setFromLocation(hospitalSettings.getLocation());
         }
 
         OrderResult result = orderService.createOrder(form);
@@ -81,7 +96,35 @@ public class OrderController {
         System.out.println("Place order failed: " + result.getMessage());
         model.addAttribute("errorMessage", result.getMessage());
         addDropDowns(model);
+        addHospital(model);
         return "place-order";
+    }
+
+    /**
+     * Starts an order that already carries the hospital details the administrator saved.
+     * @return the form the page fills in
+     */
+    private PlaceOrderForm emptyForm() {
+
+        PlaceOrderForm form = new PlaceOrderForm();
+
+        if (hospitalSettings.hasDetails()) {
+            form.setHospitalName(hospitalSettings.getName());
+            form.setFromLocation(hospitalSettings.getLocation());
+        }
+
+        return form;
+    }
+
+    /**
+     * Hands the page the hospital details the administrator saved, so the boxes can be filled.
+     * @param model the data handed to place-order.html
+     */
+    private void addHospital(Model model) {
+
+        if (hospitalSettings.hasDetails()) {
+            model.addAttribute("hospital", hospitalSettings);
+        }
     }
 
     /**

@@ -90,6 +90,124 @@
                 </div>
 
 
+                <div th:if="${successMessage}"
+                     class="alert alert-success"
+                     th:text="${successMessage}"></div>
+
+                <div th:if="${errorMessage}"
+                     class="alert alert-danger"
+                     th:text="${errorMessage}"></div>
+
+
+                <!-- ================= HOSPITAL DETAILS ================= -->
+
+                <div class="card shadow-sm p-4 settings-section">
+
+                    <h5 class="mb-1">
+                        Hospital / Clinic Details
+                    </h5>
+
+                    <p class="text-muted small mb-4">
+                        Kept here once. Every new order shows these details in its hospital boxes.
+                    </p>
+
+                    <form method="post"
+                          th:action="@{/settings/hospital}">
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+
+                                <label for="hospitalName"
+                                       class="form-label">
+
+                                    Hospital / Clinic
+                                    <span class="required">*</span>
+
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="hospitalName"
+                                       name="hospitalName"
+                                       required
+                                       th:value="${hospital.name}"
+                                       placeholder="Enter hospital or clinic">
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label for="hospitalLocation"
+                                       class="form-label">
+
+                                    Branch Orders Are Sent From
+                                    <span class="required">*</span>
+
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="hospitalLocation"
+                                       name="location"
+                                       required
+                                       th:value="${hospital.location}"
+                                       placeholder="e.g. Colombo South">
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label for="hospitalAddress"
+                                       class="form-label">
+                                    Address
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="hospitalAddress"
+                                       name="address"
+                                       th:value="${hospital.address}"
+                                       placeholder="Street and town">
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label for="hospitalPhone"
+                                       class="form-label">
+                                    Contact Number
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="hospitalPhone"
+                                       name="phone"
+                                       th:value="${hospital.phone}"
+                                       placeholder="e.g. 011 234 5678">
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="mt-3">
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+                                Save Hospital Details
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
                 <!-- ================= ACCOUNT SETTINGS ================= -->
 
                 <div class="card shadow-sm p-4 settings-section">
