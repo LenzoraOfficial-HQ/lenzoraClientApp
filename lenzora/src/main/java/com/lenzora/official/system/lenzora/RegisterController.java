@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * Serves the sign-up page and saves the account it submits. The new account is
  * not logged in straight away - the login page is shown instead.
- *
- * @author Lenzora
- * @version 1.0
  */
 @Controller
 public class RegisterController {
@@ -21,18 +18,11 @@ public class RegisterController {
     /** Checks the submitted details and writes the account. */
     private final UserRegistrationService userRegistrationService;
 
-    /**
-     * @param pUserRegistrationService the sign-up service
-     */
     public RegisterController(UserRegistrationService pUserRegistrationService) {
         this.userRegistrationService = pUserRegistrationService;
     }
 
-    /**
-     * Shows the empty sign-up form.
-     *
-     * @return the sign-up page
-     */
+    /** Shows the empty sign-up form. */
     @GetMapping("/register")
     public String showRegister() {
         return "register";
@@ -41,14 +31,6 @@ public class RegisterController {
     /**
      * Creates the account, or shows the form again with the reason it could not
      * be created.
-     *
-     * @param pFirstName         the first name typed on the form
-     * @param pLastName          the last name typed on the form
-     * @param pEmail             the email address, which is also the login name
-     * @param pPassword          the chosen password
-     * @param pConfirmedPassword the same password typed a second time
-     * @param pModel             carries the message back to the page
-     * @return a redirect to the login page, or the sign-up page again
      */
     @PostMapping("/register")
     public String createAccount(

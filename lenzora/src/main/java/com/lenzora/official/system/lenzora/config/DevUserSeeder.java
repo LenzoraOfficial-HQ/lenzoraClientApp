@@ -13,9 +13,6 @@ import java.time.LocalDateTime;
 /**
  * Creates one administrator account when the application starts against an
  * empty database, so there is always an account to sign in with.
- *
- * @author Lenzora
- * @version 1.0
  */
 @Component
 public class DevUserSeeder implements ApplicationRunner {
@@ -32,19 +29,12 @@ public class DevUserSeeder implements ApplicationRunner {
     /** Turns the plain password into the BCrypt hash the table stores. */
     private final PasswordEncoder passwordEncoder;
 
-    /**
-     * @param pUserRepository  the login account table
-     * @param pPasswordEncoder the encoder used by the login form
-     */
     public DevUserSeeder(UserRepository pUserRepository,
                          PasswordEncoder pPasswordEncoder) {
         this.userRepository = pUserRepository;
         this.passwordEncoder = pPasswordEncoder;
     }
 
-    /**
-     * @param pArgs the command line arguments, not used
-     */
     @Override
     public void run(ApplicationArguments pArgs) {
 
