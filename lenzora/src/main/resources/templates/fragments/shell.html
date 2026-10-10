@@ -62,9 +62,14 @@
 
     <div class="d-flex align-items-center gap-3">
 
-        <button type="button" class="icon-button" aria-label="Notifications">
+        <a th:href="@{/notifications}"
+           class="icon-button"
+           aria-label="Notifications"
+           title="View notifications">
+
             <i class="bi bi-bell"></i>
-        </button>
+
+        </a>
 
         <span class="avatar" aria-label="Account">
             <i class="bi bi-person"></i>

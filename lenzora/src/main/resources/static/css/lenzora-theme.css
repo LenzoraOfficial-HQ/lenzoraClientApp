@@ -213,6 +213,13 @@ h6 {
     font-size: 17px;
     line-height: 1;
     transition: transform 0.16s ease, box-shadow 0.16s ease;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    text-decoration: none;
+    line-height: 1;
 }
 
 .icon-button:hover {
