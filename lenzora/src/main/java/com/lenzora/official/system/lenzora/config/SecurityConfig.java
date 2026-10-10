@@ -54,6 +54,7 @@ public class SecurityConfig {
                                 "/api/auth/forgot-password",
                                 "/api/auth/reset-password",
                                 "/css/**",
+                                "/assets/**",
                                 "/oauth2/**"
                         ).permitAll()
                         // The admin portal and the management screens are admin only.

@@ -194,25 +194,6 @@
             min-height: 120px;
         }
 
-        /* ================= ORDER INFO ================= */
-
-        .order-info {
-            background-color: var(--lenzora-surface-alt);
-            border-radius: 10px;
-            padding: 16px;
-            margin-bottom: 24px;
-        }
-
-        .order-info-label {
-            color: var(--lenzora-text-muted);
-            font-size: 12px;
-            margin-bottom: 3px;
-        }
-
-        .order-info-value {
-            font-weight: 600;
-        }
-
         /* ================= ACTIONS ================= */
 
         .form-actions {
@@ -326,59 +307,6 @@
                             </span>
 
                             <i class="bi bi-chevron-down date-chip-chevron"></i>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- ================================================= -->
-                    <!-- ORDER INFORMATION -->
-                    <!-- ================================================= -->
-
-                    <div class="order-info">
-
-                        <div class="row">
-
-                            <div class="col-md-4">
-
-                                <div class="order-info-label">
-                                    Order Number
-                                </div>
-
-                                <div class="order-info-value text-muted">
-                                    Generated on submission
-                                </div>
-
-                            </div>
-
-
-                            <div class="col-md-4">
-
-                                <div class="order-info-label">
-                                    Order Date
-                                </div>
-
-                                <div class="order-info-value">
-                                    <span id="orderDate"></span>
-                                </div>
-
-                            </div>
-
-
-                            <div class="col-md-4">
-
-                                <div class="order-info-label">
-                                    Status
-                                </div>
-
-                                <div class="order-info-value">
-                                    <span class="badge bg-secondary">
-                                        Draft
-                                    </span>
-                                </div>
-
-                            </div>
 
                         </div>
 
@@ -1841,23 +1769,9 @@
 </div>
 
 
-<!-- ========================================================= -->
-<!-- SIMPLE DATE DISPLAY -->
-<!-- ========================================================= -->
-
 <script>
 
     document.addEventListener("DOMContentLoaded", function () {
-
-        // ---------- order date ----------
-        const today = new Date();
-
-        document.getElementById("orderDate").textContent =
-            today.getFullYear() +
-            "-" +
-            String(today.getMonth() + 1).padStart(2, "0") +
-            "-" +
-            String(today.getDate()).padStart(2, "0");
 
         // The step bar is only rendered together with the order form itself.
         const stepBar = document.getElementById("orderStepBar");
