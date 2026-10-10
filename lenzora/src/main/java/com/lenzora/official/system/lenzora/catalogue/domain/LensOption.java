@@ -22,7 +22,7 @@ public class LensOption extends AuditableEntity {
     private Long lensOptionId;
 
     /** Unique code used to identify the lens option. */
-    @Column(name = "code", nullable = false, length = 50)
+    @Column(name = "lens_code", nullable = false, length = 50)
     private String lensCode;
 
     /** Display name or description of the lens option. */
@@ -39,7 +39,7 @@ public class LensOption extends AuditableEntity {
     private BigDecimal extraCharge;
 
     /** Indicates whether the lens option is currently active. */
-    @Column(name = "active", nullable = false)
+    @Column(name = "is_active", nullable = false)
     private Boolean active = true;
 
     /** No-argument constructor required by JPA. */

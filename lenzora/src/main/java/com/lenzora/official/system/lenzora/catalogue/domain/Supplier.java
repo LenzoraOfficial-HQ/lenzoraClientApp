@@ -20,7 +20,7 @@ public class Supplier extends AuditableEntity {
     private Long supplierId;
 
     /** Name of the supplier. */
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(name = "supplier_name", nullable = false, length = 100)
     private String supplierName;
 
     /** Name of the supplier's contact person. */
