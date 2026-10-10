@@ -252,6 +252,27 @@ public class Order extends AuditableEntity {
     }
 
     /**
+     * Moves the order to the next status, as chosen on the admin review screen.
+     *
+     * @param pNext the status the administrator chose
+     * @return true when the status was changed, false when the order no longer allows it
+     */
+    public boolean moveTo(OrderStatus pNext) {
+
+        if (pNext == null) {
+            System.out.println("Order " + orderNumber + " was given no status.");
+            return false;
+        }
+
+        if (!canChange()) {
+            return false;
+        }
+
+        this.status = pNext;
+        return true;
+    }
+
+    /**
      * The total from sum of lines.
      * @return the new total
      */
