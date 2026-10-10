@@ -481,14 +481,37 @@
 
                     <span class="notification-date"
                           th:text="${#temporals.format(notification.createdAt, 'dd MMM yyyy, hh:mm a')}">
-                Notification date
-            </span>
+                        Notification date
+                    </span>
+
+                    <!-- Actions for each notification -->
+                    <div class="mt-3">
+
+                        <!-- Show button only for unread notifications -->
+                        <form th:if="${!notification.isRead}"
+                              th:action="@{/notifications/{id}/read(id=${notification.notificationId})}"
+                              method="post">
+
+                            <button type="submit"
+                                    class="btn btn-sm btn-outline-success">
+                                <i class="bi bi-check2-circle me-1"></i>
+                                Mark as Read
+                            </button>
+
+                        </form>
+
+                        <!-- Show status for already-read notifications -->
+                        <span th:if="${notification.isRead}"
+                              class="badge bg-success">
+                            <i class="bi bi-check2 me-1"></i>
+                            Read
+                        </span>
+
+                    </div>
 
                 </div>
 
             </div>
-
-        </div>
 
         <!-- Empty state when there are no notifications -->
         <div class="empty-state"

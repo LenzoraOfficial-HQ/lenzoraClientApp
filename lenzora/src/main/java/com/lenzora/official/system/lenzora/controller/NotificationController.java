@@ -3,6 +3,8 @@ package com.lenzora.official.system.lenzora.controller;
 import com.lenzora.official.system.lenzora.entity.AppUser;
 import com.lenzora.official.system.lenzora.repository.AppUserRepository;
 import com.lenzora.official.system.lenzora.service.NotificationService;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -49,6 +51,36 @@ public class NotificationController{
         model.addAttribute("readCount",notifications.size() - unreadNotifications.size());
 
         return "notifications";
+    }
+
+    @PostMapping("/notifications/{notificationId}/read")
+    public String markNotificationAsRead(
+            @PathVariable Long notificationId,
+            Authentication authentication) {
+
+        // Identify the logged-in user
+        String email = authentication.getName();
+
+        AppUser appUser = appUserRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new IllegalStateException(
+                                "Logged-in user was not found in AppUser"));
+
+        Long userId = appUser.getUserId();
+
+        // Find the notification
+        var notificationOptional =
+                notificationService.getNotificationById(notificationId);
+
+        // Only allow the owner to mark their notification as read
+        if (notificationOptional.isPresent()
+                && notificationOptional.get().getUserId().equals(userId)) {
+
+            notificationService.markAsRead(notificationId);
+        }
+
+        // Return to the notification page
+        return "redirect:/notifications";
     }
 
 
