@@ -5,7 +5,7 @@ import com.lenzora.official.system.lenzora.catalogue.infrastructure.SupplierRepo
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Updates suppliers in the catalogue. */
+/** Creates and updates suppliers in the catalogue. */
 @Service
 public class SupplierService {
 
@@ -13,6 +13,12 @@ public class SupplierService {
 
     public SupplierService(SupplierRepository supplierRepository) {
         this.supplierRepository = supplierRepository;
+    }
+
+    /** Saves a newly registered supplier. */
+    @Transactional
+    public Supplier createSupplier(Supplier supplier) {
+        return supplierRepository.saveAndFlush(supplier);
     }
 
     /**
