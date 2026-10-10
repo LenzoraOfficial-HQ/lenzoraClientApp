@@ -50,6 +50,11 @@
                 <i class="bi bi-box-seam"></i> Catalogue
             </a>
 
+            <a href="/admin/suppliers" class="nav-link"
+               th:classappend="${active == 'admin-suppliers'} ? 'active'">
+                <i class="bi bi-truck"></i> Suppliers
+            </a>
+
             <a href="/users" class="nav-link"
                th:classappend="${active == 'users'} ? 'active'">
                 <i class="bi bi-people"></i> Users
