@@ -1,5 +1,6 @@
 package com.lenzora.official.system.lenzora.model;
 
+import com.lenzora.official.system.lenzora.entity.AccountStatus;
 import jakarta.persistence.*;
 
 @Entity
@@ -26,8 +27,21 @@ public class User {
     @Column(name = "user_role", nullable = false)
     private String role;
 
+    @Column(name = "role", nullable = false)
+    private String legacyRole;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_status", nullable = false)
-    private String status;
+    private AccountStatus accountStatus = AccountStatus.PENDING;
+
+    @Column(name = "status", nullable = false)
+    private String legacyStatus;
+
+    @Column(name = "license_number", length = 50)
+    private String licenseNumber;
+
+    @Column(name = "profile_completed", nullable = false, columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+    private boolean profileCompleted;
 
     @Column(name = "registration_no")
     private String registrationNo;
@@ -108,13 +122,36 @@ public class User {
         this.role = role;
     }
 
-
-    public String getStatus() {
-        return status;
+    @PrePersist
+    @PreUpdate
+    protected void synchronizeRoleColumns() {
+        this.legacyRole = this.role;
+        this.legacyStatus = this.accountStatus.name();
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+
+    public AccountStatus getAccountStatus() {
+        return accountStatus == AccountStatus.ACTIVE ? AccountStatus.APPROVED : accountStatus;
+    }
+
+    public void setAccountStatus(AccountStatus accountStatus) {
+        this.accountStatus = accountStatus;
+    }
+
+    public String getLicenseNumber() {
+        return licenseNumber;
+    }
+
+    public void setLicenseNumber(String licenseNumber) {
+        this.licenseNumber = licenseNumber;
+    }
+
+    public boolean isProfileCompleted() {
+        return profileCompleted;
+    }
+
+    public void setProfileCompleted(boolean profileCompleted) {
+        this.profileCompleted = profileCompleted;
     }
 
 

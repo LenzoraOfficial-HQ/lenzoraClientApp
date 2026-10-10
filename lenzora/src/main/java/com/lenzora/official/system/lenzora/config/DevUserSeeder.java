@@ -1,12 +1,14 @@
 package com.lenzora.official.system.lenzora.config;
 
 import com.lenzora.official.system.lenzora.model.User;
+import com.lenzora.official.system.lenzora.entity.AccountStatus;
 import com.lenzora.official.system.lenzora.repository.UserRepository;
 
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Profile;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +17,7 @@ import java.time.LocalDateTime;
  * empty database, so there is always an account to sign in with.
  */
 @Component
+@Profile("!production")
 public class DevUserSeeder implements ApplicationRunner {
 
     /** The address typed into the "Username" box of the login page. */
@@ -49,7 +52,7 @@ public class DevUserSeeder implements ApplicationRunner {
         admin.setEmail(ADMIN_EMAIL);
         admin.setPasswordHash(passwordEncoder.encode(ADMIN_PASSWORD));
         admin.setRole("ADMIN");
-        admin.setStatus("ACTIVE");
+        admin.setAccountStatus(AccountStatus.ACTIVE);
 
         LocalDateTime now = LocalDateTime.now();
         admin.setCreatedAt(now);

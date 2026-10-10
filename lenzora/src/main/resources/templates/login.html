@@ -343,20 +343,20 @@
                    th:value="${_csrf.token}">
 
 
-            <!-- USERNAME -->
+            <!-- EMAIL -->
 
             <div class="mb-3">
 
-                <label for="username"
+                  <label for="email"
                        class="form-label">
-                    Username
+                      Email address
                 </label>
 
-                <input type="text"
+                  <input type="email"
                        class="form-control"
-                       id="username"
-                       name="username"
-                       placeholder="Enter your username"
+                      id="email"
+                      name="email"
+                      placeholder="Enter your registered email"
                        required>
 
             </div>
@@ -412,7 +412,7 @@
 
         <div class="login-error"
              th:if="${param.error != null}">
-            Email or password is incorrect.
+            Email or password is incorrect. Use the email address you registered with.
         </div>
 
         <div class="login-notice"

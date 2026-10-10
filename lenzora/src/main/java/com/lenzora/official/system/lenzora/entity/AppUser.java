@@ -31,9 +31,15 @@ public class AppUser {
     @Column(name = "user_role", nullable = false)
     private UserRole userRole = UserRole.ORTHOPTIST;
 
+     @Column(name = "role", nullable = false)
+     private String legacyRole;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "user_status", nullable = false)
     private UserStatus userStatus = UserStatus.PENDING;
+
+     @Column(name = "status", nullable = false)
+     private String legacyStatus;
 
     @Column(name = "registration_no", length = 30)
     private String registrationNo;
@@ -63,6 +69,8 @@ public class AppUser {
      */
     @PrePersist
     protected void onCreate() {
+          this.legacyRole = this.userRole.name();
+          this.legacyStatus = this.userStatus.name();
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
@@ -72,6 +80,8 @@ public class AppUser {
      */
     @PreUpdate
     protected void onUpdate() {
+          this.legacyRole = this.userRole.name();
+          this.legacyStatus = this.userStatus.name();
         this.updatedAt = LocalDateTime.now();
     }
 

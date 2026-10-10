@@ -1,5 +1,6 @@
 package com.lenzora.official.system.lenzora.service;
 
+import com.lenzora.official.system.lenzora.entity.AccountStatus;
 import com.lenzora.official.system.lenzora.model.User;
 import com.lenzora.official.system.lenzora.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +23,8 @@ public class UserRegistrationService {
      * Validates input details and registers a new user.
      * Returns an error message if validation fails, or an empty string on success.
      */
-    public String register(String firstName, String lastName, String email, String password, String confirmPassword) {
+    public String register(String firstName, String lastName, String email,
+                           String password, String confirmPassword) {
         // Clean input values
         firstName = cleanText(firstName);
         lastName = cleanText(lastName);
@@ -63,7 +65,7 @@ public class UserRegistrationService {
         user.setEmail(email);
         user.setPasswordHash(passwordEncoder.encode(password));
         user.setRole("ORTHOPTIST");
-        user.setStatus("ACTIVE");
+        user.setAccountStatus(AccountStatus.PENDING);
 
         LocalDateTime now = LocalDateTime.now();
         user.setCreatedAt(now);

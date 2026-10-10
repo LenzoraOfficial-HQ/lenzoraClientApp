@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 
 <!-- Sidebar. Pass the page key so the right item gets the gold pill:
@@ -40,6 +40,11 @@
         <a href="/settings" class="nav-link"
            th:classappend="${active == 'settings'} ? 'active'">
             <i class="bi bi-gear"></i> Settings
+        </a>
+
+        <a href="/admin/orthoptists" class="nav-link"
+           sec:authorize="hasRole('ADMIN')">
+            <i class="bi bi-person-check"></i> Approvals
         </a>
 
     </nav>
