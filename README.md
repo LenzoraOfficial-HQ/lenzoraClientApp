@@ -25,7 +25,7 @@
 |-------------|----------------|---------------------------------------------------|
 | JDK         | **21**         | Required. Older/newer JDKs will fail the build.   |
 | Maven       | *not required* | The Maven Wrapper (`mvnw`) downloads Maven for you.|
-| MySQL       | 8.x (optional) | Only needed once DB persistence is enabled.       |
+| MySQL       | 8.x (optional) | Needed for the login and order screens.     |
 | IDE         | any            | VS Code, IntelliJ IDEA, or Eclipse/STS all work.  |
 
 Check your Java version:
@@ -115,27 +115,45 @@ Main config file: `lenzora/src/main/resources/application.properties`
 
 ## 🗄️ Database (MySQL)
 
-The project includes **Spring Data JPA** and the **MySQL connector**, but the datasource is **currently disabled** so the app starts without a database:
+The connection settings come from `lenzora/.env` (copy `lenzora/.env.example` to `lenzora/.env`,
+which is never committed). If there is no `.env`, the app falls back to a local MySQL server.
 
-```java
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-```
+### Option A — your own local MySQL (no `.env` needed)
 
-To enable DB persistence later:
+1. Start a MySQL server on `localhost:3306`.
+2. Run the app from the `lenzora/` folder (`cd lenzora; .\mvnw.cmd spring-boot:run`).
 
-1. Create a database in MySQL, e.g. `CREATE DATABASE lenzora;`
-2. Add the following to `application.properties` (replace credentials as needed):
+The default URL is `jdbc:mysql://localhost:3306/lenzora?createDatabaseIfNotExist=true…`, so the
+`lenzora` database is created for you and Hibernate builds the tables it needs (`app_user`,
+`app_order`, `order_item`, `prescription`, `frame`, `lens_option`, `supplier`, …) on the first start.
+
+Sign in with `admin@lenzora.lk` / `admin123` (seeded only while `app_user` is empty), or create an
+account from `/register`.
+
+### Option B — the shared team database (Aiven)
+
+Put the shared connection details in `lenzora/.env`:
 
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/lenzora?useSSL=false&serverTimezone=UTC
-spring.datasource.username=root
-spring.datasource.password=your_password
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
+DB_URL=jdbc:mysql://<host>:<port>/defaultdb?ssl-mode=REQUIRED&allowPublicKeyRetrieval=true&serverTimezone=UTC
+DB_USERNAME=<user>
+DB_PASSWORD=<password>
+DDL_AUTO=none
 ```
 
-3. Remove `DataSourceAutoConfiguration.class` from the `@SpringBootApplication` exclusion in `LenzoraApplication.java`.
-4. Restart the app.
+> **`DDL_AUTO` decides who owns the schema.** `none` means "the database already has the tables —
+> never change them", which is required for the shared database. `update` lets Hibernate create
+> missing tables, which is what a private local database needs — it is the default when no `.env`
+> is present.
+
+### "Table 'lenzora.app_user' doesn't exist"
+
+The app reached a database with no tables. Two causes:
+
+* `DB_URL` in `lenzora/.env` points at an empty database while `DDL_AUTO=none` is in effect — remove
+  the `DDL_AUTO` line (or set it to `update`) so Hibernate can create the tables, or
+* the DMS schema script was run separately: it loads its tables into `defaultdb`, so `DB_URL` must
+  name that same database.
 
 ---
 
