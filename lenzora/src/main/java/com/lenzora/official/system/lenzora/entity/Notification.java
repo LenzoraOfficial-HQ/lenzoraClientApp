@@ -13,11 +13,7 @@ import java.time.LocalDateTime;
  *
  */
 @Entity
-<<<<<<< HEAD
-@Table(name = "notifications")
-=======
 @Table(name = "notification")
->>>>>>> 2b7f0e32aa0b4d41ab49b1ed728e5fc14222ecbb
 public class Notification {
 
     /**
