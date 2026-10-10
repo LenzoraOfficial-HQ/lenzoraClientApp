@@ -3,7 +3,7 @@
 <body>
 
 <!-- Sidebar. Pass the page key so the right item gets the gold pill:
-     sidebar('dashboard' | 'place-order' | 'users' | 'reports' | 'settings') -->
+     sidebar('dashboard' | 'place-order' | 'catalogue' | 'users' | 'reports' | 'settings') -->
 <div class="col-md-2 sidebar p-4" th:fragment="sidebar(active)">
 
     <div class="logo mb-4">
@@ -20,6 +20,11 @@
         <a href="/place-order" class="nav-link"
            th:classappend="${active == 'place-order'} ? 'active'">
             <i class="bi bi-cart3"></i> Place Order
+        </a>
+
+        <a href="/catalogue" class="nav-link"
+           th:classappend="${active == 'catalogue'} ? 'active'">
+            <i class="bi bi-box-seam"></i> Catalogue
         </a>
 
         <a href="/users" class="nav-link"
