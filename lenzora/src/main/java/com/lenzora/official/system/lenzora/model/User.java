@@ -23,10 +23,10 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
-    @Column(name = "role", nullable = false)
+    @Column(name = "user_role", nullable = false)
     private String role;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "user_status", nullable = false)
     private String status;
 
     @Column(name = "registration_no")
