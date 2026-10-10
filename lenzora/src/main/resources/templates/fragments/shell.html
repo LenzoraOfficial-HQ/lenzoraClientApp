@@ -99,6 +99,17 @@
 
         </span>
 
+        <!-- Sign out. A POST carrying the form's CSRF token, so the session is
+             really ended; the same control serves the admin portal too. -->
+        <form th:action="@{/logout}" method="post" class="m-0">
+
+            <button type="submit" class="sign-out" title="Sign out">
+                <i class="bi bi-box-arrow-right"></i>
+                <span class="sign-out-label">Sign out</span>
+            </button>
+
+        </form>
+
         <span class="avatar" aria-label="Account">
             <i class="bi bi-person"></i>
         </span>

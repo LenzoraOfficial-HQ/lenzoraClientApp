@@ -95,9 +95,58 @@
                      th:text="${errorMessage}"></div>
 
 
+                <!-- Queue bar: the two queues are worked on one at a time, so
+                     the lists never have to be scrolled past each other. -->
+
+                <div class="step-bar" id="queueBar">
+
+                    <div class="step-track">
+                        <div class="step-fill" id="queueFill"></div>
+                    </div>
+
+                    <div class="step-list" id="queueTabs">
+
+                        <button type="button" class="step-item is-active"
+                                data-queue="review">
+                            <span class="step-num">1</span>
+                            <span class="step-label">Awaiting Review</span>
+                            <span class="badge bg-warning text-dark"
+                                  th:text="${#lists.size(reviewQueue)}">0</span>
+                        </button>
+
+                        <button type="button" class="step-item"
+                                data-queue="placement">
+                            <span class="step-num">2</span>
+                            <span class="step-label">Ready to Place</span>
+                            <span class="badge bg-success"
+                                  th:text="${#lists.size(placementQueue)}">0</span>
+                        </button>
+
+                        <button type="button" class="step-item"
+                                data-queue="all">
+                            <span class="step-num"><i class="bi bi-list-ul"></i></span>
+                            <span class="step-label">Both queues</span>
+                        </button>
+
+                    </div>
+
+                    <div class="step-foot">
+
+                        <div class="step-meta">
+                            <span id="queueText">Showing the orders waiting for review</span>
+                            <span id="queuePercent"></span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
                 <!-- ================= WAITING FOR REVIEW ================= -->
 
-                <div class="card shadow-sm p-4 mb-4">
+                <div class="card shadow-sm p-4 mb-4"
+                     id="reviewCard"
+                     th:attr="data-count=${#lists.size(reviewQueue)}">
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
 
@@ -205,7 +254,9 @@
 
                 <!-- ================= READY TO PLACE ================= -->
 
-                <div class="card shadow-sm p-4">
+                <div class="card shadow-sm p-4"
+                     id="placementCard"
+                     th:attr="data-count=${#lists.size(placementQueue)}">
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
 
@@ -305,6 +356,68 @@
     </div>
 
 </div>
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const tabs      = document.querySelectorAll("#queueTabs .step-item");
+        const review    = document.getElementById("reviewCard");
+        const placement = document.getElementById("placementCard");
+
+        if (!tabs.length || !review || !placement) {
+            return;
+        }
+
+        const fill    = document.getElementById("queueFill");
+        const text    = document.getElementById("queueText");
+        const percent = document.getElementById("queuePercent");
+
+        const waiting = Number(review.dataset.count || 0);
+        const ready   = Number(placement.dataset.count || 0);
+        const total   = waiting + ready;
+        const done    = (total === 0) ? 100 : Math.round((ready / total) * 100);
+
+        function showQueue(which) {
+
+            review.classList.toggle("wz-hidden", which === "placement");
+            placement.classList.toggle("wz-hidden", which === "review");
+
+            tabs.forEach(function (tab) {
+                tab.classList.toggle("is-active", tab.dataset.queue === which);
+            });
+
+            if (which === "review") {
+                text.textContent = "Showing the " + waiting + " order(s) waiting for review";
+            } else if (which === "placement") {
+                text.textContent = "Showing the " + ready + " order(s) ready to place";
+            } else {
+                text.textContent = "Showing all " + total + " order(s) in the queue";
+            }
+
+            fill.style.width    = done + "%";
+            percent.textContent = ready + " of " + total + " moved on (" + done + "%)";
+
+            if (history.replaceState) {
+                history.replaceState(null, "", "#" + which);
+            }
+        }
+
+        tabs.forEach(function (tab) {
+
+            tab.addEventListener("click", function () {
+                showQueue(tab.dataset.queue);
+            });
+        });
+
+        const wanted  = (location.hash || "").replace("#", "");
+        const opening = (wanted === "placement" || wanted === "all") ? wanted : "review";
+
+        showQueue(opening);
+    });
+
+</script>
 
 </body>
 
