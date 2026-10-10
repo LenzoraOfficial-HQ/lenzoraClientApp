@@ -16,6 +16,10 @@ import java.time.LocalDateTime;
 @Table(name = "notification")
 public class Notification {
 
+    protected Notification() {
+        // JPA requires a no-args constructor
+    }
+
     /**
      * Unique identifier for the notification
      */

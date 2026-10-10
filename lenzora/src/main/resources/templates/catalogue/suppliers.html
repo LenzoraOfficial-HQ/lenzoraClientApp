@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lenzora - Suppliers</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/lenzora-theme.css}">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+        }
+
+        main {
+            min-height: 100vh;
+        }
+
+        main > .p-4 {
+            background: transparent;
+        }
+
+        main h2,
+        main h5 {
+            color: var(--lenzora-text);
+        }
+
+        main .text-muted {
+            color: var(--lenzora-text-muted) !important;
+        }
+
+        main .card {
+            border: 1px solid var(--lenzora-border);
+            border-radius: var(--lenzora-radius);
+            background-color: var(--lenzora-surface);
+            box-shadow: var(--lenzora-shadow-soft) !important;
+        }
+
+        main .form-label {
+            color: var(--lenzora-text);
+            font-weight: 600;
+        }
+
+        main .form-control {
+            min-height: 44px;
+            border: 1px solid var(--lenzora-border);
+            border-radius: var(--lenzora-radius-sm);
+            background-color: var(--lenzora-surface-alt);
+            color: var(--lenzora-text);
+            font-family: var(--lenzora-font);
+            transition: border-color 0.16s ease, box-shadow 0.16s ease;
+        }
+
+        main .form-control::placeholder {
+            color: var(--lenzora-text-muted);
+        }
+
+        main .form-control:focus {
+            border-color: var(--lenzora-accent-strong);
+            background-color: var(--lenzora-surface);
+            color: var(--lenzora-text);
+            box-shadow: 0 0 0 4px var(--lenzora-accent-soft);
+        }
+
+        main .btn-primary {
+            border: 1px solid transparent;
+            border-radius: var(--lenzora-radius-sm);
+            background-color: var(--lenzora-accent);
+            background-image: var(--lenzora-gold-gradient);
+            color: var(--lenzora-accent-ink);
+            font-weight: 700;
+            box-shadow: 0 10px 22px -10px rgba(212, 175, 55, 0.75);
+        }
+
+        main .btn-primary:hover,
+        main .btn-primary:focus-visible {
+            border-color: transparent;
+            background-color: var(--lenzora-accent-strong);
+            background-image: var(--lenzora-gold-gradient);
+            color: var(--lenzora-accent-ink);
+            filter: brightness(1.04);
+            transform: translateY(-1px);
+        }
+
+        main .badge.bg-secondary {
+            background-color: var(--lenzora-navy) !important;
+            color: #ffffff;
+        }
+
+        main .badge.bg-success {
+            background-color: var(--lenzora-green) !important;
+        }
+
+        main .badge.bg-secondary,
+        main .badge.bg-success {
+            border-radius: 999px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            padding: 0.45em 0.75em;
+        }
+
+        main .table {
+            margin-bottom: 0;
+            --bs-table-bg: transparent;
+            --bs-table-color: var(--lenzora-text);
+            --bs-table-border-color: var(--lenzora-border);
+            --bs-table-hover-bg: var(--lenzora-accent-soft);
+            --bs-table-hover-color: var(--lenzora-text);
+        }
+
+        main .table > thead th {
+            background-color: var(--lenzora-surface-alt);
+            color: var(--lenzora-text-muted);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        main .table > :not(caption) > * > * {
+            padding: 0.85rem 0.75rem;
+            border-bottom-color: var(--lenzora-border);
+        }
+
+        main .alert-success {
+            border-color: rgba(47, 158, 99, 0.2);
+            background-color: rgba(47, 158, 99, 0.1);
+            color: #216b45;
+        }
+
+        main .alert-danger {
+            border-color: rgba(214, 69, 80, 0.2);
+            background-color: rgba(214, 69, 80, 0.1);
+            color: #9f2e37;
+        }
+
+        main .text-danger {
+            color: var(--lenzora-danger) !important;
+        }
+
+        @media (max-width: 767.98px) {
+            .sidebar {
+                min-height: auto;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="~{fragments/shell :: sidebar('admin-suppliers')}"></div>
+
+        <main class="col-md-10 p-0">
+            <div th:replace="~{fragments/shell :: topbar}"></div>
+
+            <div class="p-4">
+                <div class="mb-4">
+                    <div class="eyebrow">Administration</div>
+                    <h2 class="mb-1">Suppliers</h2>
+                    <p class="text-muted mb-0">Register suppliers and manage supplier details.</p>
+                </div>
+
+                <div class="alert alert-success" th:if="${successMessage}"
+                     th:text="${successMessage}">Supplier registered.</div>
+                <div class="alert alert-danger" th:if="${errorMessage}"
+                     th:text="${errorMessage}">Please check the supplier details.</div>
+
+                <section class="card shadow-sm p-4 mb-4">
+                    <h5 class="mb-3">Register a supplier</h5>
+                    <form th:action="@{/admin/suppliers}" th:object="${supplierForm}" method="post">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label" for="supplierName">Supplier name</label>
+                                <input class="form-control" id="supplierName" type="text"
+                                       th:field="*{supplierName}" required>
+                                <div class="text-danger small" th:errors="*{supplierName}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="contactPerson">Contact person</label>
+                                <input class="form-control" id="contactPerson" type="text"
+                                       th:field="*{contactPerson}">
+                                <div class="text-danger small" th:errors="*{contactPerson}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="supplierEmail">Email</label>
+                                <input class="form-control" id="supplierEmail" type="email"
+                                       th:field="*{supplierEmail}" required>
+                                <div class="text-danger small" th:errors="*{supplierEmail}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" for="phone">Phone</label>
+                                <input class="form-control" id="phone" type="tel" th:field="*{phone}">
+                                <div class="text-danger small" th:errors="*{phone}"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label" for="streetNo">Street number</label>
+                                <input class="form-control" id="streetNo" type="text" th:field="*{streetNo}">
+                                <div class="text-danger small" th:errors="*{streetNo}"></div>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label" for="streetName">Street name</label>
+                                <input class="form-control" id="streetName" type="text" th:field="*{streetName}">
+                                <div class="text-danger small" th:errors="*{streetName}"></div>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label" for="city">City</label>
+                                <input class="form-control" id="city" type="text" th:field="*{city}">
+                                <div class="text-danger small" th:errors="*{city}"></div>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label" for="postalCode">Postal code</label>
+                                <input class="form-control" id="postalCode" type="text"
+                                       th:field="*{postalCode}">
+                                <div class="text-danger small" th:errors="*{postalCode}"></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary mt-4" type="submit">
+                            <i class="bi bi-person-plus"></i> Register supplier
+                        </button>
+                    </form>
+                </section>
+
+                <section class="card shadow-sm p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">Registered suppliers</h5>
+                        <span class="badge bg-secondary"
+                              th:text="${#lists.size(supplierList) + ' supplier(s)'}">0 suppliers</span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Supplier</th>
+                                <th scope="col">Contact person</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">City</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="supplier : ${supplierList}">
+                                <td th:text="${supplier.supplierId}">1</td>
+                                <td th:text="${supplier.supplierName}">Supplier name</td>
+                                <td th:text="${supplier.contactPerson ?: '-'}">Contact</td>
+                                <td th:text="${supplier.supplierEmail}">supplier@example.com</td>
+                                <td th:text="${supplier.phone ?: '-'}">Phone</td>
+                                <td th:text="${supplier.city ?: '-'}">City</td>
+                                <td>
+                                    <span class="badge bg-success" th:if="${supplier.active}">Active</span>
+                                    <span class="badge bg-secondary" th:unless="${supplier.active}">Inactive</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(supplierList)}">
+                                <td colspan="7" class="text-center text-muted py-4">
+                                    No suppliers have been registered yet.
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+</div>
+</body>
+</html>

@@ -127,8 +127,9 @@ The default URL is `jdbc:mysql://localhost:3306/lenzora?createDatabaseIfNotExist
 `lenzora` database is created for you and Hibernate builds the tables it needs (`app_user`,
 `app_order`, `order_item`, `prescription`, `frame`, `lens_option`, `supplier`, …) on the first start.
 
-Sign in with `admin@lenzora.lk` / `admin123` (seeded only while `app_user` is empty), or create an
-account from `/register`.
+Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` in `lenzora/.env` before the first start. The configured
+administrator is seeded only while `app_user` is empty. These credentials are not updated for an
+administrator that already exists in the database.
 
 ### Option B — the shared team database (Aiven)
 
@@ -219,4 +220,3 @@ lenzoraClientApp/
 - Update this README if you change build steps, ports, or required tooling.
 
 ---
-

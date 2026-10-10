@@ -14,4 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Automatically finds a user by their email address
     Optional<User> findByEmail(String email);
+
+    // Counts the accounts that carry one role, such as ADMIN
+    long countByRole(String role);
 }
