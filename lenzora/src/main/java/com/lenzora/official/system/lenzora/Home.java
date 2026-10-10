@@ -1,7 +1,10 @@
 
 package com.lenzora.official.system.lenzora;
 
+import com.lenzora.official.system.lenzora.config.RoleChecks;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +16,14 @@ public class Home {
     @Value("${spring.security.oauth2.client.registration.google.client-id:}")
     private String googleClientId;
 
-    // Dashboard
+    // Dashboard. The client screens belong to the orthoptists, so an
+    // administrator is sent straight to the admin portal instead.
     @GetMapping("/")
-    public String showHome(Model model) {
+    public String showHome(Model model, Authentication authentication) {
+
+        if (RoleChecks.isAdmin(authentication)) {
+            return "redirect:/admin";
+        }
 
         model.addAttribute("Name", "Lenzora");
         model.addAttribute("welcome", "Welcome to platform");
@@ -35,19 +43,5 @@ public class Home {
 
     // NOTE: /place-order now lives in OrderController (it needs the lookup data).
     // Keeping it here as well would cause "Ambiguous mapping" at startup.
-
-    @GetMapping("/users")
-    public String showUsers(){
-        return "users";
-    }
-
-    @GetMapping("/reports")
-    public String showReports(){
-        return "reports";
-    }
-
-    @GetMapping("/settings")
-    public String showSettings(){
-        return "settings";
-    }
+    // NOTE: the admin screens (/users, /reports, /settings) moved to AdminController.
 }

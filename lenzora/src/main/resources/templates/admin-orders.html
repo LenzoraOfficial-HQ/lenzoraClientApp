@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Lenzora - Order Review</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <!-- Shared theme colours -->
+    <link rel="stylesheet" th:href="@{/css/lenzora-theme.css}">
+
+    <style>
+        .sidebar {
+            min-height: 100vh;
+        }
+
+        .queue-title {
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <!-- ================= SIDEBAR ================= -->
+
+        <div th:replace="~{fragments/shell :: sidebar('admin-orders')}"></div>
+
+
+        <!-- ================= MAIN CONTENT ================= -->
+
+        <div class="col-md-10 p-0">
+
+            <!-- TOP BAR -->
+
+            <div th:replace="~{fragments/shell :: topbar}"></div>
+
+
+            <!-- ORDER REVIEW -->
+
+            <div class="p-4">
+
+                <div class="d-flex justify-content-between align-items-start mb-4">
+
+                    <div>
+
+                        <div class="eyebrow">
+                            Administration
+                        </div>
+
+                        <h2 class="queue-title mb-1">
+                            Order Review
+                        </h2>
+
+                        <p class="text-muted mb-0">
+                            Orders the orthoptists sent for admin review.
+                        </p>
+
+                    </div>
+
+                    <div class="date-chip">
+
+                        <i class="bi bi-calendar3 date-chip-icon"></i>
+
+                        <span class="date-chip-label">
+                            Today
+                        </span>
+
+                        <span class="date-chip-value"
+                              th:text="${#dates.format(#dates.createNow(), 'dd MMM yyyy')}">
+                            27 Sep 2026
+                        </span>
+
+                        <i class="bi bi-chevron-down date-chip-chevron"></i>
+
+                    </div>
+
+                </div>
+
+
+                <div th:if="${successMessage}"
+                     class="alert alert-success"
+                     th:text="${successMessage}"></div>
+
+                <div th:if="${errorMessage}"
+                     class="alert alert-danger"
+                     th:text="${errorMessage}"></div>
+
+
+                <!-- ================= WAITING FOR REVIEW ================= -->
+
+                <div class="card shadow-sm p-4 mb-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <h5 class="mb-0">
+                            Sent for admin review
+                        </h5>
+
+                        <span class="badge bg-warning text-dark"
+                              th:text="${#lists.size(reviewQueue)} + ' order(s)'">
+                            0 order(s)
+                        </span>
+
+                    </div>
+
+
+                    <p class="text-muted"
+                       th:if="${#lists.isEmpty(reviewQueue)}">
+                        Nothing is waiting for review.
+                    </p>
+
+
+                    <div class="table-responsive"
+                         th:unless="${#lists.isEmpty(reviewQueue)}">
+
+                        <table class="table align-middle">
+
+                            <thead>
+
+                            <tr>
+                                <th>Order</th>
+                                <th>Patient</th>
+                                <th>Hospital</th>
+                                <th>Job Type</th>
+                                <th>Placed On</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                            <tr th:each="o : ${reviewQueue}">
+
+                                <td>
+                                    <strong th:text="${o.orderNumber}">
+                                        LZ-20261010-0000A1
+                                    </strong>
+                                </td>
+
+                                <td th:text="${o.patientName}">
+                                    Patient Name
+                                </td>
+
+                                <td th:text="${o.hospitalName}">
+                                    Hospital
+                                </td>
+
+                                <td th:text="${o.jobType.label}">
+                                    New Spectacle
+                                </td>
+
+                                <td th:text="${o.orderDate}">
+                                    2026-10-10
+                                </td>
+
+                                <td th:text="${'Rs ' + #numbers.formatDecimal(o.total, 1, 'COMMA', 2, 'POINT')}">
+                                    Rs 27,500.00
+                                </td>
+
+                                <td>
+
+                                    <div class="d-flex gap-2">
+
+                                        <form th:action="@{/admin/orders/{id}/review(id=${o.id})}"
+                                              method="post">
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-primary">
+                                                <i class="bi bi-check2"></i> Reviewed
+                                            </button>
+                                        </form>
+
+                                        <form th:action="@{/admin/orders/{id}/cancel(id=${o.id})}"
+                                              method="post">
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-secondary">
+                                                <i class="bi bi-x-lg"></i> Cancel
+                                            </button>
+                                        </form>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================= READY TO PLACE ================= -->
+
+                <div class="card shadow-sm p-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <h5 class="mb-0">
+                            Reviewed - ready to place
+                        </h5>
+
+                        <span class="badge bg-success"
+                              th:text="${#lists.size(placementQueue)} + ' order(s)'">
+                            0 order(s)
+                        </span>
+
+                    </div>
+
+
+                    <p class="text-muted"
+                       th:if="${#lists.isEmpty(placementQueue)}">
+                        No reviewed order is waiting to be placed.
+                    </p>
+
+
+                    <div class="table-responsive"
+                         th:unless="${#lists.isEmpty(placementQueue)}">
+
+                        <table class="table align-middle">
+
+                            <thead>
+
+                            <tr>
+                                <th>Order</th>
+                                <th>Patient</th>
+                                <th>Hospital</th>
+                                <th>Job Type</th>
+                                <th>Placed On</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                            <tr th:each="o : ${placementQueue}">
+
+                                <td>
+                                    <strong th:text="${o.orderNumber}">
+                                        LZ-20261010-0000A1
+                                    </strong>
+                                </td>
+
+                                <td th:text="${o.patientName}">
+                                    Patient Name
+                                </td>
+
+                                <td th:text="${o.hospitalName}">
+                                    Hospital
+                                </td>
+
+                                <td th:text="${o.jobType.label}">
+                                    New Spectacle
+                                </td>
+
+                                <td th:text="${o.orderDate}">
+                                    2026-10-10
+                                </td>
+
+                                <td th:text="${'Rs ' + #numbers.formatDecimal(o.total, 1, 'COMMA', 2, 'POINT')}">
+                                    Rs 27,500.00
+                                </td>
+
+                                <td>
+
+                                    <form th:action="@{/admin/orders/{id}/place(id=${o.id})}"
+                                          method="post">
+                                        <button type="submit"
+                                                class="btn btn-sm btn-primary">
+                                            <i class="bi bi-send"></i> Place Order
+                                        </button>
+                                    </form>
+
+                                </td>
+
+                            </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
