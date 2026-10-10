@@ -593,14 +593,45 @@
 
                                     </label>
 
-                                    <input type="text"
-                                           class="form-control"
-                                           th:field="*{hospitalName}"
-                                           placeholder="Enter hospital or clinic">
+                                    <div th:if="${hospital == null}">
 
-                                    <div class="text-danger small"
-                                         th:if="${#fields.hasErrors('hospitalName')}"
-                                         th:errors="*{hospitalName}"></div>
+                                        <input type="text"
+                                               class="form-control"
+                                               th:field="*{hospitalName}"
+                                               placeholder="Enter hospital or clinic">
+
+                                        <div class="text-danger small"
+                                             th:if="${#fields.hasErrors('hospitalName')}"
+                                             th:errors="*{hospitalName}"></div>
+
+                                    </div>
+
+
+                                    <div th:if="${hospital != null}">
+
+                                        <input type="text"
+                                               class="form-control"
+                                               id="hospitalName"
+                                               readonly
+                                               th:value="${hospital.name}">
+
+                                        <input type="hidden"
+                                               name="hospitalName"
+                                               th:value="${hospital.name}">
+
+                                        <div class="form-text"
+                                             th:if="${!#strings.isEmpty(hospital.address)}"
+                                             th:text="${hospital.address}"></div>
+
+                                        <div class="form-text"
+                                             th:if="${!#strings.isEmpty(hospital.phone)}"
+                                             th:text="${hospital.phone}"></div>
+
+                                        <div class="form-text">
+                                            Kept by the administrator on the Settings page.
+                                        </div>
+
+                                    </div>
 
                                 </div>
 
@@ -636,14 +667,33 @@
 
                                     </label>
 
-                                    <input type="text"
-                                           class="form-control"
-                                           th:field="*{fromLocation}"
-                                           placeholder="e.g. Colombo South">
+                                    <div th:if="${hospital == null}">
 
-                                    <div class="text-danger small"
-                                         th:if="${#fields.hasErrors('fromLocation')}"
-                                         th:errors="*{fromLocation}"></div>
+                                        <input type="text"
+                                               class="form-control"
+                                               th:field="*{fromLocation}"
+                                               placeholder="e.g. Colombo South">
+
+                                        <div class="text-danger small"
+                                             th:if="${#fields.hasErrors('fromLocation')}"
+                                             th:errors="*{fromLocation}"></div>
+
+                                    </div>
+
+
+                                    <div th:if="${hospital != null}">
+
+                                        <input type="text"
+                                               class="form-control"
+                                               id="fromLocation"
+                                               readonly
+                                               th:value="${hospital.location}">
+
+                                        <input type="hidden"
+                                               name="fromLocation"
+                                               th:value="${hospital.location}">
+
+                                    </div>
 
                                 </div>
 

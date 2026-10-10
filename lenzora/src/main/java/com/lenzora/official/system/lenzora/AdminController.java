@@ -3,6 +3,7 @@ package com.lenzora.official.system.lenzora;
 import com.lenzora.official.system.lenzora.catalogue.infrastructure.FrameRepository;
 import com.lenzora.official.system.lenzora.catalogue.infrastructure.LensOptionRepository;
 import com.lenzora.official.system.lenzora.catalogue.infrastructure.SupplierRepository;
+import com.lenzora.official.system.lenzora.config.HospitalSettings;
 import com.lenzora.official.system.lenzora.ordering.Order;
 import com.lenzora.official.system.lenzora.ordering.OrderRepository;
 import com.lenzora.official.system.lenzora.ordering.OrderResult;
@@ -15,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
@@ -42,9 +44,13 @@ public class AdminController {
     /** Reads the suppliers of the catalogue. */
     private final SupplierRepository supplierRepository;
 
+    /** Keeps the hospital details the orders are sent to. */
+    private final HospitalSettings hospitalSettings;
+
     public AdminController(UserRepository pUserRepository, OrderRepository pOrderRepository,
                            OrderService pOrderService, FrameRepository pFrameRepository,
-                           LensOptionRepository pLensOptionRepository, SupplierRepository pSupplierRepository) {
+                           LensOptionRepository pLensOptionRepository, SupplierRepository pSupplierRepository,
+                           HospitalSettings pHospitalSettings) {
 
         this.userRepository = pUserRepository;
         this.orderRepository = pOrderRepository;
@@ -52,6 +58,7 @@ public class AdminController {
         this.frameRepository = pFrameRepository;
         this.lensOptionRepository = pLensOptionRepository;
         this.supplierRepository = pSupplierRepository;
+        this.hospitalSettings = pHospitalSettings;
     }
 
     /**
@@ -173,12 +180,45 @@ public class AdminController {
     }
 
     /**
-     * Shows the settings.
+     * Shows the settings, together with the hospital details already saved.
      *
+     * @param model the data handed to settings.html
      * @return the name of the page to show
      */
     @GetMapping("/settings")
-    public String showSettings() {
+    public String showSettings(Model model) {
+
+        model.addAttribute("hospital", hospitalSettings);
+
         return "settings";
+    }
+
+    /**
+     * Saves the hospital details the order form shows.
+     *
+     * @param pHospitalName the hospital or clinic the orders go to
+     * @param pLocation the branch the orders are sent from
+     * @param pAddress the address shown with the hospital
+     * @param pPhone the contact number shown with the hospital
+     * @param redirect what to show after the save
+     * @return a redirect back to the settings page
+     */
+    @PostMapping("/settings/hospital")
+    public String saveHospital(@RequestParam(name = "hospitalName", required = false) String pHospitalName,
+                               @RequestParam(name = "location", required = false) String pLocation,
+                               @RequestParam(name = "address", required = false) String pAddress,
+                               @RequestParam(name = "phone", required = false) String pPhone,
+                               RedirectAttributes redirect) {
+
+        String problem = hospitalSettings.save(pHospitalName, pLocation, pAddress, pPhone);
+
+        if (problem.isEmpty()) {
+            redirect.addFlashAttribute("successMessage",
+                    "Hospital details saved. Every new order will show them.");
+        } else {
+            redirect.addFlashAttribute("errorMessage", problem);
+        }
+
+        return "redirect:/settings";
     }
 }
