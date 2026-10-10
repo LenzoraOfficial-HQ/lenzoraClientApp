@@ -391,6 +391,7 @@
 
                     <div th:if="${successMessage}"
                          class="alert alert-success"
+                         id="saveNotice"
                          th:text="${successMessage}"></div>
 
                     <div th:if="${errorMessage}"
@@ -415,6 +416,90 @@
                           method="post">
 
 
+                        <!-- Step bar. The form is filled one short page at a
+                             time, so it never has to be scrolled through. The
+                             buttons are type="button" so they cannot submit. -->
+
+                        <div class="step-bar" id="orderStepBar">
+
+                            <div class="step-track">
+                                <div class="step-fill" id="orderStepFill"></div>
+                            </div>
+
+                            <div class="step-list" id="orderStepList">
+
+                                <button type="button" class="step-item">
+                                    <span class="step-num">1</span>
+                                    <span class="step-label">Job Type</span>
+                                </button>
+
+                                <button type="button" class="step-item">
+                                    <span class="step-num">2</span>
+                                    <span class="step-label">Patient</span>
+                                </button>
+
+                                <button type="button" class="step-item">
+                                    <span class="step-num">3</span>
+                                    <span class="step-label">Prescription</span>
+                                </button>
+
+                                <button type="button" class="step-item">
+                                    <span class="step-num">4</span>
+                                    <span class="step-label">Lens</span>
+                                </button>
+
+                                <button type="button" class="step-item">
+                                    <span class="step-num">5</span>
+                                    <span class="step-label">Frame</span>
+                                </button>
+
+                                <button type="button" class="step-item">
+                                    <span class="step-num">6</span>
+                                    <span class="step-label">Remarks</span>
+                                </button>
+
+                            </div>
+
+                            <div class="step-foot">
+
+                                <div class="step-meta">
+                                    <span id="orderStepText">Step 1 of 6 - Job Type</span>
+                                    <span id="orderStepPercent">17% complete</span>
+                                    <span class="draft-status wz-hidden"
+                                          id="draftStatus">
+                                        Draft saved
+                                    </span>
+                                </div>
+
+                                <div class="step-nav">
+
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-secondary"
+                                            id="wizardBack">
+                                        <i class="bi bi-arrow-left"></i> Back
+                                    </button>
+
+                                    <button type="button"
+                                            class="btn btn-sm btn-primary"
+                                            id="wizardNext">
+                                        Next <i class="bi bi-arrow-right"></i>
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                            <!-- Why the bar is holding the user on a step. -->
+                            <div class="step-message wz-hidden" id="orderStepMessage">
+
+                                <i class="bi bi-exclamation-circle"></i>
+                                <span id="orderStepMessageText"></span>
+
+                            </div>
+
+                        </div>
+
+
                         <!-- Validation summary. MUST stay inside the form:
                              #fields needs the th:object binding context. -->
                         <div th:if="${#fields.hasErrors('*')}"
@@ -430,7 +515,7 @@
                         <!-- section must stay first.                          -->
                         <!-- ================================================= -->
 
-                        <div class="form-section">
+                        <div class="form-section" id="jobTypeSection">
 
                             <div class="section-header">
 
@@ -919,7 +1004,7 @@
 
                                     <!-- ADD -->
 
-                                    <tr>
+                                    <tr class="rx-add">
 
                                         <td>
                                             Add
@@ -977,7 +1062,7 @@
 
                                     <!-- FIT HEIGHT -->
 
-                                    <tr>
+                                    <tr class="rx-fit">
 
                                         <td>
                                             Fit Height
@@ -1006,7 +1091,7 @@
 
                                     <!-- SEG HEIGHT -->
 
-                                    <tr>
+                                    <tr class="rx-seg">
 
                                         <td>
                                             Seg Height
@@ -1263,7 +1348,8 @@
 
                                         <input type="radio"
                                                th:field="*{lensType}"
-                                               th:value="${t}">
+                                               th:value="${t}"
+                                               class="lens-type-radio">
 
                                         <span th:text="${t.label}">
                                             Digital Progressive
@@ -1517,8 +1603,10 @@
 
 
                             <!-- FRAME MEASUREMENTS -->
+                            <!-- Only a frame from the catalogue has these, so the
+                                 whole block is hidden for a lens replacement. -->
 
-                            <div class="row g-3 mb-4">
+                            <div class="row g-3 mb-4 frame-specs">
 
 
                                 <div class="col-md-3">
@@ -1593,7 +1681,7 @@
 
                             <!-- FRAME MATERIAL -->
 
-                            <div class="mb-4">
+                            <div class="mb-4 frame-specs">
 
                                 <label class="form-label">
                                     Frame Material
@@ -1621,7 +1709,7 @@
 
                             <!-- FRAME RIM TYPE -->
 
-                            <div class="mb-4">
+                            <div class="mb-4 frame-specs">
 
                                 <label class="form-label">
                                     Frame Rim Type
@@ -1649,7 +1737,7 @@
 
                             <!-- FRAME SHAPE -->
 
-                            <div>
+                            <div class="frame-specs">
 
                                 <label for="frameShape"
                                        class="form-label">
@@ -1680,7 +1768,7 @@
                         <!-- 6. REMARKS -->
                         <!-- ================================================= -->
 
-                        <div class="form-section">
+                        <div class="form-section" id="remarksSection">
 
                             <div class="section-header">
 
@@ -1771,6 +1859,15 @@
             "-" +
             String(today.getDate()).padStart(2, "0");
 
+        // The step bar is only rendered together with the order form itself.
+        const stepBar = document.getElementById("orderStepBar");
+
+        if (!stepBar) {
+            return;
+        }
+
+        const form = document.getElementById("orderForm");
+
         // ---------- frame info panel + price prefill ----------
         const frameSelect = document.getElementById("frameId");
         const info        = document.querySelector(".frame-placeholder");
@@ -1780,17 +1877,16 @@
             qtyInput.value = 1;
         }
 
-        // ---------- job type: show only the sections that job needs ----------
+        // ---------- job type: which steps the job needs ----------
         // This mirrors the database rule in trg_items_job_type_guard, so the
         // user is never asked for a field the table does not want:
         //   NEW_SPECTACLE     -> frame + lens + prescription
         //   FRAME_REPLACEMENT -> frame only (the existing lenses are re-glazed)
         //   LENS_REPLACEMENT  -> lens + prescription, in the patient's own frame
-        const jobRadios           = document.querySelectorAll(".job-type-radio");
-        const prescriptionSection = document.getElementById("prescriptionSection");
-        const lensSection         = document.getElementById("lensSection");
-        const catalogueFrameBox   = document.getElementById("catalogueFrameBox");
-        const ownFrameBox         = document.getElementById("ownFrameBox");
+        const jobRadios         = document.querySelectorAll(".job-type-radio");
+        const catalogueFrameBox = document.getElementById("catalogueFrameBox");
+        const ownFrameBox       = document.getElementById("ownFrameBox");
+        const frameSpecs        = document.querySelectorAll(".frame-specs");
 
         function show(box, visible) {
             if (box) {
@@ -1798,7 +1894,7 @@
             }
         }
 
-        function applyJobType() {
+        function chosenJobType() {
 
             let chosen = "";
 
@@ -1808,21 +1904,670 @@
                 }
             });
 
-            const lensIsNeeded     = (chosen !== "FRAME_REPLACEMENT");
-            const patientOwnFrame  = (chosen === "LENS_REPLACEMENT");
+            return chosen;
+        }
 
-            show(prescriptionSection, lensIsNeeded);
-            show(lensSection, lensIsNeeded);
+        function applyJobType() {
+
+            const patientOwnFrame = (chosenJobType() === "LENS_REPLACEMENT");
+
+            // A frame the patient brought in has no catalogue measurements,
+            // material, rim or shape to record, so those boxes stay away.
+            frameSpecs.forEach(function (box) {
+                show(box, !patientOwnFrame);
+            });
+
             show(catalogueFrameBox, !patientOwnFrame);
             show(ownFrameBox, patientOwnFrame);
             show(info, !patientOwnFrame);
         }
 
-        jobRadios.forEach(function (radio) {
-            radio.addEventListener("change", applyJobType);
+        // ---------- lens type: which prescription rows it needs ----------
+        // The same three rules the order line and the prescription check, so
+        // the user is never asked for a reading addition a single-vision lens
+        // does not have, or a fitting height only a progressive lens uses.
+        const lensRadios = document.querySelectorAll(".lens-type-radio");
+        const addRow     = document.querySelector(".rx-add");
+        const segRow     = document.querySelector(".rx-seg");
+        const fitRow     = document.querySelector(".rx-fit");
+
+        function chosenLensType() {
+
+            let chosen = "";
+
+            lensRadios.forEach(function (radio) {
+                if (radio.checked) {
+                    chosen = radio.value;
+                }
+            });
+
+            return chosen;
+        }
+
+        // A row that is put away is emptied too, so a value typed before the
+        // lens type was chosen cannot end up on a lens that never uses it.
+        function showRow(row, visible) {
+
+            show(row, visible);
+
+            if (!visible && row) {
+                row.querySelectorAll("input").forEach(function (input) {
+                    input.value = "";
+                });
+            }
+        }
+
+        function applyLensType() {
+
+            const chosen  = chosenLensType();
+            const known   = (chosen !== "");
+            const reading = (!known || chosen !== "SINGLE_VISION");
+            const fitting = (!known || chosen === "NORMAL_PROGRESSIVE" || chosen === "DIGITAL_PROGRESSIVE");
+
+            showRow(addRow, reading);
+            showRow(segRow, reading);
+            showRow(fitRow, fitting);
+        }
+
+        lensRadios.forEach(function (radio) {
+            radio.addEventListener("change", applyLensType);
         });
 
+        // ---------- steps: one section of the form at a time ----------
+        // Filling the form a few short pages at a time keeps the top bar and
+        // the step on screen, so the whole form never has to be scrolled.
+        const steps = [
+            { box: document.getElementById("jobTypeSection"),      label: "Job Type" },
+            { box: document.getElementById("patientSection"),      label: "Patient" },
+            { box: document.getElementById("prescriptionSection"), label: "Prescription" },
+            { box: document.getElementById("lensSection"),         label: "Lens" },
+            { box: document.getElementById("frameSection"),        label: "Frame" },
+            { box: document.getElementById("remarksSection"),      label: "Remarks" }
+        ];
+
+        const stepTabs        = document.querySelectorAll("#orderStepList .step-item");
+        const stepFill        = document.getElementById("orderStepFill");
+        const stepText        = document.getElementById("orderStepText");
+        const stepPercent     = document.getElementById("orderStepPercent");
+        const stepMessage     = document.getElementById("orderStepMessage");
+        const stepMessageText = document.getElementById("orderStepMessageText");
+        const draftStatus     = document.getElementById("draftStatus");
+        const backBtn         = document.getElementById("wizardBack");
+        const nextBtn         = document.getElementById("wizardNext");
+
+        let currentStep = 0;
+
+        // A frame replacement re-glazes the lenses the patient already has, so
+        // the prescription and the lens steps are not asked for.
+        function stepNeeded(index) {
+
+            const frameOnly = (chosenJobType() === "FRAME_REPLACEMENT");
+
+            return !(frameOnly && (index === 2 || index === 3));
+        }
+
+        function openSteps() {
+
+            const open = [];
+
+            for (let i = 0; i < steps.length; i++) {
+                if (stepNeeded(i)) {
+                    open.push(i);
+                }
+            }
+
+            return open;
+        }
+
+        function renderSteps() {
+
+            const open  = openSteps();
+            let   place = open.indexOf(currentStep);
+
+            if (place < 0) {
+                currentStep = open[0];
+                place = 0;
+            }
+
+            const done    = place + 1;
+            const total   = open.length;
+            const percent = Math.round((done / total) * 100);
+
+            for (let i = 0; i < steps.length; i++) {
+
+                const needed = stepNeeded(i);
+
+                steps[i].box.classList.toggle("wz-hidden", i !== currentStep);
+                stepTabs[i].classList.toggle("wz-hidden", !needed);
+                stepTabs[i].classList.toggle("is-active", i === currentStep);
+                stepTabs[i].classList.toggle("is-done", needed && i < currentStep && stepProblems(i).length === 0);
+            }
+
+            stepFill.style.width    = percent + "%";
+            stepText.textContent    = "Step " + done + " of " + total + " - " + steps[currentStep].label;
+            stepPercent.textContent = percent + "% complete";
+
+            backBtn.disabled = (place === 0);
+            nextBtn.classList.toggle("wz-hidden", place === total - 1);
+        }
+
+        // ---------- what each step still needs ----------
+        // These mirror the rules the server applies in OrderService.createOrder,
+        // OrderItem.check and Prescription.check, so the bar never walks the user
+        // past a section the save would reject a moment later.
+
+        function fieldOf(name) {
+            return form.querySelector('[name="' + name + '"]');
+        }
+
+        function fieldValue(name) {
+            const field = fieldOf(name);
+            return field ? field.value.trim() : "";
+        }
+
+        function requireFill(name, message, problems) {
+            const field = fieldOf(name);
+            if (field && field.value.trim() === "") {
+                problems.push({ field: field, message: message });
+            }
+        }
+
+        function rangeCheck(name, low, high, message, problems) {
+
+            const field = fieldOf(name);
+
+            if (!field || field.value.trim() === "") {
+                return;
+            }
+
+            const value = Number(field.value);
+
+            if (isNaN(value) || value < low || value > high) {
+                problems.push({ field: field, message: message });
+            }
+        }
+
+        function lensLabel() {
+
+            const radio = document.querySelector(".lens-type-radio:checked");
+            const label = radio ? radio.closest("label") : null;
+
+            return label ? label.textContent.trim() : "this lens";
+        }
+
+        // One prescription row is kept per measured eye, so the reading addition
+        // and the heights are checked per eye, exactly like the server does.
+        function prescriptionProblems() {
+
+            const problems = [];
+            const sides    = ["right", "left"];
+            let measured   = 0;
+
+            sides.forEach(function (side) {
+
+                if (fieldValue(side + ".sph") !== "") {
+                    measured++;
+                }
+
+                rangeCheck(side + ".sph", -20, 20, "Sphere must be between -20.00 and +20.00.", problems);
+                rangeCheck(side + ".cyl", -20, 20, "Cylinder must be between -20.00 and +20.00.", problems);
+                rangeCheck(side + ".axis", 1, 180, "Axis must be between 1 and 180.", problems);
+                rangeCheck(side + ".addValue", 0.5, 4, "Reading addition must be between 0.50 and 4.00.", problems);
+
+                if (fieldValue(side + ".cyl") !== "" && fieldValue(side + ".axis") === "") {
+                    const axis = fieldOf(side + ".axis");
+                    if (axis) {
+                        problems.push({ field: axis, message: "Axis is required when Cylinder is set." });
+                    }
+                }
+            });
+
+            rangeCheck("pd", 40, 80, "PD must be between 40 and 80 mm.", problems);
+
+            if (measured === 0) {
+                problems.push({ field: fieldOf("right.sph"), message: "Fill in at least one eye's measurements." });
+            }
+
+            const lens = chosenLensType();
+            const reading = (lens !== "" && lens !== "SINGLE_VISION");
+            const fitting = (lens === "NORMAL_PROGRESSIVE" || lens === "DIGITAL_PROGRESSIVE");
+
+            if (reading || fitting) {
+
+                sides.forEach(function (side) {
+
+                    if (fieldValue(side + ".sph") === "") {
+                        return;
+                    }
+
+                    if (reading && fieldValue(side + ".addValue") === "") {
+                        problems.push({ field: fieldOf(side + ".addValue"), message: "A " + lensLabel() + " lens needs a reading addition (ADD)." });
+                    }
+
+                    if (reading && fieldValue(side + ".segHeight") === "") {
+                        problems.push({ field: fieldOf(side + ".segHeight"), message: "A " + lensLabel() + " lens needs a segment height." });
+                    }
+
+                    if (fitting && fieldValue(side + ".fitHeight") === "") {
+                        problems.push({ field: fieldOf(side + ".fitHeight"), message: "A progressive lens needs a fitting height." });
+                    }
+                });
+            }
+
+            return problems;
+        }
+
+        function stepProblems(index) {
+
+            const problems = [];
+
+            if (!stepNeeded(index)) {
+                return problems;
+            }
+
+            if (index === 0 && chosenJobType() === "") {
+                problems.push({ field: document.querySelector("#jobTypeSection .option-grid"), message: "Choose the job type." });
+            }
+
+            if (index === 1) {
+                requireFill("patientReference", "Patient reference is required.", problems);
+                requireFill("patientName", "Patient name is required.", problems);
+                requireFill("hospitalName", "Hospital or clinic name is required.", problems);
+                requireFill("fromLocation", "The branch the job is sent from is required.", problems);
+
+                const contact = fieldOf("patientContact");
+                const number  = contact ? contact.value.trim() : "";
+
+                if (number === "") {
+                    problems.push({ field: contact, message: "Patient contact number is required." });
+                } else if (!/^\+?[0-9]{9,15}$/.test(number)) {
+                    problems.push({ field: contact, message: "Contact: 9 to 15 digits, with an optional leading +." });
+                }
+            }
+
+            if (index === 2) {
+                return problems.concat(prescriptionProblems());
+            }
+
+            if (index === 3 && chosenLensType() === "") {
+                problems.push({ field: document.querySelector("#lensSection .option-grid"), message: "Choose the lens type." });
+            }
+
+            if (index === 4) {
+                if (chosenJobType() === "LENS_REPLACEMENT") {
+                    requireFill("ownFrameDescription", "Describe the frame the patient brought in.", problems);
+                } else {
+                    requireFill("frameId", "Choose a frame from the catalogue.", problems);
+                }
+            }
+
+            return problems;
+        }
+
+        // The first step at or before "until" that still has something missing.
+        function firstProblemStep(until) {
+
+            for (let i = 0; i <= until && i < steps.length; i++) {
+                if (stepProblems(i).length > 0) {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        function clearStepMarks() {
+
+            form.querySelectorAll(".is-invalid").forEach(function (field) {
+                field.classList.remove("is-invalid");
+            });
+
+            form.querySelectorAll(".grid-error").forEach(function (box) {
+                box.classList.remove("grid-error");
+            });
+
+            stepTabs.forEach(function (tab) {
+                tab.classList.remove("is-error");
+            });
+
+            stepMessageText.textContent = "";
+            stepMessage.classList.add("wz-hidden");
+        }
+
+        // Stops on the step that still needs something and points at the field.
+        function showStepProblem(index) {
+
+            clearStepMarks();
+
+            const problems = stepProblems(index);
+
+            problems.forEach(function (problem) {
+
+                if (!problem.field) {
+                    return;
+                }
+
+                const tag = problem.field.tagName;
+
+                if (tag === "INPUT" && (problem.field.type === "radio" || problem.field.type === "checkbox")) {
+                    const grid = problem.field.closest(".option-grid");
+                    if (grid) {
+                        grid.classList.add("grid-error");
+                        return;
+                    }
+                }
+
+                if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") {
+                    problem.field.classList.add("is-invalid");
+                    return;
+                }
+
+                problem.field.classList.add("grid-error");
+            });
+
+            stepTabs[index].classList.add("is-error");
+
+            stepMessageText.textContent = "Step " + (index + 1) + " (" + steps[index].label + "): "
+                    + problems[0].message
+                    + (problems.length > 1 ? " (+" + (problems.length - 1) + " more)" : "");
+            stepMessage.classList.remove("wz-hidden");
+
+            currentStep = index;
+            renderSteps();
+            scrollToBar();
+        }
+
+        function scrollToBar() {
+
+            const y = stepBar.getBoundingClientRect().top + window.scrollY - 8;
+
+            window.scrollTo({ top: y, behavior: "smooth" });
+        }
+
+        function goToStep(index) {
+
+            if (!stepNeeded(index)) {
+                return;
+            }
+
+            clearStepMarks();
+
+            currentStep = index;
+            renderSteps();
+            scrollToBar();
+
+            // The step is part of the draft, so the form reopens where it was left.
+            saveDraft();
+        }
+
+        function moveStep(by) {
+
+            const open  = openSteps();
+            const place = open.indexOf(currentStep);
+
+            // Going on is only allowed once every step up to here is filled in.
+            if (by > 0) {
+
+                const blocked = firstProblemStep(currentStep);
+
+                if (blocked >= 0) {
+                    showStepProblem(blocked);
+                    return;
+                }
+            }
+
+            const next = place + by;
+
+            if (next < 0 || next >= open.length) {
+                return;
+            }
+
+            goToStep(open[next]);
+        }
+
+        // A tab: going back is always allowed, going forward only once the steps
+        // before it are filled in.
+        function tryMoveTo(index) {
+
+            if (!stepNeeded(index)) {
+                return;
+            }
+
+            if (index > currentStep) {
+
+                const blocked = firstProblemStep(index - 1);
+
+                if (blocked >= 0) {
+                    showStepProblem(blocked);
+                    return;
+                }
+            }
+
+            goToStep(index);
+        }
+
+        stepTabs.forEach(function (tab, index) {
+
+            tab.addEventListener("click", function () {
+                tryMoveTo(index);
+            });
+        });
+
+        backBtn.addEventListener("click", function () {
+            moveStep(-1);
+        });
+
+        nextBtn.addEventListener("click", function () {
+            moveStep(1);
+        });
+
+        jobRadios.forEach(function (radio) {
+
+            radio.addEventListener("change", function () {
+
+                applyJobType();
+
+                // The chosen job may hide the step the user is standing on.
+                if (!stepNeeded(currentStep)) {
+
+                    const open = openSteps();
+
+                    for (let i = 0; i < open.length; i++) {
+                        if (open[i] > currentStep) {
+                            currentStep = open[i];
+                            break;
+                        }
+                    }
+                }
+
+                renderSteps();
+            });
+        });
+
+        // ---------- autosave ----------
+        // The draft is kept in this browser, so a refresh, a closed tab or a
+        // detour to another screen never loses what was already typed. It is
+        // dropped as soon as an order is saved.
+        const DRAFT_KEY = "lenzora.orderDraft";
+        let draftTimer = 0;
+
+        function draftStore() {
+
+            try {
+                return window.localStorage;
+            } catch (unavailable) {
+                return null;
+            }
+        }
+
+        function collectDraft() {
+
+            const values = {};
+
+            new FormData(form).forEach(function (value, name) {
+
+                if (name.charAt(0) === "_") {
+                    return;                       // _csrf and the th:field companions
+                }
+
+                if (Object.prototype.hasOwnProperty.call(values, name)) {
+                    if (!Array.isArray(values[name])) {
+                        values[name] = [values[name]];
+                    }
+                    values[name].push(value);
+                } else {
+                    values[name] = value;
+                }
+            });
+
+            return { values: values, step: currentStep };
+        }
+
+        function saveDraft() {
+
+            const store = draftStore();
+
+            if (!store) {
+                return;
+            }
+
+            try {
+                store.setItem(DRAFT_KEY, JSON.stringify(collectDraft()));
+                draftStatus.textContent = "Draft saved " + new Date().toTimeString().slice(0, 5);
+                draftStatus.classList.remove("wz-hidden");
+            } catch (full) {
+                // A full or blocked storage must never stop the form being used.
+            }
+        }
+
+        function clearDraft() {
+
+            const store = draftStore();
+
+            if (store) {
+                store.removeItem(DRAFT_KEY);
+            }
+        }
+
+        // Only the boxes the page left empty are filled, so whatever the server
+        // sent back is never overwritten by an older draft.
+        function restoreDraft() {
+
+            const store = draftStore();
+
+            if (!store) {
+                return;
+            }
+
+            let draft = null;
+
+            try {
+                draft = JSON.parse(store.getItem(DRAFT_KEY) || "null");
+            } catch (broken) {
+                return;
+            }
+
+            if (!draft || !draft.values) {
+                return;
+            }
+
+            Object.keys(draft.values).forEach(function (name) {
+
+                const fields = form.querySelectorAll('[name="' + name + '"]');
+
+                if (!fields.length) {
+                    return;
+                }
+
+                const wanted = Array.isArray(draft.values[name]) ? draft.values[name] : [draft.values[name]];
+                const first  = fields[0];
+
+                if (first.type === "radio" || first.type === "checkbox") {
+
+                    let chosen = false;
+
+                    fields.forEach(function (field) {
+                        if (field.checked) {
+                            chosen = true;
+                        }
+                    });
+
+                    if (chosen) {
+                        return;
+                    }
+
+                    fields.forEach(function (field) {
+                        if (wanted.indexOf(field.value) >= 0) {
+                            field.checked = true;
+                        }
+                    });
+
+                    return;
+                }
+
+                if (first.value === "") {
+                    first.value = wanted[0];
+                }
+            });
+
+            if (typeof draft.step === "number" && stepNeeded(draft.step)) {
+                currentStep = draft.step;
+            }
+        }
+
+        form.addEventListener("submit", function (event) {
+
+            const blocked = firstProblemStep(steps.length - 1);
+
+            if (blocked >= 0) {
+                event.preventDefault();
+                showStepProblem(blocked);
+            }
+        });
+
+        form.addEventListener("input", function () {
+
+            clearStepMarks();
+
+            window.clearTimeout(draftTimer);
+            draftTimer = window.setTimeout(saveDraft, 400);
+        });
+
+        form.addEventListener("change", saveDraft);
+
+        // ---------- start ----------
+        // The draft goes back first, then the job and lens rules decide what is
+        // on screen for it.
+        restoreDraft();
+
+        if (document.getElementById("saveNotice")) {
+            clearDraft();
+        }
+
         applyJobType();
+
+        applyLensType();
+
+        // A save that was rejected shows its message next to the field that
+        // caused it, so open that step first.
+        const serverProblems = document.querySelectorAll("#orderForm .text-danger.small");
+
+        for (let i = 0; i < serverProblems.length; i++) {
+
+            if (serverProblems[i].textContent.trim() !== "") {
+
+                const box = serverProblems[i].closest(".form-section");
+                const at  = steps.findIndex(function (step) { return step.box === box; });
+
+                if (at >= 0 && stepNeeded(at)) {
+                    currentStep = at;
+                }
+
+                break;
+            }
+        }
+
+        renderSteps();
 
         if (!frameSelect || !info) {
             return;
