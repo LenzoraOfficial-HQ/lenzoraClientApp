@@ -535,3 +535,211 @@ h6 {
 .text-secondary {
     color: var(--lenzora-text-muted) !important;
 }
+
+/* ------------------------------------------------------------------
+   Step bar: the sticky top menu of a screen that is worked through in
+   short pages. place-order.html uses it to show one order section at a
+   time, admin-orders.html to switch between its queues.
+   ------------------------------------------------------------------ */
+.step-bar {
+    position: sticky;
+    top: 0;
+    z-index: 6;
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    border: 1px solid var(--lenzora-hairline);
+    border-radius: var(--lenzora-radius);
+    box-shadow: var(--lenzora-shadow-soft);
+    padding: 14px 18px;
+    margin-bottom: 24px;
+}
+
+.step-track {
+    height: 6px;
+    border-radius: 999px;
+    background-color: rgba(90, 107, 133, 0.16);
+    overflow: hidden;
+}
+
+.step-fill {
+    width: 0;
+    height: 100%;
+    border-radius: 999px;
+    background-color: var(--lenzora-accent);
+    background-image: var(--lenzora-gold-gradient);
+    transition: width 0.25s ease;
+}
+
+.step-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 12px;
+}
+
+.step-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background-color: transparent;
+    color: var(--lenzora-text-muted);
+    font-family: inherit;
+    font-size: 13.5px;
+    padding: 6px 14px 6px 6px;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.step-item:hover:not(:disabled) {
+    background-color: var(--lenzora-surface-alt);
+    color: var(--lenzora-text);
+}
+
+.step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: rgba(90, 107, 133, 0.16);
+    color: var(--lenzora-slate);
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.step-item.is-done .step-num {
+    background-color: rgba(47, 158, 99, 0.18);
+    color: #1d7a4c;
+}
+
+.step-item.is-active {
+    background-color: var(--lenzora-accent-soft);
+    border-color: rgba(212, 175, 55, 0.55);
+    color: var(--lenzora-text);
+}
+
+.step-item.is-active .step-num {
+    background-color: var(--lenzora-accent);
+    background-image: var(--lenzora-gold-gradient);
+    color: var(--lenzora-accent-ink);
+}
+
+.step-label {
+    font-weight: 600;
+}
+
+.step-foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.step-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    font-size: 12px;
+    color: var(--lenzora-text-muted);
+}
+
+.step-nav {
+    display: flex;
+    gap: 8px;
+}
+
+/* Hidden by the step bar until its step or queue is the one on screen */
+.wz-hidden {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+
+    .step-bar {
+        padding: 12px 14px;
+    }
+
+    .step-item {
+        font-size: 12.5px;
+        padding: 5px 10px 5px 5px;
+    }
+}
+
+/* Sign out: the account chip's logout control. It sits in the shared top bar,
+   so the client screens and the admin portal show the same one. */
+.sign-out {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 42px;
+    padding: 0 16px;
+    border: 1px solid var(--lenzora-hairline);
+    border-radius: 999px;
+    background-color: #ffffff;
+    box-shadow: var(--lenzora-shadow-soft);
+    color: var(--lenzora-text-muted);
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    transition: transform 0.16s ease, box-shadow 0.16s ease, color 0.16s ease;
+}
+
+.sign-out:hover,
+.sign-out:focus {
+    color: var(--lenzora-danger);
+    transform: translateY(-1px);
+    box-shadow: var(--lenzora-shadow-md);
+}
+
+/* A phone is the only place where the label has to give way to the icon. */
+@media (max-width: 576px) {
+
+    .sign-out {
+        padding: 0 12px;
+    }
+
+    .sign-out-label {
+        display: none;
+    }
+}
+
+/* Why the step bar is holding the user on a step, and a field it is waiting
+   for. Also used by the admin queue bar's own step bar. */
+.step-message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--lenzora-danger);
+}
+
+.step-item.is-error {
+    border-color: rgba(214, 69, 80, 0.55);
+    color: var(--lenzora-danger);
+}
+
+.step-item.is-error .step-num {
+    background-color: rgba(214, 69, 80, 0.16);
+    color: var(--lenzora-danger);
+}
+
+/* A radio or checkbox group with something still missing */
+.grid-error {
+    outline: 2px solid rgba(214, 69, 80, 0.45);
+    outline-offset: 4px;
+    border-radius: 10px;
+}
+
+.draft-status {
+    color: var(--lenzora-green);
+    font-weight: 600;
+}
