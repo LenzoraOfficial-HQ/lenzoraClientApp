@@ -5,6 +5,7 @@ import com.lenzora.official.system.lenzora.model.User;
 import com.lenzora.official.system.lenzora.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Locale;
@@ -14,16 +15,20 @@ public class UserRegistrationService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuditService auditService;
 
-    public UserRegistrationService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserRegistrationService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+                                   AuditService auditService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.auditService = auditService;
     }
 
     /**
      * Validates input details and registers a new user.
      * Returns an error message if validation fails, or an empty string on success.
      */
+    @Transactional
     public String register(String firstName, String lastName, String email,
                            String password, String confirmPassword) {
         // Clean input values
@@ -72,7 +77,12 @@ public class UserRegistrationService {
         user.setCreatedAt(now);
         user.setUpdatedAt(now);
 
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        auditService.logAction(
+                "REGISTRATION",
+                email,
+                "app_user",
+                "New orthoptist account registered: " + savedUser.getEmail());
 
         return ""; // Success
     }

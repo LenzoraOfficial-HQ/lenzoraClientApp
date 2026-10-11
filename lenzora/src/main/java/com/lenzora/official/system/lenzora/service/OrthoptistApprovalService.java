@@ -13,9 +13,11 @@ import java.util.List;
 public class OrthoptistApprovalService {
 
     private final UserRepository userRepository;
+    private final AuditService auditService;
 
-    public OrthoptistApprovalService(UserRepository userRepository) {
+    public OrthoptistApprovalService(UserRepository userRepository, AuditService auditService) {
         this.userRepository = userRepository;
+        this.auditService = auditService;
     }
 
     @Transactional(readOnly = true)
@@ -59,6 +61,13 @@ public class OrthoptistApprovalService {
             orthoptist.setBranch(null);
             orthoptist.setProfileCompleted(false);
         }
-        return userRepository.save(orthoptist);
+        User savedOrthoptist = userRepository.save(orthoptist);
+        auditService.logAction(
+                newStatus == AccountStatus.ACTIVE ? "APPROVAL" : "REJECTION",
+                adminEmail,
+                "app_user",
+                "Orthoptist " + savedOrthoptist.getId() + " (" + savedOrthoptist.getEmail()
+                        + ") " + (newStatus == AccountStatus.ACTIVE ? "approved" : "rejected"));
+        return savedOrthoptist;
     }
 }

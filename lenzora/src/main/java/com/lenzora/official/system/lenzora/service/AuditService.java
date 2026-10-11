@@ -27,21 +27,36 @@ public class AuditService {
     public void logAction(Long userId, String action, String entityName, String entityId, String details, String ipAddress) {
         AuditLog auditLog = new AuditLog();
 
-        // If a userId is given, find and attach the user
         if (userId != null) {
             AppUser user = appUserRepository.findById(userId).orElse(null);
             auditLog.setUser(user);
+            if (user != null) {
+                auditLog.setUsername(user.getEmail());
+            }
         }
 
-        // Set log details
         auditLog.setAuditAction(action);
         auditLog.setEntityName(entityName);
         auditLog.setEntityId(entityId);
         auditLog.setDetails(details);
         auditLog.setIpAddress(ipAddress);
         auditLog.setCreatedAt(LocalDateTime.now());
+        auditLogRepository.save(auditLog);
+    }
 
-        // Save to database
+    @Transactional
+    public void logAction(String actionType, String username, String target, String details) {
+        AuditLog auditLog = new AuditLog();
+        auditLog.setAuditAction(actionType);
+        auditLog.setUsername(username);
+        auditLog.setEntityName(target);
+        auditLog.setDetails(details);
+        auditLog.setCreatedAt(LocalDateTime.now());
+
+        if (username != null && !username.isBlank()) {
+            appUserRepository.findByEmail(username).ifPresent(auditLog::setUser);
+        }
+
         auditLogRepository.save(auditLog);
     }
 }

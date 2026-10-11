@@ -1,5 +1,6 @@
 package com.lenzora.official.system.lenzora.entity;
 
+import com.lenzora.official.system.lenzora.shared.AuditableEntity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "password_reset_tokens")
-public class PasswordResetToken {
+public class PasswordResetToken extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,17 +28,6 @@ public class PasswordResetToken {
 
     @Column(name = "used_at")
     private LocalDateTime usedAt;
-
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    /**
-     * Automatically sets the creation time before saving.
-     */
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
 
     public PasswordResetToken() {}
 
@@ -82,10 +72,4 @@ public class PasswordResetToken {
          this.usedAt = usedAt; 
     }
 
-    public LocalDateTime getCreatedAt() {
-         return createdAt; 
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-         this.createdAt = createdAt; }
 }

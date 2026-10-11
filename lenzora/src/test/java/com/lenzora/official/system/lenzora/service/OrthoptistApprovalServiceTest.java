@@ -28,13 +28,16 @@ class OrthoptistApprovalServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private AuditService auditService;
+
     @InjectMocks
     private OrthoptistApprovalService approvalService;
 
     @Test
     void registrationCreatesPendingAccountWithoutProfessionalDetails() {
         UserRegistrationService registrationService =
-                new UserRegistrationService(userRepository, passwordEncoder);
+                new UserRegistrationService(userRepository, passwordEncoder, auditService);
         when(userRepository.findByEmailIgnoreCase("doctor@example.com")).thenReturn(Optional.empty());
         when(passwordEncoder.encode("securepass")).thenReturn("encoded");
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -48,6 +51,11 @@ class OrthoptistApprovalServiceTest {
         assertEquals(null, savedUser.getValue().getLicenseNumber());
         assertEquals(AccountStatus.PENDING, savedUser.getValue().getAccountStatus());
         assertEquals(false, savedUser.getValue().isProfileCompleted());
+        verify(auditService).logAction(
+                "REGISTRATION",
+                "doctor@example.com",
+                "app_user",
+                "New orthoptist account registered: doctor@example.com");
     }
 
     @Test
@@ -69,6 +77,11 @@ class OrthoptistApprovalServiceTest {
 
         assertEquals(AccountStatus.APPROVED, updated.getAccountStatus());
         assertEquals(admin.getId(), updated.getApprovedBy());
+        verify(auditService).logAction(
+                "APPROVAL",
+                admin.getEmail(),
+                "app_user",
+                "Orthoptist 12 (doctor@example.com) approved");
     }
 
     @Test
@@ -94,6 +107,11 @@ class OrthoptistApprovalServiceTest {
         assertEquals(null, updated.getPhone());
         assertEquals(null, updated.getBranch());
         assertEquals(false, updated.isProfileCompleted());
+        verify(auditService).logAction(
+                "REJECTION",
+                admin.getEmail(),
+                "app_user",
+                "Orthoptist 12 (doctor@example.com) rejected");
     }
 
     @Test

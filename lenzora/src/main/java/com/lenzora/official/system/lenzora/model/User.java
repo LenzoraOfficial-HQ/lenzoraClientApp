@@ -1,11 +1,12 @@
 package com.lenzora.official.system.lenzora.model;
 
 import com.lenzora.official.system.lenzora.entity.AccountStatus;
+import com.lenzora.official.system.lenzora.shared.BaseAuditableEntity;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "app_user")
-public class User {
+public class User extends BaseAuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,13 +58,6 @@ public class User {
 
     @Column(name = "approved_at")
     private java.time.LocalDateTime approvedAt;
-
-    @Column(name = "created_at", nullable = false)
-    private java.time.LocalDateTime createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    private java.time.LocalDateTime updatedAt;
-
 
     public User() {
     }
@@ -197,23 +191,5 @@ public class User {
 
     public void setApprovedAt(java.time.LocalDateTime approvedAt) {
         this.approvedAt = approvedAt;
-    }
-
-
-    public java.time.LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(java.time.LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-
-    public java.time.LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(java.time.LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

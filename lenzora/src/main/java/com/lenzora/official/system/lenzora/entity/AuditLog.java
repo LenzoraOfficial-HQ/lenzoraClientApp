@@ -20,6 +20,9 @@ public class AuditLog {
     @JoinColumn(name = "user_id")
     private AppUser user;
 
+    @Column(name = "username", length = 100)
+    private String username;
+
     @Column(name = "audit_action", nullable = false, length = 50)
     private String auditAction;
 
@@ -51,6 +54,10 @@ public class AuditLog {
          return logId; 
     }
 
+    public Long getId() {
+        return logId;
+    }
+
     public void setLogId(Long logId) {
          this.logId = logId; 
     }
@@ -63,8 +70,20 @@ public class AuditLog {
          this.user = user; 
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getAuditAction() {
          return auditAction; 
+    }
+
+    public String getActionType() {
+        return auditAction;
     }
 
     public void setAuditAction(String auditAction) {
@@ -73,6 +92,10 @@ public class AuditLog {
 
     public String getEntityName() {
          return entityName; 
+    }
+
+    public String getTargetEntity() {
+        return entityName;
     }
 
     public void setEntityName(String entityName) {
@@ -105,6 +128,10 @@ public class AuditLog {
 
     public LocalDateTime getCreatedAt() {
          return createdAt; 
+    }
+
+    public LocalDateTime getTimestamp() {
+        return createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
