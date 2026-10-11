@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: lenzora
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /login
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+      - key: DDL_AUTO
+        value: none
+      - key: SPRING_JPA_SHOW_SQL
+        value: "false"
+      - key: DB_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false

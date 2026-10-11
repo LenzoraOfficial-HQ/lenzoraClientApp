@@ -1,5 +1,6 @@
 package com.lenzora.official.system.lenzora.entity;
 
+import com.lenzora.official.system.lenzora.shared.BaseAuditableEntity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "app_user")
-public class AppUser {
+public class AppUser extends BaseAuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,9 +32,15 @@ public class AppUser {
     @Column(name = "user_role", nullable = false)
     private UserRole userRole = UserRole.ORTHOPTIST;
 
+     @Column(name = "role", nullable = false)
+     private String legacyRole;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "user_status", nullable = false)
     private UserStatus userStatus = UserStatus.PENDING;
+
+     @Column(name = "status", nullable = false)
+     private String legacyStatus;
 
     @Column(name = "registration_no", length = 30)
     private String registrationNo;
@@ -52,27 +59,16 @@ public class AppUser {
     @Column(name = "approved_at")
     private LocalDateTime approvedAt;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    private LocalDateTime updatedAt;
-
-    /**
-     * Automatically sets created and updated timestamps on initial insert.
-     */
     @PrePersist
     protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        this.legacyRole = this.userRole.name();
+        this.legacyStatus = this.userStatus.name();
     }
 
-    /**
-     * Automatically updates the timestamp when the record is modified.
-     */
     @PreUpdate
     protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+        this.legacyRole = this.userRole.name();
+        this.legacyStatus = this.userStatus.name();
     }
 
     public AppUser() {}
@@ -161,16 +157,4 @@ public class AppUser {
          this.approvedAt = approvedAt; 
     }
 
-    public LocalDateTime getCreatedAt() {
-         return createdAt; 
-    }
-    public void setCreatedAt(LocalDateTime createdAt) {
-         this.createdAt = createdAt; 
-    }
-
-    public LocalDateTime getUpdatedAt() {
-         return updatedAt; 
-    }
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-         this.updatedAt = updatedAt; }
 }

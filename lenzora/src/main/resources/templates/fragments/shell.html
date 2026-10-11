@@ -4,7 +4,7 @@
 <body>
 
 <!-- Sidebar. Pass the page key so the right item gets the gold pill:
-     sidebar('dashboard' | 'place-order' | 'admin' | 'admin-orders' | 'catalogue' | 'users' | 'reports' | 'settings')
+     sidebar('dashboard' | 'place-order' | 'admin' | 'admin-orders' | 'catalogue' | 'users' | 'reports' | 'settings' | 'audit-logs')
      The client links belong to the orthoptists, the administration links to
      accounts whose app_user.user_role is ADMIN. Neither side sees the other's. -->
 <div class="col-md-2 sidebar p-4" th:fragment="sidebar(active)">
@@ -71,6 +71,17 @@
             </a>
 
         </div>
+
+        <a href="/admin/orthoptists" class="nav-link"
+           sec:authorize="hasRole('ADMIN')">
+            <i class="bi bi-person-check"></i> Approvals
+        </a>
+
+        <a href="/admin/audit-logs" class="nav-link"
+           th:classappend="${active == 'audit-logs'} ? 'active'"
+           sec:authorize="hasRole('ADMIN')">
+            <i class="bi bi-journal-text"></i> Audit Logs
+        </a>
 
     </nav>
 

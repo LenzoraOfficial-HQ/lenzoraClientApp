@@ -5,6 +5,7 @@ package com.lenzora.official.system.lenzora.entity;
  */
 public enum UserStatus {
     PENDING, 
+    APPROVED,
     ACTIVE, 
     SUSPENDED, 
     REJECTED
