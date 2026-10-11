@@ -21,4 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByRoleAndAccountStatusAndProfileCompletedTrueOrderByCreatedAtAsc(
             String role, AccountStatus accountStatus);
+
+    // Counts the accounts that carry one role, such as ADMIN
+    long countByRole(String role);
 }

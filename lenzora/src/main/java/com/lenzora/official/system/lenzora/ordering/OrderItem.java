@@ -436,9 +436,22 @@ public class OrderItem extends AuditableEntity {
         this.bSize = pBSize;
         this.dSize = pDSize;
         this.diameter = pDiameter;
-        this.frameMaterial = pMaterial;
-        this.frameRimType = pRimType;
-        this.frameShape = pShape;
+        this.frameMaterial = enumOrNull(pMaterial);
+        this.frameRimType = enumOrNull(pRimType);
+        this.frameShape = enumOrNull(pShape);
+    }
+
+    /**
+     * The frame spec columns only hold the values written on the frame, so an
+     * empty box has to be stored as nothing rather than as a blank.
+     * @param pValue the value the form sent
+     * @return the value to store, or null when the box was left alone
+     */
+    private static String enumOrNull(String pValue) {
+        if (pValue == null || pValue.trim().isEmpty()) {
+            return null;
+        }
+        return pValue;
     }
 
     /**

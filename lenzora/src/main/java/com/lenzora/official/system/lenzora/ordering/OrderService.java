@@ -161,6 +161,34 @@ public class OrderService {
     }
 
     /**
+     * Moves a saved order to another status, as chosen on the admin review screen.
+     *
+     * @param pOrderId the id of the order to move
+     * @param pNext the status the administrator chose
+     * @return the updated order, or a message saying why it could not be moved
+     */
+    public OrderResult changeStatus(Long pOrderId, Order.OrderStatus pNext) {
+
+        if (pOrderId == null) {
+            return failed("No order was chosen.");
+        }
+
+        Order order = orders.findById(pOrderId).orElse(null);
+        if (order == null) {
+            return failed("That order no longer exists.");
+        }
+
+        if (!order.moveTo(pNext)) {
+            return failed("Order " + order.getOrderNumber() + " is "
+                    + order.getStatus().getLabel() + " and can no longer be changed.");
+        }
+
+        orders.save(order);
+        System.out.println("Order " + order.getOrderNumber() + " is now " + order.getStatus().getLabel() + ".");
+        return OrderResult.saved(order);
+    }
+
+    /**
      * Reads the chosen frame from the catalogue.
      * @param pFrameId the frame the user picked, may be null
      * @return the frame details, or null when it cannot be ordered any more

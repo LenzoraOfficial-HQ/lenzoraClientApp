@@ -84,6 +84,11 @@ public class CatalogueController {
         return "catalogue";
     }
 
+    @GetMapping("/suppliers")
+    public String showSuppliers() {
+        return "redirect:/admin/suppliers";
+    }
+
     @PostMapping("/frames/{pId}")
     public String saveFrame(@PathVariable Long pId,
                             @ModelAttribute("frameForm") Frame pForm,
