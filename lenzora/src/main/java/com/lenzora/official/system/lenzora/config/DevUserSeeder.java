@@ -6,6 +6,7 @@ import com.lenzora.official.system.lenzora.repository.UserRepository;
 
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.context.annotation.Profile;
@@ -20,22 +21,23 @@ import java.time.LocalDateTime;
 @Profile("!production")
 public class DevUserSeeder implements ApplicationRunner {
 
-    /** The address typed into the "Username" box of the login page. */
-    private static final String ADMIN_EMAIL = "admin@lenzora.lk";
-
-    /** The matching password, hashed with BCrypt before it is stored. */
-    private static final String ADMIN_PASSWORD = "admin123";
-
     /** Reads and writes the login accounts. */
     private final UserRepository userRepository;
 
     /** Turns the plain password into the BCrypt hash the table stores. */
     private final PasswordEncoder passwordEncoder;
 
+    private final String adminEmail;
+    private final String adminPassword;
+
     public DevUserSeeder(UserRepository pUserRepository,
-                         PasswordEncoder pPasswordEncoder) {
+                         PasswordEncoder pPasswordEncoder,
+                         @Value("${lenzora.admin.email:}") String pAdminEmail,
+                         @Value("${lenzora.admin.password:}") String pAdminPassword) {
         this.userRepository = pUserRepository;
         this.passwordEncoder = pPasswordEncoder;
+        this.adminEmail = pAdminEmail;
+        this.adminPassword = pAdminPassword;
     }
 
     @Override
@@ -46,11 +48,16 @@ public class DevUserSeeder implements ApplicationRunner {
             return;
         }
 
+        if (adminEmail.isBlank() || adminPassword.isBlank()) {
+            System.out.println("Admin credentials are not configured, so no account was seeded.");
+            return;
+        }
+
         User admin = new User();
         admin.setFirstName("Lenzora");
         admin.setLastName("Admin");
-        admin.setEmail(ADMIN_EMAIL);
-        admin.setPasswordHash(passwordEncoder.encode(ADMIN_PASSWORD));
+        admin.setEmail(adminEmail);
+        admin.setPasswordHash(passwordEncoder.encode(adminPassword));
         admin.setRole("ADMIN");
         admin.setAccountStatus(AccountStatus.ACTIVE);
 
@@ -60,8 +67,7 @@ public class DevUserSeeder implements ApplicationRunner {
 
         userRepository.save(admin);
 
-        System.out.println("Seeded the default administrator. Sign in with "
-                + ADMIN_EMAIL + " / " + ADMIN_PASSWORD
-                + " (development account - change it before release).");
+        System.out.println("Seeded the configured development administrator account: "
+            + adminEmail + ".");
     }
 }

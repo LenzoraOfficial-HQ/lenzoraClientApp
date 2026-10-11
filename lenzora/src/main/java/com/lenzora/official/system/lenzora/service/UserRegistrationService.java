@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 
 @Service
 public class UserRegistrationService {
@@ -28,9 +29,9 @@ public class UserRegistrationService {
         // Clean input values
         firstName = cleanText(firstName);
         lastName = cleanText(lastName);
-        email = cleanText(email);
-        password = cleanText(password);
-        confirmPassword = cleanText(confirmPassword);
+        email = cleanText(email).toLowerCase(Locale.ROOT);
+        password = password == null ? "" : password;
+        confirmPassword = confirmPassword == null ? "" : confirmPassword;
 
         // Basic validations
         if (firstName.isEmpty() || lastName.isEmpty()) {
@@ -54,7 +55,7 @@ public class UserRegistrationService {
         }
 
         // Check if email is already registered
-        if (userRepository.findByEmail(email).isPresent()) {
+        if (userRepository.findByEmailIgnoreCase(email).isPresent()) {
             return "An account already exists for " + email + ". Please log in instead.";
         }
 

@@ -17,6 +17,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Automatically finds a user by their email address
     Optional<User> findByEmail(String email);
 
+    Optional<User> findByEmailIgnoreCase(String email);
+
     List<User> findByRoleAndAccountStatusAndProfileCompletedTrueOrderByCreatedAtAsc(
             String role, AccountStatus accountStatus);
 }

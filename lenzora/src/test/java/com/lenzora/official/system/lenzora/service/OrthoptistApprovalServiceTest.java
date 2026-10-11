@@ -35,7 +35,7 @@ class OrthoptistApprovalServiceTest {
     void registrationCreatesPendingAccountWithoutProfessionalDetails() {
         UserRegistrationService registrationService =
                 new UserRegistrationService(userRepository, passwordEncoder);
-        when(userRepository.findByEmail("doctor@example.com")).thenReturn(Optional.empty());
+        when(userRepository.findByEmailIgnoreCase("doctor@example.com")).thenReturn(Optional.empty());
         when(passwordEncoder.encode("securepass")).thenReturn("encoded");
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
