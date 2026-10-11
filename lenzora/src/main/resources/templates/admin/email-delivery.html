@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
@@ -11,211 +10,143 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
           rel="stylesheet">
 
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet" th:href="@{/css/lenzora-theme.css}">
+
     <style>
-        :root {
-            --lenzora-blue: #2878f0;
-            --lenzora-light-blue: #69b5ff;
-            --lenzora-navy: #062b70;
-            --lenzora-dark-navy: #00163e;
-            --lenzora-charcoal: #252b39;
-            --lenzora-gold: #f2bd45;
-            --lenzora-text: #172b4d;
-            --lenzora-muted: #75849e;
-            --lenzora-background: #f4f7fc;
-        }
-
         body {
-            background: var(--lenzora-background);
-            font-family: Georgia, "Times New Roman", serif;
-            color: var(--lenzora-text);
+            background: #edf0f6;
+            color: #202b3e;
         }
 
-        .page-header {
-            background: linear-gradient(120deg, #ffffff, #edf4ff);
-            padding: 30px 32px;
-            border-radius: 20px;
-            margin-bottom: 28px;
-            border: 1px solid #e0e9f8;
-            box-shadow: 0 8px 25px rgba(20, 55, 110, 0.07);
+        .main-content {
+            padding: 30px;
         }
 
-        .page-header h2 {
-            color: var(--lenzora-navy);
-            font-weight: 700;
+        .eyebrow {
+            color: #75849d;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
-        .page-header p {
-            color: var(--lenzora-muted) !important;
+        .page-title {
+            font-size: 34px;
+            font-weight: bold;
+            margin-top: 8px;
+            color: #202b3e;
+        }
+
+        .page-description {
+            color: #75849d;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #efd477, #bd941b);
+            color: #111;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 18px;
+            font-weight: bold;
+        }
+
+        .btn-gold:hover {
+            background: #d4ad32;
+            color: #111;
         }
 
         .summary-card {
-            position: relative;
-            overflow: hidden;
-            border-radius: 24px;
-            padding: 26px;
-            min-height: 210px;
-            height: 100%;
-            color: white;
             border: none;
-            box-shadow: 0 10px 25px rgba(10, 35, 80, 0.16);
-            transition: transform 0.2s ease,
-            box-shadow 0.2s ease;
+            border-radius: 20px;
+            padding: 24px;
+            color: white;
+            height: 100%;
+            box-shadow: 0 6px 18px rgba(25, 41, 67, 0.10);
         }
 
-        .summary-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 30px rgba(10, 35, 80, 0.22);
+        .card-blue {
+            background: linear-gradient(135deg, #659df0, #3274df);
         }
 
-        .summary-card::before {
-            content: "";
-            position: absolute;
-            width: 190px;
-            height: 190px;
-            top: -105px;
-            right: -35px;
-            border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.22);
-            box-shadow:
-                    0 0 0 25px rgba(255, 255, 255, 0.035),
-                    0 0 0 50px rgba(255, 255, 255, 0.025);
-            pointer-events: none;
+        .card-navy {
+            background: linear-gradient(135deg, #354f78, #192943);
         }
 
-        .summary-card > * {
-            position: relative;
-            z-index: 1;
+        .card-ink {
+            background: linear-gradient(135deg, #263348, #0c1422);
         }
 
-        .summary-card.total {
-            background:
-                    radial-gradient(circle at 100% 0%,
-                    rgba(255,255,255,0.20), transparent 45%),
-                    linear-gradient(135deg,
-                    #56a5ff 0%, #1764df 58%, #0846b4 100%);
+        .card-gold {
+            background: linear-gradient(135deg, #efd477, #c9a227);
+            color: #171717;
         }
 
-        .summary-card.pending {
-            background:
-                    radial-gradient(circle at 100% 0%,
-                    rgba(255,255,255,0.15), transparent 45%),
-                    linear-gradient(135deg,
-                    #174da0 0%, #062c70 58%, #00173f 100%);
-        }
-
-        .summary-card.sent {
-            background:
-                    radial-gradient(circle at 100% 0%,
-                    rgba(255,255,255,0.18), transparent 45%),
-                    linear-gradient(135deg,
-                    #555e70 0%, #303747 55%, #171d2a 100%);
-        }
-
-        .summary-card.failed {
-            background:
-                    radial-gradient(circle at 100% 0%,
-                    rgba(255,255,255,0.38), transparent 45%),
-                    linear-gradient(135deg,
-                    #ffe08a 0%, #e8b13c 55%, #bd800d 100%);
-            color: #392907;
+        .summary-icon {
+            font-size: 25px;
+            margin-bottom: 15px;
+            display: inline-block;
         }
 
         .summary-label {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 8px;
         }
 
         .summary-number {
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 38px;
+            font-size: 32px;
             font-weight: bold;
-            line-height: 1.2;
+            margin: 0;
         }
 
         .summary-note {
-            margin-top: 15px;
+            margin-top: 10px;
+            margin-bottom: 0;
             font-size: 13px;
             opacity: 0.9;
         }
 
-        .summary-icon {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 54px;
-            height: 54px;
-            margin-bottom: 22px;
-            border-radius: 18px;
-            background: rgba(255, 255, 255, 0.16);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            font-family: Arial, sans-serif;
-            font-size: 25px;
-        }
-
-        .summary-card.failed .summary-icon {
-            background: rgba(83, 54, 0, 0.10);
-            border-color: rgba(83, 54, 0, 0.12);
-        }
-
-        .table-container {
+        .content-panel {
             background: white;
-            padding: 28px;
             border-radius: 22px;
-            border: 1px solid #e5ebf5;
-            box-shadow: 0 8px 25px rgba(20, 55, 110, 0.07);
-        }
-
-        .table-container h5 {
-            color: var(--lenzora-navy);
-            font-weight: 700;
-        }
-
-        .table {
-            margin-bottom: 0;
-            color: var(--lenzora-text);
-            vertical-align: middle;
+            padding: 25px;
+            box-shadow: 0 5px 18px rgba(25, 41, 67, 0.05);
         }
 
         .table thead th {
-            background: #edf3ff;
-            color: var(--lenzora-navy);
-            padding: 16px 14px;
-            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            color: #75849d;
             font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 0.04em;
-            border-bottom: 1px solid #dce6f6;
             white-space: nowrap;
+            padding: 15px;
         }
 
         .table tbody td {
-            padding: 17px 14px;
-            border-color: #e9eef7;
-        }
-
-        .table-hover tbody tr:hover > * {
-            background-color: #f4f8ff;
+            padding: 16px 15px;
+            vertical-align: middle;
         }
 
         .status {
             display: inline-block;
-            padding: 7px 13px;
             border-radius: 20px;
-            font-family: Arial, sans-serif;
+            padding: 7px 10px;
             font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 0.04em;
+            font-weight: bold;
+            white-space: nowrap;
         }
 
         .status-pending {
-            background: #fff2cf;
-            color: #805700;
+            background: #fff1c9;
+            color: #96700b;
         }
 
         .status-sent {
-            background: #d9f3e6;
-            color: #126c48;
+            background: #e0f2e8;
+            color: #237447;
         }
 
         .status-failed {
@@ -227,36 +158,32 @@
             color: #b02a37;
             max-width: 220px;
             overflow-wrap: anywhere;
-            font-family: Arial, sans-serif;
             font-size: 13px;
         }
 
         .recipient-type {
-            color: var(--lenzora-muted);
-            font-family: Arial, sans-serif;
+            color: #75849d;
             font-size: 12px;
         }
 
         .empty-state {
-            padding: 45px 15px !important;
-            color: var(--lenzora-muted);
+            text-align: center;
+            padding: 45px 20px;
+            color: #75849d;
         }
 
-        @media (max-width: 576px) {
-            .summary-card {
-                padding: 22px;
-            }
+        .empty-state i {
+            font-size: 42px;
+            color: #d4ad32;
+        }
 
-            .summary-number {
-                font-size: 32px;
-            }
-
-            .table-container {
+        @media (max-width: 768px) {
+            .main-content {
                 padding: 18px;
             }
 
-            .page-header {
-                padding: 24px;
+            .page-title {
+                font-size: 27px;
             }
         }
     </style>
@@ -264,185 +191,228 @@
 
 <body>
 
-<div class="container-fluid p-3 p-lg-5">
+<div class="container-fluid">
+    <div class="row">
 
-    <!-- Page heading -->
-    <div class="page-header">
-        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
-            <div>
-                <h2 class="fw-bold mb-2">Email Delivery Management</h2>
-                <p class="mb-0">
-                    Monitor outgoing emails and investigate delivery failures.
-                </p>
-            </div>
+        <!-- Shared Lenzora sidebar -->
+        <div th:replace="~{fragments/shell :: sidebar('email-delivery')}"></div>
 
-            <div class="d-flex flex-wrap align-items-center gap-2">
-                <a th:href="@{/}"
-                   class="btn btn-outline-primary rounded-pill px-4 py-2">
-                    <i class="bi bi-arrow-left me-2"></i>
-                    Back to Dashboard
-                </a>
+        <!-- Main area -->
+        <div class="col-md-10 p-0">
 
-                <a th:href="@{/admin/email-delivery/create}"
-                   class="btn btn-primary rounded-pill px-4 py-2">
-                    <i class="bi bi-send me-2"></i>
-                    Create Email
-                </a>
-            </div>
-        </div>
-    </div>
+            <!-- Shared Lenzora top navigation -->
+            <div th:replace="~{fragments/shell :: topbar}"></div>
 
-    <!-- Summary cards -->
-    <div class="row g-4 mb-4">
+            <main class="main-content">
 
-        <!-- Total emails -->
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="summary-card total">
-                <div class="summary-icon">&#9993;</div>
-                <p class="summary-label">Total Emails</p>
-                <div class="summary-number"
-                     th:text="${totalCount}">0</div>
-                <p class="summary-note">All delivery records</p>
-            </div>
-        </div>
+                <!-- Page heading -->
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
-        <!-- Pending emails -->
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="summary-card pending">
-                <div class="summary-icon">&#9889;</div>
-                <p class="summary-label">Pending Emails</p>
-                <div class="summary-number"
-                     th:text="${pendingCount}">0</div>
-                <p class="summary-note">Awaiting delivery</p>
-            </div>
-        </div>
+                    <div>
+                        <div class="eyebrow">Communication Centre</div>
 
-        <!-- Sent emails -->
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="summary-card sent">
-                <div class="summary-icon">&#10003;</div>
-                <p class="summary-label">Successfully Sent</p>
-                <div class="summary-number"
-                     th:text="${sentCount}">0</div>
-                <p class="summary-note">Delivered successfully</p>
-            </div>
-        </div>
+                        <h1 class="page-title">
+                            Email Delivery Management
+                        </h1>
 
-        <!-- Failed emails -->
-        <div class="col-12 col-sm-6 col-xl-3">
-            <div class="summary-card failed">
-                <div class="summary-icon">&#9888;</div>
-                <p class="summary-label">Failed Emails</p>
-                <div class="summary-number"
-                     th:text="${failedCount}">0</div>
-                <p class="summary-note">Require investigation</p>
-            </div>
-        </div>
+                        <p class="page-description mb-0">
+                            Monitor outgoing emails and investigate delivery failures.
+                        </p>
+                    </div>
 
-    </div>
+                    <a th:href="@{/admin/email-delivery/create}"
+                       class="btn btn-gold">
+                        <i class="bi bi-send me-2"></i>
+                        Create Email
+                    </a>
 
-    <!-- Email delivery table -->
-    <div class="table-container">
+                </div>
 
-        <div class="d-flex flex-wrap justify-content-between
-                    align-items-center gap-3 mb-4">
-            <div>
-                <h5 class="mb-1">Email Delivery Records</h5>
-                <p class="text-secondary small mb-0">
-                    Delivery status, attempts, and error information
-                </p>
-            </div>
-        </div>
+                <!-- Summary cards -->
+                <div class="row g-4 mb-4">
 
-        <div class="table-responsive">
-            <table class="table table-hover align-middle">
+                    <div class="col-xl-3 col-sm-6">
+                        <div class="summary-card card-blue">
+                            <div class="summary-icon">
+                                <i class="bi bi-envelope"></i>
+                            </div>
 
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Recipient</th>
-                    <th>Subject</th>
-                    <th>Status</th>
-                    <th>Attempts</th>
-                    <th>Sent At</th>
-                    <th>Last Error</th>
-                </tr>
-                </thead>
+                            <p class="summary-label">Total Emails</p>
 
-                <tbody>
-
-                <tr th:each="email : ${emailDeliveries}">
-
-                    <td class="fw-bold"
-                        th:text="${email.emailId}">1</td>
-
-                    <td>
-                        <div class="fw-semibold"
-                             th:text="${email.recipientEmail}">
-                            recipient@example.com
+                            <p class="summary-number"
+                               th:text="${totalCount != null ? totalCount : 0}">0</p>
                         </div>
-                        <small class="recipient-type"
-                               th:text="${email.recipientType}">
-                            SUPPLIER
-                        </small>
-                    </td>
+                    </div>
 
-                    <td th:text="${email.subject}">
-                        Order update
-                    </td>
+                    <div class="col-xl-3 col-sm-6">
+                        <div class="summary-card card-navy">
+                            <div class="summary-icon">
+                                <i class="bi bi-lightning-charge"></i>
+                            </div>
 
-                    <td>
-                        <span class="status"
-                              th:classappend="${email.status == 'SENT'} ? ' status-sent' :
+                            <p class="summary-label">Pending Emails</p>
+
+                            <p class="summary-number"
+                               th:text="${pendingCount != null ? pendingCount : 0}">0</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-sm-6">
+                        <div class="summary-card card-ink">
+                            <div class="summary-icon">
+                                <i class="bi bi-check2-circle"></i>
+                            </div>
+
+                            <p class="summary-label">Successfully Sent</p>
+
+                            <p class="summary-number"
+                               th:text="${sentCount != null ? sentCount : 0}">0</p>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-sm-6">
+                        <div class="summary-card card-gold">
+                            <div class="summary-icon">
+                                <i class="bi bi-exclamation-triangle"></i>
+                            </div>
+
+                            <p class="summary-label">Failed Emails</p>
+
+                            <p class="summary-number"
+                               th:text="${failedCount != null ? failedCount : 0}">0</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Email delivery records -->
+                <section class="content-panel">
+
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+
+                        <div>
+                            <h5 class="fw-bold mb-1">
+                                <i class="bi bi-list-ul me-2"
+                                   style="color: #c9a227;"></i>
+                                Email Delivery Records
+                            </h5>
+
+                            <p class="text-secondary small mb-0">
+                                Delivery status, attempts, and error information
+                            </p>
+                        </div>
+
+                        <span class="text-muted small">
+                            Records:
+                            <strong th:text="${emailDeliveries != null ? emailDeliveries.size() : 0}">0</strong>
+                        </span>
+
+                    </div>
+
+                    <div class="table-responsive"
+                         th:if="${emailDeliveries != null and !#lists.isEmpty(emailDeliveries)}">
+
+                        <table class="table align-middle">
+
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Recipient</th>
+                                <th>Subject</th>
+                                <th>Status</th>
+                                <th>Attempts</th>
+                                <th>Sent At</th>
+                                <th>Last Error</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            <tr th:each="email : ${emailDeliveries}">
+
+                                <td class="fw-bold"
+                                    th:text="${email.emailId}">1</td>
+
+                                <td>
+                                    <div class="fw-semibold"
+                                         th:text="${email.recipientEmail}">
+                                        recipient@example.com
+                                    </div>
+
+                                    <small class="recipient-type"
+                                           th:text="${email.recipientType}">
+                                        SUPPLIER
+                                    </small>
+                                </td>
+
+                                <td th:text="${email.subject}">
+                                    Order update
+                                </td>
+
+                                <td>
+                                    <span class="status"
+                                          th:classappend="${email.status == 'SENT'} ? ' status-sent' :
                                               (${email.status == 'FAILED'} ? ' status-failed' : ' status-pending')"
-                              th:text="${email.status}">
-                            PENDING
-                        </span>
-                    </td>
+                                          th:text="${email.status}">
+                                        PENDING
+                                    </span>
+                                </td>
 
-                    <td th:text="${email.attemptCount}">0</td>
+                                <td th:text="${email.attemptCount}">0</td>
 
-                    <td>
-                        <span th:if="${email.sentAt != null}"
-                              th:text="${#temporals.format(email.sentAt, 'dd MMM yyyy, hh:mm a')}">
-                            Date
-                        </span>
+                                <td>
+                                    <span th:if="${email.sentAt != null}"
+                                          th:text="${#temporals.format(email.sentAt, 'dd MMM yyyy, hh:mm a')}">
+                                        Date
+                                    </span>
 
-                        <span th:if="${email.sentAt == null}"
-                              class="text-secondary">—</span>
-                    </td>
+                                    <span th:if="${email.sentAt == null}"
+                                          class="text-muted">—</span>
+                                </td>
 
-                    <td>
-                        <span th:if="${email.lastError != null
-                                      and !#strings.isEmpty(email.lastError)}"
-                              class="error-text"
-                              th:text="${email.lastError}">
-                            Delivery error
-                        </span>
+                                <td>
+                                    <span th:if="${email.lastError != null and !#strings.isEmpty(email.lastError)}"
+                                          class="error-text"
+                                          th:text="${email.lastError}">
+                                        Delivery error
+                                    </span>
 
-                        <span th:if="${email.lastError == null
-                                      or #strings.isEmpty(email.lastError)}"
-                              class="text-secondary">—</span>
-                    </td>
+                                    <span th:if="${email.lastError == null or #strings.isEmpty(email.lastError)}"
+                                          class="text-muted">—</span>
+                                </td>
 
-                </tr>
+                            </tr>
 
-                <!-- Empty state -->
-                <tr th:if="${#lists.isEmpty(emailDeliveries)}">
-                    <td colspan="7" class="text-center empty-state">
-                        <div class="fs-1 mb-2">&#9993;</div>
-                        <div class="fw-bold">No email records yet</div>
-                        <div class="small mt-1">
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Empty state -->
+                    <div class="empty-state"
+                         th:if="${emailDeliveries == null or #lists.isEmpty(emailDeliveries)}">
+
+                        <i class="bi bi-envelope"></i>
+
+                        <h5 class="fw-bold mt-3">
+                            No email records found
+                        </h5>
+
+                        <p class="mb-3">
                             Email delivery records will appear here when available.
-                        </div>
-                    </td>
-                </tr>
+                        </p>
 
-                </tbody>
-            </table>
+                        <a th:href="@{/admin/email-delivery/create}"
+                           class="btn btn-gold">
+                            <i class="bi bi-send me-2"></i>
+                            Create Your First Email
+                        </a>
+                    </div>
+
+                </section>
+
+            </main>
         </div>
     </div>
-
 </div>
 
 </body>
