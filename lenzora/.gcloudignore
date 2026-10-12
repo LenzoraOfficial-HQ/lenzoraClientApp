@@ -1,0 +1,14 @@
+# Files Cloud Build does not need to receive as build input.
+# Only the Dockerfile, pom.xml, mvnw, .mvn and src/ are used by the build.
+.git
+.gitignore
+.gitattributes
+.vscode
+.idea
+.env
+.env.*
+target/
+*.log
+DMS_projectreport/
+hospital.properties
+HELP.md
