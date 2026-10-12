@@ -2,6 +2,7 @@ services:
   - type: web
     name: lenzora
     runtime: docker
+    rootDir: lenzora
     plan: free
     dockerfilePath: ./Dockerfile
     dockerContext: .

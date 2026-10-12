@@ -1,6 +1,12 @@
 FROM eclipse-temurin:25-jdk AS build
 WORKDIR /workspace
 
+# The wrapper script downloads Maven with curl and extracts it with unzip;
+# the base image ships neither.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends curl unzip \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY .mvn .mvn
 COPY mvnw pom.xml ./
 RUN chmod +x ./mvnw && ./mvnw -B -DskipTests dependency:go-offline
