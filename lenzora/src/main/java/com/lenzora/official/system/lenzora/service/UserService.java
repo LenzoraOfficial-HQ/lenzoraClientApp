@@ -7,6 +7,7 @@ import com.lenzora.official.system.lenzora.repository.AppUserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -101,5 +102,9 @@ public class UserService {
      */
     public Optional<AppUser> getUserById(Long userId) {
         return userRepository.findById(userId);
+    }
+
+    public List<AppUser> getAllUsers() {
+        return userRepository.findAll();
     }
 }

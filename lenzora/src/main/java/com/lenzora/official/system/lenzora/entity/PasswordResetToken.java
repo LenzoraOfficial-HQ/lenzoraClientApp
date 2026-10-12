@@ -1,5 +1,6 @@
 package com.lenzora.official.system.lenzora.entity;
 
+import com.lenzora.official.system.lenzora.model.User;
 import com.lenzora.official.system.lenzora.shared.AuditableEntity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class PasswordResetToken extends AuditableEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private AppUser user;
+    private User user;
 
     @Column(name = "token_hash", nullable = false, length = 64, unique = true)
     private String tokenHash;
@@ -32,44 +33,18 @@ public class PasswordResetToken extends AuditableEntity {
     public PasswordResetToken() {}
 
     // Getters and Setters
-    public Long getTokenId() {
-         return tokenId; 
-    }
+    public Long getTokenId() { return tokenId; }
+    public void setTokenId(Long tokenId) { this.tokenId = tokenId; }
 
-    public void setTokenId(Long tokenId) {
-         this.tokenId = tokenId; 
-    }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
-    public AppUser getUser() {
-         return user; 
-    }
+    public String getTokenHash() { return tokenHash; }
+    public void setTokenHash(String tokenHash) { this.tokenHash = tokenHash; }
 
-    public void setUser(AppUser user) {
-         this.user = user; 
-    }
+    public LocalDateTime getExpiresAt() { return expiresAt; }
+    public void setExpiresAt(LocalDateTime expiresAt) { this.expiresAt = expiresAt; }
 
-    public String getTokenHash() {
-         return tokenHash; 
-    }
-
-    public void setTokenHash(String tokenHash) {
-         this.tokenHash = tokenHash; 
-    }
-
-    public LocalDateTime getExpiresAt() { 
-         return expiresAt; 
-    }
-
-    public void setExpiresAt(LocalDateTime expiresAt) {
-         this.expiresAt = expiresAt; 
-    }
-
-    public LocalDateTime getUsedAt() {
-         return usedAt; 
-    }
-
-    public void setUsedAt(LocalDateTime usedAt) {
-         this.usedAt = usedAt; 
-    }
-
+    public LocalDateTime getUsedAt() { return usedAt; }
+    public void setUsedAt(LocalDateTime usedAt) { this.usedAt = usedAt; }
 }
