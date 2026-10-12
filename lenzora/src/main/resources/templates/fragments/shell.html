@@ -82,6 +82,13 @@
                 <i class="bi bi-envelope-check"></i> Email Delivery
             </a>
 
+            <!-- Order Status History -->
+            <a th:href="@{/admin/order-status}"
+               class="nav-link"
+               th:classappend="${active == 'order-status'} ? 'active'">
+                <i class="bi bi-clock-history"></i> Order Status
+            </a>
+
         </div>
 
     </nav>
