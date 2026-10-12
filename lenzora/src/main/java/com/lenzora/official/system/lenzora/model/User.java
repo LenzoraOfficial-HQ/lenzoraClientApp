@@ -1,10 +1,12 @@
 package com.lenzora.official.system.lenzora.model;
 
+import com.lenzora.official.system.lenzora.entity.AccountStatus;
+import com.lenzora.official.system.lenzora.shared.BaseAuditableEntity;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "app_user")
-public class User {
+public class User extends BaseAuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +28,21 @@ public class User {
     @Column(name = "user_role", nullable = false)
     private String role;
 
+    @Column(name = "role", nullable = false)
+    private String legacyRole;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_status", nullable = false)
-    private String status;
+    private AccountStatus accountStatus = AccountStatus.PENDING;
+
+    @Column(name = "status", nullable = false)
+    private String legacyStatus;
+
+    @Column(name = "license_number", length = 50)
+    private String licenseNumber;
+
+    @Column(name = "profile_completed", nullable = false, columnDefinition = "BOOLEAN NOT NULL DEFAULT FALSE")
+    private boolean profileCompleted;
 
     @Column(name = "registration_no")
     private String registrationNo;
@@ -43,13 +58,6 @@ public class User {
 
     @Column(name = "approved_at")
     private java.time.LocalDateTime approvedAt;
-
-    @Column(name = "created_at", nullable = false)
-    private java.time.LocalDateTime createdAt;
-
-    @Column(name = "updated_at", nullable = false)
-    private java.time.LocalDateTime updatedAt;
-
 
     public User() {
     }
@@ -108,13 +116,36 @@ public class User {
         this.role = role;
     }
 
-
-    public String getStatus() {
-        return status;
+    @PrePersist
+    @PreUpdate
+    protected void synchronizeRoleColumns() {
+        this.legacyRole = this.role;
+        this.legacyStatus = this.accountStatus.name();
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+
+    public AccountStatus getAccountStatus() {
+        return accountStatus == AccountStatus.ACTIVE ? AccountStatus.APPROVED : accountStatus;
+    }
+
+    public void setAccountStatus(AccountStatus accountStatus) {
+        this.accountStatus = accountStatus;
+    }
+
+    public String getLicenseNumber() {
+        return licenseNumber;
+    }
+
+    public void setLicenseNumber(String licenseNumber) {
+        this.licenseNumber = licenseNumber;
+    }
+
+    public boolean isProfileCompleted() {
+        return profileCompleted;
+    }
+
+    public void setProfileCompleted(boolean profileCompleted) {
+        this.profileCompleted = profileCompleted;
     }
 
 
@@ -160,23 +191,5 @@ public class User {
 
     public void setApprovedAt(java.time.LocalDateTime approvedAt) {
         this.approvedAt = approvedAt;
-    }
-
-
-    public java.time.LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(java.time.LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-
-    public java.time.LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(java.time.LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

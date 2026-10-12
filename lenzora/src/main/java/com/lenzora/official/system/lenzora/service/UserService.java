@@ -16,11 +16,14 @@ public class UserService {
 
     private final AppUserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuditService auditService;
 
     // Constructor to inject required dependencies
-    public UserService(AppUserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(AppUserRepository userRepository, PasswordEncoder passwordEncoder,
+                       AuditService auditService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.auditService = auditService;
     }
 
     /**
@@ -47,7 +50,13 @@ public class UserService {
         user.setPasswordHash(encodedPassword);
 
         // Save to database
-        return userRepository.save(user);
+        AppUser savedUser = userRepository.save(user);
+        auditService.logAction(
+                "REGISTRATION",
+                savedUser.getEmail(),
+                "app_user",
+                "New orthoptist account registered: " + savedUser.getEmail());
+        return savedUser;
     }
 
     /**
@@ -78,7 +87,13 @@ public class UserService {
         targetUser.setApprovedBy(adminUser);
         targetUser.setApprovedAt(LocalDateTime.now());
 
-        return userRepository.save(targetUser);
+        AppUser savedTarget = userRepository.save(targetUser);
+        auditService.logAction(
+                "APPROVAL",
+                adminEmail,
+                "app_user",
+                "User " + savedTarget.getUserId() + " (" + savedTarget.getEmail() + ") approved");
+        return savedTarget;
     }
 
     /**

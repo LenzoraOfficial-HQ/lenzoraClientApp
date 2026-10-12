@@ -1,34 +1,42 @@
 package com.lenzora.official.system.lenzora.service;
 
+import com.lenzora.official.system.lenzora.entity.AccountStatus;
 import com.lenzora.official.system.lenzora.model.User;
 import com.lenzora.official.system.lenzora.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 
 @Service
 public class UserRegistrationService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuditService auditService;
 
-    public UserRegistrationService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserRegistrationService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+                                   AuditService auditService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.auditService = auditService;
     }
 
     /**
      * Validates input details and registers a new user.
      * Returns an error message if validation fails, or an empty string on success.
      */
-    public String register(String firstName, String lastName, String email, String password, String confirmPassword) {
+    @Transactional
+    public String register(String firstName, String lastName, String email,
+                           String password, String confirmPassword) {
         // Clean input values
         firstName = cleanText(firstName);
         lastName = cleanText(lastName);
-        email = cleanText(email);
-        password = cleanText(password);
-        confirmPassword = cleanText(confirmPassword);
+        email = cleanText(email).toLowerCase(Locale.ROOT);
+        password = password == null ? "" : password;
+        confirmPassword = confirmPassword == null ? "" : confirmPassword;
 
         // Basic validations
         if (firstName.isEmpty() || lastName.isEmpty()) {
@@ -52,7 +60,7 @@ public class UserRegistrationService {
         }
 
         // Check if email is already registered
-        if (userRepository.findByEmail(email).isPresent()) {
+        if (userRepository.findByEmailIgnoreCase(email).isPresent()) {
             return "An account already exists for " + email + ". Please log in instead.";
         }
 
@@ -63,13 +71,18 @@ public class UserRegistrationService {
         user.setEmail(email);
         user.setPasswordHash(passwordEncoder.encode(password));
         user.setRole("ORTHOPTIST");
-        user.setStatus("ACTIVE");
+        user.setAccountStatus(AccountStatus.PENDING);
 
         LocalDateTime now = LocalDateTime.now();
         user.setCreatedAt(now);
         user.setUpdatedAt(now);
 
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        auditService.logAction(
+                "REGISTRATION",
+                email,
+                "app_user",
+                "New orthoptist account registered: " + savedUser.getEmail());
 
         return ""; // Success
     }
