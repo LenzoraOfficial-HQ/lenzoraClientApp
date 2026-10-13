@@ -1,0 +1,12 @@
+package com.lenzora.official.system.lenzora.config;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
+import java.util.Set;
+
+public class RoleChecks {
+    public static boolean hasRole(Authentication authentication, String role) {
+        Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+        return roles.contains(role);
+    }
+}

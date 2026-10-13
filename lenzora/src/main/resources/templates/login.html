@@ -392,12 +392,17 @@
 
         </form>
 
+        <!-- FORGOT PASSWORD LINK -->
+            <div class="text-end mb-4">
+                <a href="/forgot-password.html" style="color: #b8860b; font-size: 14px; text-decoration: none; font-weight: 600;">
+                    Forgot password?
+                </a>
+            </div>
 
         <!-- GOOGLE LOGIN -->
 
         <a href="/oauth2/authorization/google"
-           class="google-login-button"
-           th:if="${googleLoginEnabled}">
+           class="google-login-button">
 
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
                  alt="Google"

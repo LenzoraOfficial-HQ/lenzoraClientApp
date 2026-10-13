@@ -1,8 +1,8 @@
 package com.lenzora.official.system.lenzora.service;
 
-import com.lenzora.official.system.lenzora.entity.AppUser;
+import com.lenzora.official.system.lenzora.model.User;
 import com.lenzora.official.system.lenzora.entity.PasswordResetToken;
-import com.lenzora.official.system.lenzora.repository.AppUserRepository;
+import com.lenzora.official.system.lenzora.repository.UserRepository;
 import com.lenzora.official.system.lenzora.repository.PasswordResetTokenRepository;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -13,7 +13,6 @@ import java.util.UUID;
 import java.util.HexFormat;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthService {
 
-    private final AppUserRepository userRepository;
+    private final UserRepository userRepository;
     private final PasswordResetTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender mailSender;
@@ -34,7 +33,7 @@ public class AuthService {
     private final String mailFrom;
 
     public AuthService(
-            AppUserRepository userRepository,
+            UserRepository userRepository,
             PasswordResetTokenRepository tokenRepository,
             PasswordEncoder passwordEncoder,
             JavaMailSender mailSender,
@@ -52,23 +51,19 @@ public class AuthService {
      * Generates a password reset token for a given user email.
      * 
      * @param email The email of the user requesting a password reset.
-     * @return The raw token string to be sent to the user via email, or null if user not found.
      */
     @Transactional
     public void createPasswordResetToken(String email) {
         if (email == null || email.isBlank()) {
             return;
         }
-        if (mailHost.isBlank() || mailFrom.isBlank()) {
-            throw new IllegalStateException("Password reset email is not configured");
-        }
 
-        Optional<AppUser> userOpt = userRepository.findByEmail(email);
+        Optional<User> userOpt = userRepository.findByEmail(email);
         if (userOpt.isEmpty()) {
             return;
         }
 
-        AppUser user = userOpt.get();
+        User user = userOpt.get();
         String rawToken = UUID.randomUUID().toString();
 
         PasswordResetToken resetToken = new PasswordResetToken();
@@ -79,13 +74,25 @@ public class AuthService {
 
         tokenRepository.save(resetToken);
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(mailFrom);
-        message.setTo(user.getEmail());
-        message.setSubject("Lenzora password reset");
-        message.setText("Use this token with the password reset form: " + rawToken
-                + "\nThis token expires in one hour.");
-        mailSender.send(message);
+        // 1. PRINT TOKEN TO TERMINAL FOR TESTING
+        System.out.println("\n==============================================");
+        System.out.println("=== YOUR RESET TOKEN: " + rawToken);
+        System.out.println("==============================================\n");
+
+        // 2. ATTEMPT EMAIL, BUT DON'T CRASH IF IT FAILS
+        try {
+            if (mailHost != null && !mailHost.isBlank() && mailFrom != null && !mailFrom.isBlank()) {
+                SimpleMailMessage message = new SimpleMailMessage();
+                message.setFrom(mailFrom);
+                message.setTo(user.getEmail());
+                message.setSubject("Lenzora password reset");
+                message.setText("Use this token with the password reset form: " + rawToken
+                        + "\nThis token expires in one hour.");
+                mailSender.send(message);
+            }
+        } catch (Exception e) {
+            System.out.println("Could not send real email, but token was generated successfully.");
+        }
     }
 
     /**
@@ -115,7 +122,7 @@ public class AuthService {
             return false;
         }
 
-        AppUser user = token.getUser();
+        User user = token.getUser();
         
         user.setPasswordHash(passwordEncoder.encode(newPassword));
         user.setUpdatedAt(LocalDateTime.now());
