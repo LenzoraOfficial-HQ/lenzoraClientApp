@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
@@ -40,6 +42,12 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration pConfiguration)
+            throws Exception {
+        return pConfiguration.getAuthenticationManager();
     }
 
     @Bean
@@ -113,6 +121,7 @@ public class SecurityConfig {
                             .oidcUserService(customOAuth2UserService)
                     )
                     .successHandler(this::onAuthenticationSuccess)
+                    .failureHandler(this::onOAuthFailure)
             );
         }
 
@@ -137,6 +146,14 @@ public class SecurityConfig {
         } else {
             response.sendRedirect("/");
         }
+    }
+
+    private void onOAuthFailure(jakarta.servlet.http.HttpServletRequest request,
+                                jakarta.servlet.http.HttpServletResponse response,
+                                org.springframework.security.core.AuthenticationException exception)
+            throws java.io.IOException {
+        System.out.println("Google sign-in failed: " + exception.getMessage());
+        response.sendRedirect("/login?oauthError");
     }
 
     private void onAccessDenied(jakarta.servlet.http.HttpServletRequest request,

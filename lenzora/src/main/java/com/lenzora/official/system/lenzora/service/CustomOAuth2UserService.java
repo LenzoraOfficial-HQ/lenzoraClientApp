@@ -57,7 +57,7 @@ public class CustomOAuth2UserService extends OidcUserService {
         }
 
         // Sign in the existing account, or create one so a first-time Google
-        // user can start using the app straight away.
+        // user can start the license verification step.
         User user = userRepository.findByEmail(email)
                 .orElseGet(() -> createAccount(oidcUser, email));
 
@@ -85,7 +85,7 @@ public class CustomOAuth2UserService extends OidcUserService {
         );
     }
 
-    /** Creates a ready-to-use account for a Google email that is not registered yet. */
+    /** Creates a pending account for a Google email that is not registered yet. */
     private User createAccount(OidcUser pOidcUser, String pEmail) {
 
         String fallbackName = nameFromEmail(pEmail);
@@ -96,8 +96,8 @@ public class CustomOAuth2UserService extends OidcUserService {
         user.setEmail(pEmail);
         user.setPasswordHash(googleAccountPassword);
         user.setRole("ORTHOPTIST");
-        user.setAccountStatus(AccountStatus.ACTIVE);
-        user.setProfileCompleted(true);
+        user.setAccountStatus(AccountStatus.PENDING);
+        user.setProfileCompleted(false);
 
         LocalDateTime now = LocalDateTime.now();
         user.setCreatedAt(now);
