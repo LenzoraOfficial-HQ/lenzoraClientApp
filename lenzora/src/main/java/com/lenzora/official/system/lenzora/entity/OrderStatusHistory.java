@@ -3,15 +3,7 @@ package com.lenzora.official.system.lenzora.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-/**
- * Represents a record of a change in the status of an order.
- *
- * <p>This entity is mapped to the {@code order_status_history} table
- * in the database. Each record stores the previous status, the new
- * status, the user who made the change, the time of the change,
- * and an optional note.</p>
- *
- */
+/** A record of one order status change. */
 @Entity
 @Table(name = "order_status_history")
 public class OrderStatusHistory {
@@ -61,7 +53,6 @@ public class OrderStatusHistory {
     @Column(name = "note")
     private String note;
 
-    // Getters and Setters
 
     /**
      * Returns the unique ID of this history record

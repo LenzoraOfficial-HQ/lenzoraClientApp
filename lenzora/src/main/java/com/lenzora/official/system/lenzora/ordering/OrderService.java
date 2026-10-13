@@ -89,13 +89,11 @@ public class OrderService {
             frameMaterial = frame.getMaterial();
         }
 
-        // create the order and give a number
         Order order = Order.place(form.getPatientReference(), form.getJobType(), LocalDate.now(), nextOrderNumber());
         if (order == null) {
             return failed("Please fill in the patient reference.");
         }
 
-        // copy the patient, hospital and reference details
         order.describePatient(form.getPatientName(), form.getPatientContact());
         order.recordHospital(form.getHospitalName(), form.getHospitalReference());
         order.recordExternalRefs(form.getSerialNo(), form.getJobNo(), form.getFromLocation());
@@ -143,7 +141,6 @@ public class OrderService {
             }
         }
 
-        // check the whole order, then save
         String problem = order.check();
         if (!problem.isEmpty()) {
             return failed(problem);

@@ -5,13 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-/**
- * Repository for managing notification records.
- *
- * <p>This repository provides standard CRUD operations and
- * notification-specific queries for the {@link Notification} entity.</p>
- *
- */
+/** Reads and writes notifications. */
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
     /**

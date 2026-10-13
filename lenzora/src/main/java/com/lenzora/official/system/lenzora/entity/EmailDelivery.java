@@ -3,16 +3,7 @@ package com.lenzora.official.system.lenzora.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-/**
- * Represents an email delivery record in the Lenzora system.
- *
- * <p>This entity is mapped to the {@code email_delivery} table in the
- * database. It stores information about outgoing emails, including
- * the recipient, subject, message body, delivery status, number of
- * attempts,
- * sending time, and any error that occurred during delivery.</p>
- *
- */
+/** An email delivery record. Rows live in the email_delivery table. */
 @Entity
 @Table(name = "email_delivery")
 public class EmailDelivery {
@@ -108,7 +99,6 @@ public class EmailDelivery {
     private LocalDateTime updatedAt;
 
 
-    // Getters and Setters
 
     /**
      * Returns the unique ID of the email delivery record.

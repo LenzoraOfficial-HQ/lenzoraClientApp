@@ -8,13 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Service class for managing email delivery records.
- *
- * <p>This service provides business-level operations for creating,
- * retrieving, updating, and deleting email delivery records.</p>
- *
- */
+/** Creates and updates email delivery records. */
 @Service
 public class EmailDeliveryService {
 
@@ -94,10 +88,7 @@ public class EmailDeliveryService {
     }
 
     /**
-     * Saves an email delivery record.
-     *
-     * <p>If the creation time or update time has not been set,
-     * the current date and time is assigned before saving.</p>
+     * Saves an email delivery record, filling in the times when they are empty.
      *
      * @param emailDelivery the email delivery record to save
      * @return the saved email delivery record
@@ -142,10 +133,7 @@ public class EmailDeliveryService {
     }
 
     /**
-     * Marks an email delivery record as failed.
-     *
-     * <p>The delivery attempt count is increased and the error
-     * message is stored for future reference.</p>
+     * Marks an email delivery record as failed and counts the attempt.
      *
      * @param emailId the ID of the email delivery record
      * @param errorMessage the error message describing the failure

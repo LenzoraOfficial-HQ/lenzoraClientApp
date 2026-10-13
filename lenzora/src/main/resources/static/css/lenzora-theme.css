@@ -593,11 +593,7 @@ h6 {
     color: var(--lenzora-text-muted) !important;
 }
 
-/* ------------------------------------------------------------------
-   Step bar: the sticky top menu of a screen that is worked through in
-   short pages. place-order.html uses it to show one order section at a
-   time, admin-orders.html to switch between its queues.
-   ------------------------------------------------------------------ */
+/* Step bar: the sticky top menu of a screen worked through in short pages. */
 .step-bar {
     position: sticky;
     top: 0;

@@ -44,10 +44,8 @@ public class CustomOAuth2UserService extends OidcUserService {
     public OidcUser loadUser(OidcUserRequest userRequest)
             throws OAuth2AuthenticationException {
 
-        // Let Spring load the user's information from Google
         OidcUser oidcUser = super.loadUser(userRequest);
 
-        // Get email from Google
         String email = oidcUser.getEmail();
 
         if (email == null || email.isBlank()) {
@@ -61,7 +59,6 @@ public class CustomOAuth2UserService extends OidcUserService {
         User user = userRepository.findByEmail(email)
                 .orElseGet(() -> createAccount(oidcUser, email));
 
-        // Keep Google's existing authorities and add the Lenzora role
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
 
         oidcUser.getAuthorities().forEach(authority ->
@@ -76,7 +73,6 @@ public class CustomOAuth2UserService extends OidcUserService {
                 )
         );
 
-        // Return the authenticated Google user with the Lenzora role
         return new org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser(
                 authorities,
                 oidcUser.getIdToken(),

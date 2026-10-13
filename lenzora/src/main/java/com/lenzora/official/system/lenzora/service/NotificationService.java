@@ -8,13 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Service class for managing notifications.
- *
- * <p>This service provides business-level operations for creating,
- * retrieving, updating, and deleting notification records.</p>
- *
- */
+/** Creates and updates notifications. */
 @Service
 public class NotificationService {
 
@@ -89,10 +83,7 @@ public class NotificationService {
     }
 
     /**
-     * Saves a notification.
-     *
-     * <p>If the creation time has not been set, the current date and time
-     * is assigned before saving.</p>
+     * Saves a notification, filling in the creation time when it is empty.
      *
      * @param notification the notification to save
      * @return the saved notification

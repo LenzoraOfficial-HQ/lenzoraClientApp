@@ -49,7 +49,6 @@ public class AuditController {
         return ResponseEntity.ok(response);
     }
 
-    // DTO for returning audit log data
     public record AuditLogResponse(
             Long logId,
             Long userId,

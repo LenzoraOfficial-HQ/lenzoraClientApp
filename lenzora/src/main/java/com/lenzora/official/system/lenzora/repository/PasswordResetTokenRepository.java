@@ -13,9 +13,7 @@ import java.util.Optional;
 @Repository
 public interface PasswordResetTokenRepository extends JpaRepository<PasswordResetToken, Long> {
 
-    // Find a reset token using its hash
     Optional<PasswordResetToken> findByTokenHash(String tokenHash);
 
-    // Delete tokens that expired before the given date and time
     void deleteByExpiresAtBefore(LocalDateTime now);
 }

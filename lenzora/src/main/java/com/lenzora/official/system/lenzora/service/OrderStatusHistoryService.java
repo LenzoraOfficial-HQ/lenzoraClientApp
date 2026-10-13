@@ -8,13 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Service class for managing order status history records.
- *
- * <p>This service provides business-level operations for retrieving,
- * saving, and deleting order status history records.</p>
- *
- */
+/** Reads and writes order status history rows. */
 @Service
 public class OrderStatusHistoryService {
 

@@ -32,7 +32,6 @@ public class PasswordResetToken extends AuditableEntity {
 
     public PasswordResetToken() {}
 
-    // Getters and Setters
     public Long getTokenId() { return tokenId; }
     public void setTokenId(Long tokenId) { this.tokenId = tokenId; }
 

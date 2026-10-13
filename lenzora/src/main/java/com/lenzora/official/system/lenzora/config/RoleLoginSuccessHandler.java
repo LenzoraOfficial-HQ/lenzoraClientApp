@@ -33,7 +33,6 @@ public class RoleLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
 
     @Override
     protected String determineTargetUrl(HttpServletRequest pRequest, HttpServletResponse pResponse, Authentication pAuthentication) {
-        // Check if the user logged in via OAuth2 (Google)
         if (pAuthentication.getPrincipal() instanceof OAuth2User) {
             OAuth2User oAuth2User = (OAuth2User) pAuthentication.getPrincipal();
             String email = oAuth2User.getAttribute("email");

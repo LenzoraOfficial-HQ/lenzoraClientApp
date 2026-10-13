@@ -14,12 +14,9 @@ import java.util.Optional;
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
-    // Find a user by email
     Optional<AppUser> findByEmail(String email);
 
-    // Check if an email is already registered
     boolean existsByEmail(String email);
 
-    // Find all users with a specific role
     List<AppUser> findByUserRole(UserRole role);
 }

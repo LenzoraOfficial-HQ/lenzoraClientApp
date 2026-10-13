@@ -117,10 +117,6 @@ public class Prescription extends AuditableEntity {
 
     protected Prescription() {}
 
-    // _____________________________________________________________________________________
-    //  Prescription
-    // ______________________________________________________________________________________
-
     /**
      * Makes sure prescription always knows its eye and its type.
      * Returns null when not known.
@@ -140,9 +136,7 @@ public class Prescription extends AuditableEntity {
         return prescription;
     }
 
-    // _____________________________________________________________________________________
-    //  Filling measurements
-    // ______________________________________________________________________________________
+    // Filling measurements
 
     /**
      * Stores the main power of lens.
@@ -206,9 +200,7 @@ public class Prescription extends AuditableEntity {
         this.orderItem = pItem;
     }
 
-    // _____________________________________________________________________________________
     // Rules
-    // ______________________________________________________________________________________
 
     /**
      * Eye measurements validation.
@@ -278,9 +270,7 @@ public class Prescription extends AuditableEntity {
         return side + kind;
     }
 
-    // _____________________________________________________________________________________
     // Reading
-    // ______________________________________________________________________________________
 
     /**
      * Gives the database id.

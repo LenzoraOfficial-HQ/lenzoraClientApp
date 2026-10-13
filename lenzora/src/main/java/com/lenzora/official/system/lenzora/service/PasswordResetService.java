@@ -3,7 +3,6 @@ package com.lenzora.official.system.lenzora.service;
 import com.lenzora.official.system.lenzora.entity.PasswordResetToken;
 import com.lenzora.official.system.lenzora.repository.PasswordResetTokenRepository;
 import com.lenzora.official.system.lenzora.repository.UserRepository;
-// IMPORTANT: If your user class is named User instead of AppUser, change this import to match your actual model:
 import com.lenzora.official.system.lenzora.model.User; 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,16 +33,12 @@ public class PasswordResetService {
             
             PasswordResetToken resetToken = new PasswordResetToken();
             resetToken.setUser(user);
-            resetToken.setTokenHash(token); // In a production app, you would hash this string before saving
+            resetToken.setTokenHash(token);
             resetToken.setExpiresAt(LocalDateTime.now().plusMinutes(15));
             
             tokenRepository.save(resetToken);
             
-            // MOCK EMAIL SENDER - Look for this in your VS Code terminal!
-            System.out.println("\n=== PASSWORD RESET EMAIL ===");
-            System.out.println("To: " + email);
-            System.out.println("Use this token to reset your password: " + token);
-            System.out.println("============================\n");
+            System.out.println("Password reset token for " + email + ": " + token);
         });
     }
 
@@ -51,7 +46,7 @@ public class PasswordResetService {
     public boolean validateTokenAndResetPassword(String token, String newPassword) {
         return tokenRepository.findByTokenHash(token)
                 .filter(resetToken -> resetToken.getExpiresAt().isAfter(LocalDateTime.now()))
-                .filter(resetToken -> resetToken.getUsedAt() == null) // Ensure it hasn't been used already
+                .filter(resetToken -> resetToken.getUsedAt() == null)
                 .map(resetToken -> {
                     var user = resetToken.getUser();
                     user.setPasswordHash(passwordEncoder.encode(newPassword));

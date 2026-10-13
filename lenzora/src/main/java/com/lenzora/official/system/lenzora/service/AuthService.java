@@ -18,10 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Service class for handling authentication-related tasks.
- * Manages operations involving the password_reset_tokens table and user credentials.
- */
+/** Password reset tokens and credential checks. */
 @Service
 public class AuthService {
 
@@ -74,12 +71,8 @@ public class AuthService {
 
         tokenRepository.save(resetToken);
 
-        // 1. PRINT TOKEN TO TERMINAL FOR TESTING
-        System.out.println("\n==============================================");
-        System.out.println("=== YOUR RESET TOKEN: " + rawToken);
-        System.out.println("==============================================\n");
+        System.out.println("Password reset token: " + rawToken);
 
-        // 2. ATTEMPT EMAIL, BUT DON'T CRASH IF IT FAILS
         try {
             if (mailHost != null && !mailHost.isBlank() && mailFrom != null && !mailFrom.isBlank()) {
                 SimpleMailMessage message = new SimpleMailMessage();
@@ -117,7 +110,6 @@ public class AuthService {
 
         PasswordResetToken token = tokenOpt.get();
 
-        // Check if token has expired or has already been used
         if (token.getExpiresAt().isBefore(LocalDateTime.now()) || token.getUsedAt() != null) {
             return false;
         }
@@ -129,7 +121,6 @@ public class AuthService {
         
         userRepository.save(user);
 
-        // Mark the token as used
         token.setUsedAt(LocalDateTime.now());
         tokenRepository.save(token);
 

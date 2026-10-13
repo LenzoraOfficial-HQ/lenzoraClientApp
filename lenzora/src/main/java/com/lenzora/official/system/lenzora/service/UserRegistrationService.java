@@ -31,14 +31,12 @@ public class UserRegistrationService {
     @Transactional
     public String register(String firstName, String lastName, String email,
                            String password, String confirmPassword) {
-        // Clean input values
         firstName = cleanText(firstName);
         lastName = cleanText(lastName);
         email = cleanText(email).toLowerCase(Locale.ROOT);
         password = password == null ? "" : password;
         confirmPassword = confirmPassword == null ? "" : confirmPassword;
 
-        // Basic validations
         if (firstName.isEmpty() || lastName.isEmpty()) {
             return "First name and last name are required.";
         }
@@ -59,12 +57,10 @@ public class UserRegistrationService {
             return "The two passwords do not match.";
         }
 
-        // Check if email is already registered
         if (userRepository.findByEmailIgnoreCase(email).isPresent()) {
             return "An account already exists for " + email + ". Please log in instead.";
         }
 
-        // Build and save the new user
         User user = new User();
         user.setFirstName(firstName);
         user.setLastName(lastName);

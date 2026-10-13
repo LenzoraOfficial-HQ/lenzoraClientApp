@@ -16,7 +16,6 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, Long> {
 
     Page<AuditLog> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
-    // Find all logs for a specific user
     List<AuditLog> findByUser_UserId(Long userId);
 
     // Find all logs by entity name (e.g., "app_user")

@@ -5,13 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-/**
- * Repository for managing email delivery records.
- *
- * <p>This repository provides standard CRUD operations and
- * email-delivery-specific queries for the {@link EmailDelivery} entity.</p>
- *
- */
+/** Reads and writes email delivery records. */
 public interface EmailDeliveryRepository extends JpaRepository<EmailDelivery, Long> {
 
     /**

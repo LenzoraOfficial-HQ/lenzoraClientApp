@@ -14,7 +14,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    // Automatically finds a user by their email address
     Optional<User> findByEmail(String email);
 
     Optional<User> findByEmailIgnoreCase(String email);
@@ -22,6 +21,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByRoleAndAccountStatusAndProfileCompletedTrueOrderByCreatedAtAsc(
             String role, AccountStatus accountStatus);
 
-    // Counts the accounts that carry one role, such as ADMIN
     long countByRole(String role);
 }

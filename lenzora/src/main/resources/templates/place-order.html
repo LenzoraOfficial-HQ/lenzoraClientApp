@@ -17,20 +17,20 @@
 
     <style>
 
-        /* ================= GENERAL ================= */
+        /* GENERAL */
 
         body {
             background-color: var(--lenzora-bg);
             color: var(--lenzora-text);
         }
 
-        /* ================= SIDEBAR ================= */
+        /* SIDEBAR */
 
         .sidebar {
             min-height: 100vh;
         }
 
-        /* ================= CONTENT ================= */
+        /* CONTENT */
 
         .page-content {
             max-width: 1400px;
@@ -45,7 +45,7 @@
             color: var(--lenzora-text-muted);
         }
 
-        /* ================= ORDER CARD ================= */
+        /* ORDER CARD */
 
         .order-card {
             background-color: var(--lenzora-surface);
@@ -54,7 +54,7 @@
             box-shadow: var(--lenzora-shadow-soft);
         }
 
-        /* ================= SECTION ================= */
+        /* SECTION */
 
         .form-section {
             border: 1px solid var(--lenzora-border);
@@ -95,7 +95,7 @@
             font-size: 13px;
         }
 
-        /* ================= FORM ================= */
+        /* FORM */
 
         .form-label {
             font-weight: 500;
@@ -119,7 +119,7 @@
             box-shadow: 0 0 0 0.15rem var(--lenzora-accent-soft);
         }
 
-        /* ================= PRESCRIPTION TABLE ================= */
+        /* PRESCRIPTION TABLE */
 
         .prescription-table {
             width: 100%;
@@ -152,7 +152,7 @@
             min-width: 100px;
         }
 
-        /* ================= OPTION CARDS ================= */
+        /* OPTION CARDS */
 
         .option-grid {
             display: grid;
@@ -178,7 +178,7 @@
             margin-right: 7px;
         }
 
-        /* ================= FRAME ================= */
+        /* FRAME */
 
         .frame-placeholder {
             background-color: var(--lenzora-surface-alt);
@@ -188,13 +188,13 @@
             color: var(--lenzora-text-muted);
         }
 
-        /* ================= REMARKS ================= */
+        /* REMARKS */
 
         .remarks {
             min-height: 120px;
         }
 
-        /* ================= ACTIONS ================= */
+        /* ACTIONS */
 
         .form-actions {
             display: flex;
@@ -208,7 +208,7 @@
             padding: 10px 20px;
         }
 
-        /* ================= RESPONSIVE ================= */
+        /* RESPONSIVE */
 
         @media (max-width: 992px) {
 
@@ -249,16 +249,12 @@
 
     <div class="row">
 
-        <!-- ================================================= -->
         <!-- SIDEBAR -->
-        <!-- ================================================= -->
 
         <div th:replace="~{fragments/shell :: sidebar('place-order')}"></div>
 
 
-        <!-- ================================================= -->
         <!-- MAIN CONTENT -->
-        <!-- ================================================= -->
 
         <div class="col-lg-10 p-0">
 
@@ -313,9 +309,7 @@
                     </div>
 
 
-                    <!-- ================================================= -->
-                    <!-- FLASH MESSAGES                                    -->
-                    <!-- ================================================= -->
+                    <!-- FLASH MESSAGES -->
 
                     <div th:if="${successMessage}"
                          class="alert alert-success"
@@ -327,9 +321,7 @@
                          th:text="${errorMessage}"></div>
 
 
-                    <!-- ================================================= -->
-                    <!-- ORDER FORM                                        -->
-                    <!-- ================================================= -->
+                    <!-- ORDER FORM -->
 
                     <!-- Hidden while the order module is absent. -->
                     <div th:unless="${orderForm != null}"
@@ -436,12 +428,10 @@
                         </div>
 
 
-                        <!-- ================================================= -->
                         <!-- 1. JOB TYPE                                       -->
-                        <!-- Writes app_order.job_type. The choice decides     -->
-                        <!-- which of the later sections are needed, so this   -->
-                        <!-- section must stay first.                          -->
-                        <!-- ================================================= -->
+                        <!-- Writes app_order.job_type. The choice decides -->
+                        <!-- which of the later sections are needed, so this -->
+                        <!-- section must stay first. -->
 
                         <div class="form-section" id="jobTypeSection">
 
@@ -492,9 +482,7 @@
                         </div>
 
 
-                        <!-- ================================================= -->
                         <!-- 2. PATIENT / HOSPITAL REFERENCE -->
-                        <!-- ================================================= -->
 
                         <div class="form-section" id="patientSection">
 
@@ -772,9 +760,7 @@
                         </div>
 
 
-                        <!-- ================================================= -->
                         <!-- 3. PRESCRIPTION -->
-                        <!-- ================================================= -->
 
                         <div class="form-section" id="prescriptionSection">
 
@@ -1207,9 +1193,7 @@
                         </div>
 
 
-                        <!-- ================================================= -->
                         <!-- 4. LENS DETAILS -->
-                        <!-- ================================================= -->
 
                         <div class="form-section" id="lensSection">
 
@@ -1376,9 +1360,7 @@
                         </div>
 
 
-                        <!-- ================================================= -->
                         <!-- 5. FRAME DETAILS -->
-                        <!-- ================================================= -->
 
                         <div class="form-section" id="frameSection">
 
@@ -1692,9 +1674,7 @@
                         </div>
 
 
-                        <!-- ================================================= -->
                         <!-- 6. REMARKS -->
-                        <!-- ================================================= -->
 
                         <div class="form-section" id="remarksSection">
 
@@ -1726,9 +1706,7 @@
                         </div>
 
 
-                        <!-- ================================================= -->
                         <!-- ACTIONS -->
-                        <!-- ================================================= -->
 
                         <div class="form-actions">
 
@@ -1782,7 +1760,7 @@
 
         const form = document.getElementById("orderForm");
 
-        // ---------- frame info panel + price prefill ----------
+        // frame info panel + price prefill
         const frameSelect = document.getElementById("frameId");
         const info        = document.querySelector(".frame-placeholder");
         const qtyInput    = document.getElementById("quantity");
@@ -1791,7 +1769,7 @@
             qtyInput.value = 1;
         }
 
-        // ---------- job type: which steps the job needs ----------
+        // job type: which steps the job needs
         // This mirrors the database rule in trg_items_job_type_guard, so the
         // user is never asked for a field the table does not want:
         //   NEW_SPECTACLE     -> frame + lens + prescription
@@ -1836,7 +1814,7 @@
             show(info, !patientOwnFrame);
         }
 
-        // ---------- lens type: which prescription rows it needs ----------
+        // lens type: which prescription rows it needs
         // The same three rules the order line and the prescription check, so
         // the user is never asked for a reading addition a single-vision lens
         // does not have, or a fitting height only a progressive lens uses.
@@ -1887,7 +1865,7 @@
             radio.addEventListener("change", applyLensType);
         });
 
-        // ---------- steps: one section of the form at a time ----------
+        // steps: one section of the form at a time
         // Filling the form a few short pages at a time keeps the top bar and
         // the step on screen, so the whole form never has to be scrolled.
         const steps = [
@@ -1965,7 +1943,7 @@
             nextBtn.classList.toggle("wz-hidden", place === total - 1);
         }
 
-        // ---------- what each step still needs ----------
+        // what each step still needs
         // These mirror the rules the server applies in OrderService.createOrder,
         // OrderItem.check and Prescription.check, so the bar never walks the user
         // past a section the save would reject a moment later.
@@ -2298,7 +2276,7 @@
             });
         });
 
-        // ---------- autosave ----------
+        // autosave
         // The draft is kept in this browser, so a refresh, a closed tab or a
         // detour to another screen never loses what was already typed. It is
         // dropped as soon as an order is saved.
@@ -2449,7 +2427,7 @@
 
         form.addEventListener("change", saveDraft);
 
-        // ---------- start ----------
+        // start
         // The draft goes back first, then the job and lens rules decide what is
         // on screen for it.
         restoreDraft();

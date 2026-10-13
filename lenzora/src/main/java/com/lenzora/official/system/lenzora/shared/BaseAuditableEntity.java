@@ -19,7 +19,6 @@ public abstract class BaseAuditableEntity {
     @Column(name = "created_by", length = 255, updatable = false)
     private String createdBy;
 
-    // The variable is renamed so the UserRepository query works
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt; 
@@ -28,7 +27,6 @@ public abstract class BaseAuditableEntity {
     @Column(name = "last_modified_by", length = 255)
     private String lastModifiedBy;
 
-    // The variable is renamed to match
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt; 
@@ -42,7 +40,6 @@ public abstract class BaseAuditableEntity {
         return lastModifiedBy;
     }
 
-    // --- NEW METHODS ---
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -59,7 +56,7 @@ public abstract class BaseAuditableEntity {
         this.updatedAt = updatedAt;
     }
 
-    // --- OLD METHODS KEPT SAFE TO PREVENT BREAKING OTHER FILES ---
+    // kept for existing callers
     public LocalDateTime getCreatedDate() {
         return createdAt;
     }

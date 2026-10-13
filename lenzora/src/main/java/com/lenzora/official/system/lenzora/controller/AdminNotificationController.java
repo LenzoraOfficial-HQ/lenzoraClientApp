@@ -35,7 +35,6 @@ public class AdminNotificationController {
         this.appUserRepository = appUserRepository;
     }
 
-    // Display notification management page
     @GetMapping
     public String showNotifications(
             @RequestParam(required = false) String search,
@@ -46,7 +45,6 @@ public class AdminNotificationController {
         List<Notification> allNotifications =
                 notificationRepository.findAll();
 
-        // Filter by notification type
         List<Notification> notifications = allNotifications;
 
         if (type != null && !type.isBlank()) {
@@ -55,7 +53,6 @@ public class AdminNotificationController {
                     .toList();
         }
 
-        // Filter by read status
         if ("unread".equals(readStatus)) {
             notifications = notifications.stream()
                     .filter(n -> !Boolean.TRUE.equals(n.getIsRead()))
@@ -67,7 +64,6 @@ public class AdminNotificationController {
                     .toList();
         }
 
-        // Search by title or message
         if (search != null && !search.isBlank()) {
             String query = search.trim().toLowerCase();
 
@@ -82,7 +78,6 @@ public class AdminNotificationController {
                     .toList();
         }
 
-        // Calculate summary counts
         long totalCount = allNotifications.size();
 
         long unreadCount = allNotifications.stream()
@@ -95,7 +90,6 @@ public class AdminNotificationController {
                 .filter(n -> "SYSTEM".equals(n.getType()))
                 .count();
 
-        // Send data to the HTML page
         model.addAttribute("notifications", notifications);
         model.addAttribute("totalCount", totalCount);
         model.addAttribute("unreadCount", unreadCount);
@@ -109,7 +103,6 @@ public class AdminNotificationController {
         return "admin/notifications";
     }
 
-    // Display the create notification form
     @GetMapping("/create")
     public String showCreateNotificationForm(Model model) {
 
@@ -120,7 +113,6 @@ public class AdminNotificationController {
         return "admin/create-notification";
     }
 
-    // Save a new notification
     @PostMapping("/create")
     public String createNotification(
             @RequestParam Long userId,
@@ -131,7 +123,6 @@ public class AdminNotificationController {
             Model model,
             RedirectAttributes redirectAttributes) {
 
-        // Validate required fields
         if (title.isBlank() || message.isBlank()) {
             model.addAttribute("users", appUserRepository.findAll());
             model.addAttribute("errorMessage",
@@ -140,7 +131,6 @@ public class AdminNotificationController {
             return "admin/create-notification";
         }
 
-        // Validate notification type
         if (!List.of("ORDER_STATUS", "ACCOUNT", "SYSTEM")
                 .contains(type)) {
 
@@ -151,7 +141,6 @@ public class AdminNotificationController {
             return "admin/create-notification";
         }
 
-        // Confirm that the recipient exists
         if (!appUserRepository.existsById(userId)) {
             model.addAttribute("users", appUserRepository.findAll());
             model.addAttribute("errorMessage",
@@ -160,7 +149,6 @@ public class AdminNotificationController {
             return "admin/create-notification";
         }
 
-        // Create the notification
         Notification notification = new Notification();
 
         notification.setUserId(userId);
@@ -171,7 +159,6 @@ public class AdminNotificationController {
         notification.setIsRead(false);
         notification.setCreatedAt(LocalDateTime.now());
 
-        // Save to the existing database table
         notificationService.saveNotification(notification);
 
         redirectAttributes.addFlashAttribute(

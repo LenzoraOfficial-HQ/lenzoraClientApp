@@ -39,7 +39,6 @@ public class UserController {
                 request.confirmPassword()
         );
 
-        // If there's an error message, return it with 400 Bad Request
         if (!error.isEmpty()) {
             return ResponseEntity.badRequest().body(error);
         }
@@ -84,7 +83,6 @@ public class UserController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // DTO for incoming registration requests
     public record UserRegistrationRequest(
             String firstName,
             String lastName,
@@ -93,7 +91,6 @@ public class UserController {
             String confirmPassword
     ) {}
 
-    // DTO for outgoing user data (hides sensitive fields like passwordHash)
     public record UserResponse(
             Long userId,
             String firstName,

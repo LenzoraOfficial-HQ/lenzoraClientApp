@@ -3,15 +3,7 @@ package com.lenzora.official.system.lenzora.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-/**
- * Represents a notification sent to a user within the Lenzora system.
- *
- * <p>This entity is mapped to the {@code notifications} table in the
- * database. A notification contains information about its recipient,
- * the related order, notification type, title, message, read status,
- * and creation time.</p>
- *
- */
+/** A notification sent to a user. Rows live in the notification table. */
 @Entity
 @Table(name = "notification")
 public class Notification {
@@ -72,7 +64,6 @@ public class Notification {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    // Getters and Setters
 
     /**
      * Returns the unique ID of the notification

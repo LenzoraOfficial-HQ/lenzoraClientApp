@@ -494,9 +494,7 @@ public class OrderItem extends AuditableEntity {
         this.orderId = pOrderId;
     }
 
-    // _________________________________________________________________
     // Rules
-    // _______________________________________________________________
 
     /**
      * check job type.

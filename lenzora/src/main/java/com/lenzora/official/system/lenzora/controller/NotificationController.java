@@ -27,24 +27,19 @@ public class NotificationController{
     @GetMapping("/notifications")
     public String showNotifications( Authentication authentication, Model model){
 
-        // Get the email of the logged-in user
         String email = authentication.getName();
 
-        // Find the user's AppUser record
         AppUser appUser = appUserRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("Logged-in user was not found in AppUser"));
 
-        // Retrieve this user's notifications
         Long userId = appUser.getUserId();
 
         List<com.lenzora.official.system.lenzora.entity.Notification>
                 notifications = notificationService.getNotificationsByUserNewestFirst(userId);
 
-        // Retrieve unread notifications
         List<com.lenzora.official.system.lenzora.entity.Notification>
                 unreadNotifications = notificationService.getUnreadNotifications(userId);
 
-        // Send notification data to the HTML page
         model.addAttribute("notifications", notifications);
         model.addAttribute("totalCount", notifications.size());
         model.addAttribute("unreadCount", unreadNotifications.size());
@@ -58,7 +53,6 @@ public class NotificationController{
             @PathVariable Long notificationId,
             Authentication authentication) {
 
-        // Identify the logged-in user
         String email = authentication.getName();
 
         AppUser appUser = appUserRepository.findByEmail(email)
@@ -68,18 +62,15 @@ public class NotificationController{
 
         Long userId = appUser.getUserId();
 
-        // Find the notification
         var notificationOptional =
                 notificationService.getNotificationById(notificationId);
 
-        // Only allow the owner to mark their notification as read
         if (notificationOptional.isPresent()
                 && notificationOptional.get().getUserId().equals(userId)) {
 
             notificationService.markAsRead(notificationId);
         }
 
-        // Return to the notification page
         return "redirect:/notifications";
     }
 

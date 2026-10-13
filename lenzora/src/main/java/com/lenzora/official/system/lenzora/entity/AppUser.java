@@ -51,7 +51,6 @@ public class AppUser extends BaseAuditableEntity {
     @Column(name = "branch", length = 50)
     private String branch;
 
-    // Self-referencing link to the admin who approved this account
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "approved_by")
     private AppUser approvedBy;
@@ -73,7 +72,6 @@ public class AppUser extends BaseAuditableEntity {
 
     public AppUser() {}
 
-    // Getters and Setters
     public Long getUserId() {
          return userId; 
     }

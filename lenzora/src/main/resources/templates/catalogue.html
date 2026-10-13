@@ -30,12 +30,12 @@
 
   <div class="row">
 
-    <!-- ================= SIDEBAR ================= -->
+<!-- SIDEBAR -->
 
     <div th:replace="~{fragments/shell :: sidebar('catalogue')}"></div>
 
 
-    <!-- ================= MAIN CONTENT ================= -->
+<!-- MAIN CONTENT -->
 
     <div class="col-md-10 p-0">
 
@@ -86,7 +86,7 @@
         </div>
 
 
-        <!-- ================= MESSAGES ================= -->
+<!-- MESSAGES -->
 
         <div class="alert alert-success"
              th:if="${successMessage}"
@@ -101,7 +101,7 @@
         </div>
 
 
-        <!-- ================= TABS ================= -->
+<!-- TABS -->
 
         <ul class="nav nav-tabs mb-4">
           <li class="nav-item">
@@ -120,9 +120,7 @@
 
         <div class="tab-content">
 
-        <!-- ================================================= -->
         <!-- FRAMES -->
-        <!-- ================================================= -->
 
         <div class="tab-pane fade" th:classappend="${lensForm == null} ? 'show active'" id="frames-tab">
 
@@ -318,9 +316,7 @@
         </div>
 
 
-        <!-- ================================================= -->
         <!-- LENS OPTIONS -->
-        <!-- ================================================= -->
 
         <div class="tab-pane fade" th:classappend="${lensForm != null} ? 'show active'" id="lens-options-tab">
 

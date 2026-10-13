@@ -6,13 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-/**
- * Repository for managing order status history records.
- *
- * <p>This repository provides database operations for the
- * {@link OrderStatusHistory} entity using Spring Data JPA.</p>
- *
- */
+/** Reads and writes order status history rows. */
 
 public interface OrderStatusHistoryRepository extends JpaRepository<OrderStatusHistory, Long>{
 
