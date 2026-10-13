@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
  * Entity representing an audit log entry in the system.
  */
 @Entity
-@Table(name = "audit_logs")
+@Table(name = "audit_log")
 public class AuditLog {
 
     @Id
@@ -20,7 +20,8 @@ public class AuditLog {
     @JoinColumn(name = "user_id")
     private AppUser user;
 
-    @Column(name = "username", length = 100)
+    // The audit_log relation has no actor column - the name is read from user_id.
+    @Transient
     private String username;
 
     @Column(name = "audit_action", nullable = false, length = 50)
@@ -71,6 +72,9 @@ public class AuditLog {
     }
 
     public String getUsername() {
+        if (user != null) {
+            return user.getEmail();
+        }
         return username;
     }
 
