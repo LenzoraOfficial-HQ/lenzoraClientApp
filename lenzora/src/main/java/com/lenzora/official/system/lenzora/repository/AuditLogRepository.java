@@ -24,4 +24,6 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, Long> {
 
     // Find all logs by action type (e.g., "CREATE", "UPDATE")
     List<AuditLog> findByAuditAction(String auditAction);
+
+    List<AuditLog> findTop4ByOrderByCreatedAtDesc();
 }

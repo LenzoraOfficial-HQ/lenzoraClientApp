@@ -34,7 +34,7 @@
                     <tr th:each="entry : ${auditLogs.content}">
                         <td th:text="${#temporals.format(entry.createdAt, 'dd MMM yyyy HH:mm:ss')}">Time</td>
                         <td th:text="${entry.auditAction}">Action</td>
-                        <td th:text="${entry.username ?: entry.userId ?: '-'}">User</td>
+                        <td th:text="${entry.username ?: '-'}">User</td>
                         <td th:text="${entry.entityName}">Target</td>
                         <td th:text="${entry.details}">Details</td>
                     </tr>

@@ -3,64 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Orthoptist Approvals - Lenzora</title>
+    <title>Users - Lenzora</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/lenzora-theme.css}">
 </head>
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div th:replace="~{fragments/shell :: sidebar('approvals')}"></div>
-        <main class="col-md-10 p-4">
+        <!-- Change sidebar highlight to 'users' -->
+        <div th:replace="~{fragments/shell :: sidebar('users')}"></div>
+        
+        <main class="col-md-10 p-0">
             <div th:replace="~{fragments/shell :: topbar}"></div>
-            <header class="py-4">
-                <div class="eyebrow">Administration</div>
-                <h1 class="h2">Orthoptist approvals</h1>
-                <p class="text-muted mb-0">Review professional details before granting account access.</p>
-            </header>
+            
+            <div class="p-4">
+                <!-- Standardized Users Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <div class="eyebrow text-muted small text-uppercase fw-bold">Welcome back</div>
+                        <h2 class="mb-1">Users</h2>
+                        <p class="text-muted mb-0">Manage Lenzora platform users and approvals.</p>
+                    </div>
+                </div>
 
-            <div th:if="${notice}" class="alert alert-success" role="status" th:text="${notice}"></div>
-            <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+                <!-- ================= TABS ================= -->
+                <ul class="nav nav-tabs mb-4">
+                  <li class="nav-item">
+                    <a class="nav-link text-muted" href="/users">All Users</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/admin/orthoptists">Pending Approvals</a>
+                  </li>
+                </ul>
 
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                    <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">License number</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col">Branch</th>
-                        <th scope="col">Registered</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="orthoptist : ${orthoptists}">
-                        <td th:text="${orthoptist.firstName + ' ' + orthoptist.lastName}">Name</td>
-                        <td th:text="${orthoptist.email}">email@example.com</td>
-                        <td th:text="${orthoptist.licenseNumber}">License</td>
-                        <td th:text="${orthoptist.phone}">Phone</td>
-                        <td th:text="${orthoptist.branch}">Branch</td>
-                        <td th:text="${#temporals.format(orthoptist.createdAt, 'dd MMM yyyy')}">Date</td>
-                        <td>
-                            <div class="d-flex gap-2">
-                                <form method="post" th:action="@{/admin/orthoptists/{id}/approve(id=${orthoptist.id})}">
-                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                                    <button class="btn btn-success btn-sm" type="submit">Approve</button>
-                                </form>
-                                <form method="post" th:action="@{/admin/orthoptists/{id}/reject(id=${orthoptist.id})}">
-                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                                    <button class="btn btn-outline-danger btn-sm" type="submit">Reject</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr th:if="${#lists.isEmpty(orthoptists)}">
-                        <td colspan="7" class="text-muted py-4">There are no pending Orthoptist registrations.</td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div th:if="${notice}" class="alert alert-success" role="status" th:text="${notice}"></div>
+                <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+
+                <!-- Styled Card Container to match Users table -->
+                <div class="card shadow-sm p-4 border-0">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="mb-0">Pending Approvals</h5>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">License number</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Branch</th>
+                                <th scope="col">Registered</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="orthoptist : ${orthoptists}">
+                                <td th:text="${orthoptist.firstName + ' ' + orthoptist.lastName}">Name</td>
+                                <td th:text="${orthoptist.email}">email@example.com</td>
+                                <td th:text="${orthoptist.licenseNumber}">License</td>
+                                <td th:text="${orthoptist.phone}">Phone</td>
+                                <td th:text="${orthoptist.branch}">Branch</td>
+                                <td th:text="${#temporals.format(orthoptist.createdAt, 'dd MMM yyyy')}">Date</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <form method="post" th:action="@{/admin/orthoptists/{id}/approve(id=${orthoptist.id})}">
+                                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                            <button class="btn btn-success btn-sm" type="submit">Approve</button>
+                                        </form>
+                                        <form method="post" th:action="@{/admin/orthoptists/{id}/reject(id=${orthoptist.id})}">
+                                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                            <button class="btn btn-outline-danger btn-sm" type="submit">Reject</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(orthoptists)}">
+                                <td colspan="7" class="text-muted py-4">There are no pending Orthoptist registrations.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
