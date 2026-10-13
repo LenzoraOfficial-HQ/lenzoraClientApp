@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Notification | Lenzora Admin</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+          rel="stylesheet">
+
+    <!-- Lenzora Theme -->
+    <link rel="stylesheet" th:href="@{/css/lenzora-theme.css}">
+
+    <style>
+        body {
+            background-color: var(--lenzora-bg);
+            background-image: var(--lenzora-app-image);
+            background-size: cover;
+            background-position: center top;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: var(--lenzora-text);
+            font-family: var(--lenzora-font);
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .eyebrow {
+            color: #b18a3b;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+        }
+
+        .page-title {
+            color: #202b3e;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .page-description {
+            color: #778092;
+            margin-bottom: 0;
+        }
+
+        .form-panel {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 4px 18px rgba(32, 43, 62, 0.06);
+            border: 1px solid rgba(32, 43, 62, 0.06);
+        }
+
+        .section-title {
+            color: #202b3e;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .section-description {
+            color: #7b8494;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            color: #344054;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .form-control,
+        .form-select {
+            background-color: #f8f9fc;
+            border: 1px solid #e0e5ed;
+            border-radius: 10px;
+            padding: 11px 13px;
+            color: #202b3e;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background-color: #ffffff;
+            border-color: #c5a15b;
+            box-shadow: 0 0 0 0.2rem rgba(197, 161, 91, 0.15);
+        }
+
+        textarea.form-control {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        .form-text {
+            color: #8a93a2;
+            font-size: 0.82rem;
+        }
+
+        .required-mark {
+            color: #dc3545;
+        }
+
+        .info-panel {
+            background: #f8f6f0;
+            border: 1px solid #eee5d2;
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .info-panel i {
+            color: #b18a3b;
+            font-size: 1.1rem;
+        }
+
+        .info-panel p {
+            color: #6f6655;
+            font-size: 0.88rem;
+            margin-bottom: 0;
+        }
+
+        .btn-accent {
+            background-color: #c5a15b;
+            color: #202b3e;
+            border: 1px solid #c5a15b;
+            border-radius: 9px;
+            padding: 10px 18px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-accent:hover {
+            background-color: #b18a3b;
+            border-color: #b18a3b;
+            color: #ffffff;
+        }
+
+        .btn-outline-secondary {
+            border-radius: 9px;
+            padding: 10px 18px;
+            font-weight: 600;
+        }
+
+        .form-divider {
+            border-top: 1px solid #edf0f5;
+            margin: 25px 0;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 18px;
+            }
+
+            .form-panel {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- Sidebar -->
+        <div th:replace="~{fragments/shell :: sidebar('notifications')}"></div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 p-0">
+
+            <!-- Topbar -->
+            <div th:replace="~{fragments/shell :: topbar}"></div>
+
+            <main class="main-content">
+
+                <!-- Page Heading -->
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+
+                    <div>
+                        <div class="eyebrow">Administration</div>
+
+                        <h2 class="page-title">
+                            Create Notification
+                        </h2>
+
+                        <p class="page-description">
+                            Create and send a notification to a registered user.
+                        </p>
+                    </div>
+
+                    <a th:href="@{/admin/notifications}"
+                       class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-2"></i>
+                        Back to Notifications
+                    </a>
+
+                </div>
+
+                <!-- Success Message -->
+                <div th:if="${successMessage}"
+                     class="alert alert-success alert-dismissible fade show"
+                     role="alert">
+
+                    <i class="bi bi-check-circle-fill me-2"></i>
+
+                    <span th:text="${successMessage}"></span>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+                </div>
+
+                <!-- Error Message -->
+                <div th:if="${errorMessage}"
+                     class="alert alert-danger alert-dismissible fade show"
+                     role="alert">
+
+                    <i class="bi bi-exclamation-circle-fill me-2"></i>
+
+                    <span th:text="${errorMessage}"></span>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+                </div>
+
+                <!-- Form Panel -->
+                <div class="form-panel">
+
+                    <div class="section-title">
+                        <i class="bi bi-bell me-2"></i>
+                        Notification Details
+                    </div>
+
+                    <p class="section-description">
+                        Complete the information below to create a notification.
+                    </p>
+
+                    <form th:action="@{/admin/notifications/create}"
+                          method="post">
+
+                        <!-- Recipient -->
+                        <div class="mb-4">
+
+                            <label for="userId" class="form-label">
+                                Recipient
+                                <span class="required-mark">*</span>
+                            </label>
+
+                            <select class="form-select"
+                                    id="userId"
+                                    name="userId"
+                                    required>
+
+                                <option value="">Select a recipient</option>
+
+                                <option th:each="user : ${users}"
+                                        th:value="${user.userId}"
+                                        th:text="${user.firstName + ' ' + user.lastName + ' (' + user.email + ')'}">
+                                </option>
+
+                            </select>
+
+                            <div class="form-text">
+                                Choose the registered user who should receive this notification.
+                            </div>
+
+                        </div>
+
+                        <!-- Notification Type -->
+                        <div class="mb-4">
+
+                            <label for="type" class="form-label">
+                                Notification Type
+                                <span class="required-mark">*</span>
+                            </label>
+
+                            <select class="form-select"
+                                    id="type"
+                                    name="type"
+                                    required>
+
+                                <option value="">Select notification type</option>
+
+                                <option value="ORDER_STATUS">Order Status</option>
+
+                                <option value="ACCOUNT">Account</option>
+
+                                <option value="SYSTEM">System</option>
+
+                            </select>
+
+                            <div class="form-text">
+                                Select the category that best describes the notification.
+                            </div>
+
+                        </div>
+
+                        <!-- Related Order -->
+                        <div class="mb-4">
+
+                            <label for="orderId" class="form-label">
+                                Related Order ID
+                                <span class="text-muted fw-normal">(Optional)</span>
+                            </label>
+
+                            <input type="number"
+                                   class="form-control"
+                                   id="orderId"
+                                   name="orderId"
+                                   min="1"
+                                   placeholder="Enter the related order ID">
+
+                            <div class="form-text">
+                                If this notification concerns a particular order, enter its ID.
+                            </div>
+
+                        </div>
+
+                        <div class="form-divider"></div>
+
+                        <!-- Notification Title -->
+                        <div class="mb-4">
+
+                            <label for="title" class="form-label">
+                                Notification Title
+                                <span class="required-mark">*</span>
+                            </label>
+
+                            <input type="text"
+                                   class="form-control"
+                                   id="title"
+                                   name="title"
+                                   maxlength="120"
+                                   required
+                                   placeholder="Enter a short notification title">
+
+                            <div class="form-text">
+                                Maximum 120 characters.
+                            </div>
+
+                        </div>
+
+                        <!-- Notification Message -->
+                        <div class="mb-4">
+
+                            <label for="message" class="form-label">
+                                Notification Message
+                                <span class="required-mark">*</span>
+                            </label>
+
+                            <textarea class="form-control"
+                                      id="message"
+                                      name="message"
+                                      maxlength="500"
+                                      required
+                                      placeholder="Write the notification message here..."></textarea>
+
+                            <div class="form-text">
+                                Maximum 500 characters. Keep the message clear and informative.
+                            </div>
+
+                        </div>
+
+                        <!-- Information Panel -->
+                        <div class="info-panel mb-4">
+
+                            <div class="d-flex align-items-start gap-3">
+
+                                <i class="bi bi-info-circle-fill"></i>
+
+                                <div>
+                                    <p class="fw-semibold mb-1">
+                                        Before creating the notification
+                                    </p>
+
+                                    <p>
+                                        Please check the recipient, notification type,
+                                        title, and message before submitting.
+                                        The notification will be saved in the system
+                                        as unread.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="d-flex flex-wrap justify-content-end gap-2">
+
+                            <a th:href="@{/admin/notifications}"
+                               class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+
+                            <button type="submit" class="btn btn-accent">
+                                <i class="bi bi-send me-2"></i>
+                                Send Notification
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </main>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
