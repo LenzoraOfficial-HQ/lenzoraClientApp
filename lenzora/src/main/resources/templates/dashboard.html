@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -153,11 +153,11 @@
     <h2>My App</h2>
 
     <ul>
-        <li><i class="bi bi-house-door"></i> Dashboard</li>
-        <li><i class="bi bi-person"></i> Users</li>
-        <li><i class="bi bi-box-seam"></i> Products</li>
-        <li><i class="bi bi-bar-chart"></i> Reports</li>
-        <li><i class="bi bi-gear"></i> Settings</li>
+        <li>Dashboard</li>
+        <li>Users</li>
+        <li>Products</li>
+        <li>Reports</li>
+        <li>Settings</li>
     </ul>
 </div>
 
@@ -203,29 +203,52 @@
 
         <h2>Recent Activity</h2>
 
-        <div class="activity-item">
-            <strong>New user registered</strong>
-            <p>John Doe created an account.</p>
-        </div>
-
-        <div class="activity-item">
-            <strong>New order received</strong>
-            <p>Order #1025 was placed.</p>
-        </div>
-
-        <div class="activity-item">
-            <strong>Product added</strong>
-            <p>New product "Laptop" was added.</p>
-        </div>
-
-        <div class="activity-item">
-            <strong>Payment received</strong>
-            <p>Payment of $250 was received.</p>
+        <div id="activity-list">
+            <div class="activity-item">
+                <p>Loading recent activities...</p>
+            </div>
         </div>
 
     </div>
 
 </div>
+
+<!-- JavaScript to fetch database audit logs and populate the table -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('/api/activities')
+            .then(response => response.json())
+            .then(data => {
+                const tbody = document.querySelector('.activity tbody');
+                if (!tbody) return;
+
+                tbody.innerHTML = '';
+
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center py-3 text-muted">No recent activity found.</td></tr>';
+                    return;
+                }
+
+                data.forEach(act => {
+                    const formattedDate = act.createdAt ? new Date(act.createdAt).toLocaleDateString() : 'Today';
+                    const userName = act.username || 'System User';
+                    const actionDescription = `${act.auditAction} (${act.entityName || 'General'})`;
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${userName}</td>
+                            <td>${actionDescription}</td>
+                            <td>${formattedDate}</td>
+                            <td><span class="badge bg-success" style="background-color: #d1e7dd; color: #0f5132; padding: 5px 10px; border-radius: 12px; font-size: 12px;">Completed</span></td>
+                        </tr>
+                    `;
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching activities:", error);
+            });
+    });
+</script>
 
 </body>
 </html>
