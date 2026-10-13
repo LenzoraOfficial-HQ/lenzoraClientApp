@@ -8,7 +8,7 @@
 
 | Layer      | Technology                                        |
 |------------|---------------------------------------------------|
-| Language   | Java 21                                           |
+| Language   | Java 25                                           |
 | Framework  | Spring Boot 4.1.0                                 |
 | Web        | Spring Web MVC                                    |
 | Templates  | Thymeleaf (+ Thymeleaf Spring Security extras)    |
@@ -23,7 +23,7 @@
 
 | Requirement | Version        | Notes                                             |
 |-------------|----------------|---------------------------------------------------|
-| JDK         | **21**         | Required. Older/newer JDKs will fail the build.   |
+| JDK         | **25**         | Required. The build targets Java 25.              |
 | Maven       | *not required* | The Maven Wrapper (`mvnw`) downloads Maven for you.|
 | MySQL       | 8.x (optional) | Needed for the login and order screens.     |
 | IDE         | any            | VS Code, IntelliJ IDEA, or Eclipse/STS all work.  |
@@ -34,7 +34,7 @@ Check your Java version:
 java -version
 ```
 
-It should report `openjdk version "21..."`. If not, install **Temurin 21 (Adoptium)** or your preferred JDK 21 and point `JAVA_HOME` at it.
+It should report `openjdk version "25..."`. If not, install **Temurin 25 (Adoptium)** or your preferred JDK 25 and point `JAVA_HOME` at it.
 
 ---
 
@@ -155,6 +155,27 @@ The app reached a database with no tables. Two causes:
   the `DDL_AUTO` line (or set it to `update`) so Hibernate can create the tables, or
 * the DMS schema script was run separately: it loads its tables into `defaultdb`, so `DB_URL` must
   name that same database.
+
+### "Not a managed type: class …model.User" while starting
+
+The app compiles, Tomcat starts, and then the context fails while a repository is created:
+
+```
+java.lang.IllegalArgumentException: Not a managed type: class com.lenzora.official.system.lenzora.model.User
+```
+
+Spring Boot finds the `@Entity` classes by reading the compiled files in `lenzora/target/classes`,
+and VS Code's Java build writes into that same folder. Starting the app **while the IDE is still
+building** — normally right after a `git pull`, a merge or a branch switch — hands that scan a
+half-written folder, so a few entities are missing and Hibernate rejects their repositories.
+Nothing in the code, the configuration or the database is wrong.
+
+Start the app again once VS Code has finished its build, or force a complete build first:
+
+```powershell
+cd lenzora
+.\mvnw.cmd clean spring-boot:run
+```
 
 ---
 
