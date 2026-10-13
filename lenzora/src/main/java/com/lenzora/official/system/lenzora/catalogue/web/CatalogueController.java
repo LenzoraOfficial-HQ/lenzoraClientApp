@@ -73,6 +73,7 @@ public class CatalogueController {
      */
     @GetMapping
     public String show(@RequestParam(name = "edit", required = false) String pEdit,
+                       @RequestParam(name = "add", required = false) String pAdd,
                        @RequestParam(name = "id", required = false) Long pId,
                        Model model) {
 
@@ -80,6 +81,7 @@ public class CatalogueController {
         model.addAttribute("lensOptions", lensOptionRepository.findAll());
         model.addAttribute("suppliers", supplierRepository.findAll());
 
+        model.addAttribute("frameForm", frameForm(pAdd, pEdit, pId));
         model.addAttribute("lensForm", lensOptionInEdit(pEdit, pId));
         model.addAttribute("supplierForm", supplierInEdit(pEdit, pId));
 
@@ -91,12 +93,18 @@ public class CatalogueController {
     public String showFrames(@RequestParam(name = "add", required = false) String pAdd,
                              @RequestParam(name = "edit", required = false) String pEdit,
                              @RequestParam(name = "id", required = false) Long pId,
-                             Model model) {
-        model.addAttribute("frames", frameRepository.findAll());
-        model.addAttribute("suppliers", supplierRepository.findAll());
-        model.addAttribute("frameForm", frameForm(pAdd, pEdit, pId));
-        model.addAttribute("activeNav", "frames");
-        return "catalogue/frames";
+                             RedirectAttributes pRedirect) {
+        // Frames are edited on the catalogue screen now, so old links land there.
+        if (pAdd != null) {
+            pRedirect.addAttribute("add", pAdd);
+        }
+        if (pEdit != null) {
+            pRedirect.addAttribute("edit", pEdit);
+        }
+        if (pId != null) {
+            pRedirect.addAttribute("id", pId);
+        }
+        return "redirect:/catalogue";
     }
 
     @GetMapping("/frame-images")
@@ -142,7 +150,7 @@ public class CatalogueController {
 
         pRedirect.addFlashAttribute("successMessage",
                 "Frame " + pForm.getBrand() + " " + pForm.getModel() + " added successfully.");
-        return "redirect:/catalogue/frames";
+        return "redirect:/catalogue";
     }
 
     @PostMapping("/frames/{pId}")
@@ -176,7 +184,7 @@ public class CatalogueController {
         }
 
         pRedirect.addFlashAttribute("successMessage", "Frame " + pForm.getBrand() + " " + pForm.getModel() + " updated successfully.");
-        return "redirect:/catalogue/frames";
+        return "redirect:/catalogue";
     }
 
     @PostMapping("/lens-options/{pId}")
@@ -254,14 +262,14 @@ public class CatalogueController {
     private String backToFrame(Long pId, String pMessage, RedirectAttributes pRedirect) {
         System.out.println("Frame " + pId + " not updated: " + pMessage);
         pRedirect.addFlashAttribute("errorMessage", pMessage);
-        return "redirect:/catalogue/frames?edit=frame&id=" + pId;
+        return "redirect:/catalogue?edit=frame&id=" + pId;
     }
 
     /** Sends the user back to the new frame form with one message on it. */
     private String backToNewFrame(String pMessage, RedirectAttributes pRedirect) {
         System.out.println("Frame not created: " + pMessage);
         pRedirect.addFlashAttribute("errorMessage", pMessage);
-        return "redirect:/catalogue/frames?add=true";
+        return "redirect:/catalogue?add=true";
     }
 
     /** Sends the user back to the lens option form with one message on it. */

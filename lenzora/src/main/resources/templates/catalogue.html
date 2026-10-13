@@ -101,11 +101,32 @@
         </div>
 
 
+        <!-- ================= TABS ================= -->
+
+        <ul class="nav nav-tabs mb-4">
+          <li class="nav-item">
+            <a class="nav-link" th:classappend="${lensForm == null} ? 'active'"
+               data-bs-toggle="tab" href="#frames-tab">
+              Frames
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:classappend="${lensForm != null} ? 'active'"
+               data-bs-toggle="tab" href="#lens-options-tab">
+              Lens Options
+            </a>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+
         <!-- ================================================= -->
         <!-- FRAMES -->
         <!-- ================================================= -->
 
-        <div class="card shadow-sm p-4 mb-4">
+        <div class="tab-pane fade" th:classappend="${lensForm == null} ? 'show active'" id="frames-tab">
+
+        <div class="card shadow-sm p-4">
 
           <div class="d-flex justify-content-between align-items-center mb-3">
 
@@ -121,26 +142,111 @@
 
             </div>
 
-            <span class="badge bg-secondary"
-                  th:text="${#lists.size(frames) + ' frame(s)'}">
-              8 frames
-            </span>
-            <div class="d-flex gap-2">
-              <a class="btn btn-primary btn-sm" th:href="@{/catalogue/frames}">Manage frames</a>
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-secondary"
+                    th:text="${#lists.size(frames) + ' frame(s)'}">
+                8 frames
+              </span>
+              <a class="btn btn-outline-primary btn-sm" th:href="@{/catalogue/frame-images}">View frame images</a>
+              <a class="btn btn-primary btn-sm" th:href="@{/catalogue(add='true')}">Add frame</a>
             </div>
+          </div>
+
+
+          <!-- EDIT FORM -->
+
+          <div th:if="${frameForm != null}">
+
+            <h5 class="mb-3"
+                th:text="${frameForm.frameId == null ? 'Add a frame' : 'Edit frame'}">
+              Add a frame
+            </h5>
+
+            <form th:action="${frameForm.frameId == null} ? @{/catalogue/frames} : @{/catalogue/frames/{id}(id=${frameForm.frameId})}"
+                  th:object="${frameForm}" method="post">
+
+              <div class="row g-3">
+
+                <div class="col-md-3">
+                  <label class="form-label" for="brand">Brand</label>
+                  <input class="form-control" id="brand" type="text" th:field="*{brand}" maxlength="50" required>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label" for="model">Model</label>
+                  <input class="form-control" id="model" type="text" th:field="*{model}" maxlength="50" required>
+                </div>
+
+                <div class="col-md-2">
+                  <label class="form-label" for="colour">Colour</label>
+                  <input class="form-control" id="colour" type="text" th:field="*{colour}" maxlength="30" required>
+                </div>
+
+                <div class="col-md-2">
+                  <label class="form-label" for="size">Size</label>
+                  <input class="form-control" id="size" type="text" th:field="*{size}" maxlength="20">
+                </div>
+
+                <div class="col-md-2">
+                  <label class="form-label" for="material">Material</label>
+                  <input class="form-control" id="material" type="text" th:field="*{material}" maxlength="30">
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label" for="price">Price (Rs)</label>
+                  <input class="form-control" id="price" type="number" step="0.01" min="0" th:field="*{price}" required>
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label" for="supplierId">Supplier</label>
+                  <select class="form-select" id="supplierId" name="supplierId" required>
+                    <option value="">-- Choose a supplier --</option>
+                    <option th:each="s : ${suppliers}"
+                            th:value="${s.supplierId}"
+                            th:selected="${frameForm.supplier != null and frameForm.supplier.supplierId == s.supplierId}"
+                            th:text="${s.supplierName}">Lenzora Supplies</option>
+                  </select>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label" for="imageUrl">Image URL</label>
+                  <input class="form-control" id="imageUrl" type="text" th:field="*{imageUrl}" maxlength="255"
+                         placeholder="https://example.com/frame.jpg">
+                </div>
+
+                <div class="col-md-12 d-flex align-items-end gap-4">
+                  <div class="form-check">
+                    <input class="form-check-input" id="frameAvailable" type="checkbox" th:field="*{available}">
+                    <label class="form-check-label" for="frameAvailable">Available</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" id="frameActive" type="checkbox" th:field="*{active}">
+                    <label class="form-check-label" for="frameActive">Active</label>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="mt-4 d-flex gap-2">
+                <button class="btn btn-primary" type="submit"
+                        th:text="${frameForm.frameId == null ? 'Add frame' : 'Save changes'}">Add frame</button>
+                <a class="btn btn-outline-secondary" th:href="@{/catalogue}">Cancel</a>
+              </div>
+
+            </form>
+
           </div>
 
 
           <!-- LIST -->
 
-          <div class="table-responsive">
+          <div class="table-responsive" th:unless="${frameForm != null}">
 
             <table class="table align-middle">
 
               <thead>
 
               <tr>
-                <th>Id</th>
                 <th>Brand</th>
                 <th>Model</th>
                 <th>Colour</th>
@@ -158,8 +264,6 @@
               <tbody>
 
               <tr th:each="f : ${frames}">
-
-                <td th:text="${f.frameId}">1</td>
 
                 <td th:text="${f.brand}">Guess</td>
 
@@ -191,7 +295,7 @@
 
                 <td>
                   <a class="btn btn-sm btn-outline-primary"
-                     th:href="@{/catalogue/frames(edit='frame',id=${f.frameId})}">
+                     th:href="@{/catalogue(edit='frame',id=${f.frameId})}">
                     Edit
                   </a>
                 </td>
@@ -204,6 +308,13 @@
 
           </div>
 
+          <div class="text-center py-4" th:if="${#lists.isEmpty(frames)}">
+            <p class="text-muted mb-3">No frames have been added yet.</p>
+            <a class="btn btn-primary" th:href="@{/catalogue(add='true')}">Add the first frame</a>
+          </div>
+
+        </div>
+
         </div>
 
 
@@ -211,7 +322,9 @@
         <!-- LENS OPTIONS -->
         <!-- ================================================= -->
 
-        <div class="card shadow-sm p-4 mb-4">
+        <div class="tab-pane fade" th:classappend="${lensForm != null} ? 'show active'" id="lens-options-tab">
+
+        <div class="card shadow-sm p-4">
 
           <div class="d-flex justify-content-between align-items-center mb-3">
 
@@ -340,6 +453,10 @@
             </table>
 
           </div>
+
+        </div>
+
+        </div>
 
         </div>
 

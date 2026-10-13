@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lenzora - Frame Images</title>
+    <title>Lenzora - Frames</title>
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/css/lenzora-theme.css}">
@@ -18,19 +18,75 @@
             border-radius: var(--lenzora-radius);
             background: var(--lenzora-surface);
             box-shadow: var(--lenzora-shadow-soft);
+            transition: transform .15s ease, box-shadow .15s ease;
         }
 
-        .frame-image, .frame-image-placeholder {
+        .frame-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--lenzora-shadow-md);
+        }
+
+        .frame-media {
+            position: relative;
+            height: 230px;
+            background: var(--lenzora-surface-alt);
+        }
+
+        .frame-media img {
+            position: absolute;
+            inset: 0;
             width: 100%;
-            height: 240px;
+            height: 100%;
             object-fit: contain;
             background: var(--lenzora-surface-alt);
         }
 
-        .frame-image-placeholder {
+        .frame-media-fallback {
+            position: absolute;
+            inset: 0;
             display: grid;
             place-items: center;
+            gap: .35rem;
             color: var(--lenzora-text-muted);
+            font-size: .85rem;
+            text-align: center;
+        }
+
+        .frame-media-fallback i {
+            font-size: 1.8rem;
+            opacity: .55;
+        }
+
+        .frame-name {
+            color: var(--lenzora-text);
+        }
+
+        .frame-tint {
+            color: var(--lenzora-text-muted);
+        }
+
+        .frame-details {
+            border-top: 1px dashed var(--lenzora-border);
+            margin-top: .85rem;
+            padding-top: .75rem;
+            display: grid;
+            gap: .35rem;
+            font-size: .85rem;
+        }
+
+        .frame-details .row-line {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .frame-details .row-line span:first-child {
+            color: var(--lenzora-text-muted);
+        }
+
+        .frame-price {
+            color: var(--lenzora-text);
+            font-weight: 700;
         }
 
         @media (max-width: 767.98px) {
@@ -51,33 +107,54 @@
                 <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
                     <div>
                         <div class="eyebrow">Catalogue</div>
-                        <h2 class="mb-1">Frame images</h2>
-                        <p class="text-muted mb-0">Browse frame photos and details from the catalogue.</p>
+                        <h2 class="mb-1">Frames</h2>
+                        <p class="text-muted mb-0">Browse the frame catalogue — photos, sizes and prices.</p>
                     </div>
+                    <span class="badge bg-secondary align-self-center"
+                          th:text="${#lists.size(frames) + ' frame(s)'}">0 frames</span>
                 </div>
                 <div class="row g-4" th:if="${!#lists.isEmpty(frames)}">
                     <div class="col-sm-6 col-xl-4" th:each="f : ${frames}">
-                        <article class="frame-card h-100">
-                            <img class="frame-image"
-                                 th:if="${f.imageUrl != null and !#strings.isEmpty(#strings.trim(f.imageUrl))}"
-                                 th:src="${f.imageUrl}" th:alt="${f.brand + ' ' + f.model}">
-                            <div class="frame-image-placeholder"
-                                 th:unless="${f.imageUrl != null and !#strings.isEmpty(#strings.trim(f.imageUrl))}">
-                                Image not added
+                        <article class="frame-card h-100"
+                                 th:with="hasImage=${f.imageUrl != null and !#strings.isEmpty(#strings.trim(f.imageUrl))}">
+                            <div class="frame-media">
+                                <div class="frame-media-fallback">
+                                    <i class="bi bi-image"></i>
+                                    <span>No image</span>
+                                </div>
+                                <img th:if="${hasImage}"
+                                     th:src="${f.imageUrl}"
+                                     th:alt="${f.brand + ' ' + f.model}"
+                                     loading="lazy"
+                                     onerror="this.style.display='none'">
                             </div>
                             <div class="p-3">
-                                <div class="d-flex justify-content-between align-items-start gap-2">
-                                    <div>
-                                        <h5 class="mb-1" th:text="${f.brand + ' ' + f.model}">Brand Model</h5>
-                                        <p class="text-muted small mb-2"
-                                           th:text="${(f.colour == null ? '' : f.colour) + (f.size == null ? '' : ' · ' + f.size)}">
-                                            Black · 52-18
-                                        </p>
-                                    </div>
+                                <div class="d-flex justify-content-between align-items-start gap-2 mb-1">
+                                    <h5 class="frame-name mb-0" th:text="${f.brand + ' ' + f.model}">Brand Model</h5>
                                     <span class="badge bg-success" th:if="${f.available and f.active}">Available</span>
                                     <span class="badge bg-secondary" th:unless="${f.available and f.active}">Not orderable</span>
                                 </div>
-                                <p class="fw-semibold mb-2"
+                                <p class="frame-tint small mb-0"
+                                   th:text="${(f.colour == null ? '' : f.colour) + (f.size == null ? '' : ' · ' + f.size)}">
+                                    Blue · 51-16
+                                </p>
+
+                                <div class="frame-details">
+                                    <div class="row-line">
+                                        <span>Material</span>
+                                        <span th:text="${f.material == null or #strings.isEmpty(f.material) ? '-' : f.material}">Metal</span>
+                                    </div>
+                                    <div class="row-line">
+                                        <span>Size</span>
+                                        <span th:text="${f.size == null or #strings.isEmpty(f.size) ? '-' : f.size}">51-16</span>
+                                    </div>
+                                    <div class="row-line">
+                                        <span>Supplier</span>
+                                        <span th:text="${f.supplier != null ? f.supplier.supplierName : '-'}">Lenzora Supplies</span>
+                                    </div>
+                                </div>
+
+                                <p class="frame-price mb-0 mt-3"
                                    th:text="${'Rs ' + #numbers.formatDecimal(f.price,1,'COMMA',2,'POINT')}">Rs 27,500.00</p>
                             </div>
                         </article>
