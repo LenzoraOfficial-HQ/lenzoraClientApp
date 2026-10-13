@@ -125,103 +125,15 @@
                   th:text="${#lists.size(frames) + ' frame(s)'}">
               8 frames
             </span>
-          </div>
-
-
-          <!-- EDIT FORM -->
-
-          <div th:if="${frameForm != null}">
-
-            <form th:action="@{/catalogue/frames/{id}(id=${frameForm.frameId})}"
-                  th:object="${frameForm}"
-                  method="post">
-
-              <div class="row g-3">
-
-                <div class="col-md-3">
-                  <label class="form-label" for="brand">Brand</label>
-                  <input type="text" class="form-control" id="brand" th:field="*{brand}" required>
-                </div>
-
-                <div class="col-md-3">
-                  <label class="form-label" for="model">Model</label>
-                  <input type="text" class="form-control" id="model" th:field="*{model}" required>
-                </div>
-
-                <div class="col-md-2">
-                  <label class="form-label" for="colour">Colour</label>
-                  <input type="text" class="form-control" id="colour" th:field="*{colour}" required>
-                </div>
-
-                <div class="col-md-2">
-                  <label class="form-label" for="size">Size</label>
-                  <input type="text" class="form-control" id="size" th:field="*{size}">
-                </div>
-
-                <div class="col-md-2">
-                  <label class="form-label" for="material">Material</label>
-                  <input type="text" class="form-control" id="material" th:field="*{material}">
-                </div>
-
-                <div class="col-md-3">
-                  <label class="form-label" for="price">Price (Rs)</label>
-                  <input type="number" step="0.01" min="0" class="form-control" id="price" th:field="*{price}" required>
-                </div>
-
-                <div class="col-md-3">
-                  <label class="form-label" for="supplierId">Supplier</label>
-                  <select class="form-select" id="supplierId" name="supplierId" required>
-                    <option value="">-- Choose a supplier --</option>
-                    <option th:each="s : ${suppliers}"
-                            th:value="${s.supplierId}"
-                            th:selected="${frameForm.supplier != null and frameForm.supplier.supplierId == s.supplierId}"
-                            th:text="${s.supplierName}">
-                      Lenzora Supplies
-                    </option>
-                  </select>
-                </div>
-
-                <div class="col-md-3">
-                  <label class="form-label" for="imageUrl">Image URL</label>
-                  <input type="text" class="form-control" id="imageUrl" th:field="*{imageUrl}">
-                </div>
-
-                <div class="col-md-3 d-flex align-items-end gap-4 pb-2">
-
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="available" th:field="*{available}">
-                    <label class="form-check-label" for="available">Available</label>
-                  </div>
-
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="active" th:field="*{active}">
-                    <label class="form-check-label" for="active">Active</label>
-                  </div>
-
-                </div>
-
-              </div>
-
-              <div class="mt-4 d-flex gap-2">
-
-                <button type="submit" class="btn btn-primary">
-                  Save Frame
-                </button>
-
-                <a class="btn btn-outline-secondary" th:href="@{/catalogue}">
-                  Cancel
-                </a>
-
-              </div>
-
-            </form>
-
+            <div class="d-flex gap-2">
+              <a class="btn btn-primary btn-sm" th:href="@{/catalogue/frames}">Manage frames</a>
+            </div>
           </div>
 
 
           <!-- LIST -->
 
-          <div class="table-responsive" th:unless="${frameForm != null}">
+          <div class="table-responsive">
 
             <table class="table align-middle">
 
@@ -279,7 +191,7 @@
 
                 <td>
                   <a class="btn btn-sm btn-outline-primary"
-                     th:href="@{/catalogue(edit='frame',id=${f.frameId})}">
+                     th:href="@{/catalogue/frames(edit='frame',id=${f.frameId})}">
                     Edit
                   </a>
                 </td>

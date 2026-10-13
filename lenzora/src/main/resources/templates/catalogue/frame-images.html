@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lenzora - Frame Images</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/lenzora-theme.css}">
+    <style>
+        .sidebar, main {
+            min-height: 100vh;
+        }
+
+        .frame-card {
+            overflow: hidden;
+            border: 1px solid var(--lenzora-border);
+            border-radius: var(--lenzora-radius);
+            background: var(--lenzora-surface);
+            box-shadow: var(--lenzora-shadow-soft);
+        }
+
+        .frame-image, .frame-image-placeholder {
+            width: 100%;
+            height: 240px;
+            object-fit: contain;
+            background: var(--lenzora-surface-alt);
+        }
+
+        .frame-image-placeholder {
+            display: grid;
+            place-items: center;
+            color: var(--lenzora-text-muted);
+        }
+
+        @media (max-width: 767.98px) {
+            .sidebar {
+                min-height: auto;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div th:replace="~{fragments/shell :: sidebar(${activeNav})}"></div>
+        <main class="col-md-10 p-0">
+            <div th:replace="~{fragments/shell :: topbar}"></div>
+            <div class="p-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+                    <div>
+                        <div class="eyebrow">Catalogue</div>
+                        <h2 class="mb-1">Frame images</h2>
+                        <p class="text-muted mb-0">Browse frame photos and details from the catalogue.</p>
+                    </div>
+                </div>
+                <div class="row g-4" th:if="${!#lists.isEmpty(frames)}">
+                    <div class="col-sm-6 col-xl-4" th:each="f : ${frames}">
+                        <article class="frame-card h-100">
+                            <img class="frame-image"
+                                 th:if="${f.imageUrl != null and !#strings.isEmpty(#strings.trim(f.imageUrl))}"
+                                 th:src="${f.imageUrl}" th:alt="${f.brand + ' ' + f.model}">
+                            <div class="frame-image-placeholder"
+                                 th:unless="${f.imageUrl != null and !#strings.isEmpty(#strings.trim(f.imageUrl))}">
+                                Image not added
+                            </div>
+                            <div class="p-3">
+                                <div class="d-flex justify-content-between align-items-start gap-2">
+                                    <div>
+                                        <h5 class="mb-1" th:text="${f.brand + ' ' + f.model}">Brand Model</h5>
+                                        <p class="text-muted small mb-2"
+                                           th:text="${(f.colour == null ? '' : f.colour) + (f.size == null ? '' : ' · ' + f.size)}">
+                                            Black · 52-18
+                                        </p>
+                                    </div>
+                                    <span class="badge bg-success" th:if="${f.available and f.active}">Available</span>
+                                    <span class="badge bg-secondary" th:unless="${f.available and f.active}">Not orderable</span>
+                                </div>
+                                <p class="fw-semibold mb-2"
+                                   th:text="${'Rs ' + #numbers.formatDecimal(f.price,1,'COMMA',2,'POINT')}">Rs 27,500.00</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <div class="card p-4 text-center" th:if="${#lists.isEmpty(frames)}">
+                    <p class="text-muted mb-0">No frames are available to display right now.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

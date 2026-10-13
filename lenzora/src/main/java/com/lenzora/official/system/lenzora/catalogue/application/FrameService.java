@@ -5,7 +5,7 @@ import com.lenzora.official.system.lenzora.catalogue.infrastructure.FrameReposit
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Updates frames in the catalogue. */
+/** Creates and updates frames in the catalogue. */
 @Service
 public class FrameService {
 
@@ -13,6 +13,12 @@ public class FrameService {
 
     public FrameService(FrameRepository frameRepository) {
         this.frameRepository = frameRepository;
+    }
+
+    /** Saves a new frame in the catalogue. */
+    @Transactional
+    public Frame createFrame(Frame frame) {
+        return frameRepository.save(frame);
     }
 
     /**

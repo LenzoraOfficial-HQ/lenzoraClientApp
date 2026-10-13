@@ -4,7 +4,7 @@
 <body>
 
 <!-- Sidebar. Pass the page key so the right item gets the gold pill:
-     sidebar('dashboard' | 'place-order' | 'admin' | 'admin-orders' | 'catalogue' | 'users' | 'reports' | 'settings' | 'audit-logs')
+     sidebar('dashboard' | 'place-order' | 'frames' | 'admin' | 'admin-orders' | 'catalogue' | 'users' | 'reports' | 'settings' | 'audit-logs')
      The client links belong to the orthoptists, the administration links to
      accounts whose app_user.user_role is ADMIN. Neither side sees the other's. -->
 <div class="col-md-2 sidebar p-4" th:fragment="sidebar(active)">
@@ -25,6 +25,11 @@
             <a href="/place-order" class="nav-link"
                th:classappend="${active == 'place-order'} ? 'active'">
                 <i class="bi bi-cart3"></i> Place Order
+            </a>
+
+            <a href="/catalogue/frame-images" class="nav-link"
+               th:classappend="${active == 'frames'} ? 'active'">
+                <i class="bi bi-eyeglasses"></i> Frames
             </a>
 
         </div>
@@ -48,6 +53,11 @@
             <a href="/catalogue" class="nav-link"
                th:classappend="${active == 'catalogue'} ? 'active'">
                 <i class="bi bi-box-seam"></i> Catalogue
+            </a>
+
+            <a href="/catalogue/frames" class="nav-link"
+               th:classappend="${active == 'frames'} ? 'active'">
+                <i class="bi bi-eyeglasses"></i> Frames
             </a>
 
             <a href="/admin/suppliers" class="nav-link"

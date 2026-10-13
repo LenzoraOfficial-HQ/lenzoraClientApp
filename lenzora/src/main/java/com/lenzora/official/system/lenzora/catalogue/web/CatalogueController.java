@@ -9,8 +9,11 @@ import com.lenzora.official.system.lenzora.catalogue.domain.Supplier;
 import com.lenzora.official.system.lenzora.catalogue.infrastructure.FrameRepository;
 import com.lenzora.official.system.lenzora.catalogue.infrastructure.LensOptionRepository;
 import com.lenzora.official.system.lenzora.catalogue.infrastructure.SupplierRepository;
+import com.lenzora.official.system.lenzora.config.RoleChecks;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -77,11 +80,33 @@ public class CatalogueController {
         model.addAttribute("lensOptions", lensOptionRepository.findAll());
         model.addAttribute("suppliers", supplierRepository.findAll());
 
-        model.addAttribute("frameForm", frameInEdit(pEdit, pId));
         model.addAttribute("lensForm", lensOptionInEdit(pEdit, pId));
         model.addAttribute("supplierForm", supplierInEdit(pEdit, pId));
 
         return "catalogue";
+    }
+
+    @GetMapping("/frames")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String showFrames(@RequestParam(name = "add", required = false) String pAdd,
+                             @RequestParam(name = "edit", required = false) String pEdit,
+                             @RequestParam(name = "id", required = false) Long pId,
+                             Model model) {
+        model.addAttribute("frames", frameRepository.findAll());
+        model.addAttribute("suppliers", supplierRepository.findAll());
+        model.addAttribute("frameForm", frameForm(pAdd, pEdit, pId));
+        model.addAttribute("activeNav", "frames");
+        return "catalogue/frames";
+    }
+
+    @GetMapping("/frame-images")
+    public String showFrameImages(Model model, Authentication authentication) {
+        boolean isAdmin = RoleChecks.isAdmin(authentication);
+        model.addAttribute("frames", isAdmin
+                ? frameRepository.findAll()
+                : frameRepository.findByAvailableTrueAndActiveTrue());
+        model.addAttribute("activeNav", "frames");
+        return "catalogue/frame-images";
     }
 
     @GetMapping("/suppliers")
@@ -89,7 +114,39 @@ public class CatalogueController {
         return "redirect:/admin/suppliers";
     }
 
+    @PostMapping("/frames")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String createFrame(@ModelAttribute("frameForm") Frame pForm,
+                              BindingResult pErrors,
+                              @RequestParam(name = "supplierId", required = false) Long pSupplierId,
+                              RedirectAttributes pRedirect) {
+        if (pErrors.hasErrors()) {
+            return backToNewFrame(firstProblem(pErrors), pRedirect);
+        }
+
+        Supplier supplier = pSupplierId == null
+                ? null
+                : supplierRepository.findById(pSupplierId).orElse(null);
+        if (supplier == null) {
+            return backToNewFrame("Please choose a supplier for the frame.", pRedirect);
+        }
+        pForm.setSupplier(supplier);
+
+        try {
+            frameService.createFrame(pForm);
+        } catch (DataIntegrityViolationException problem) {
+            return backToNewFrame("The database refused these values. Check the brand, model, colour and price.", pRedirect);
+        } catch (RuntimeException problem) {
+            return backToNewFrame(problem.getMessage(), pRedirect);
+        }
+
+        pRedirect.addFlashAttribute("successMessage",
+                "Frame " + pForm.getBrand() + " " + pForm.getModel() + " added successfully.");
+        return "redirect:/catalogue/frames";
+    }
+
     @PostMapping("/frames/{pId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String saveFrame(@PathVariable Long pId,
                             @ModelAttribute("frameForm") Frame pForm,
                             BindingResult pErrors,
@@ -119,7 +176,7 @@ public class CatalogueController {
         }
 
         pRedirect.addFlashAttribute("successMessage", "Frame " + pForm.getBrand() + " " + pForm.getModel() + " updated successfully.");
-        return "redirect:/catalogue";
+        return "redirect:/catalogue/frames";
     }
 
     @PostMapping("/lens-options/{pId}")
@@ -166,8 +223,11 @@ public class CatalogueController {
         return "redirect:/catalogue";
     }
 
-    /** Reads the frame being edited, or null while the whole table is shown. */
-    private Frame frameInEdit(String pEdit, Long pId) {
+    /** Reads the frame being edited, or creates a blank form when requested. */
+    private Frame frameForm(String pAdd, String pEdit, Long pId) {
+        if ("true".equals(pAdd)) {
+            return new Frame();
+        }
         if (pId == null || !"frame".equals(pEdit)) {
             return null;
         }
@@ -194,7 +254,14 @@ public class CatalogueController {
     private String backToFrame(Long pId, String pMessage, RedirectAttributes pRedirect) {
         System.out.println("Frame " + pId + " not updated: " + pMessage);
         pRedirect.addFlashAttribute("errorMessage", pMessage);
-        return "redirect:/catalogue?edit=frame&id=" + pId;
+        return "redirect:/catalogue/frames?edit=frame&id=" + pId;
+    }
+
+    /** Sends the user back to the new frame form with one message on it. */
+    private String backToNewFrame(String pMessage, RedirectAttributes pRedirect) {
+        System.out.println("Frame not created: " + pMessage);
+        pRedirect.addFlashAttribute("errorMessage", pMessage);
+        return "redirect:/catalogue/frames?add=true";
     }
 
     /** Sends the user back to the lens option form with one message on it. */
