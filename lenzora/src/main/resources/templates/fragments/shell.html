@@ -82,11 +82,6 @@
 
         </div>
 
-        <a href="/admin/orthoptists" class="nav-link"
-           sec:authorize="hasRole('ADMIN')">
-            <i class="bi bi-person-check"></i> Approvals
-        </a>
-
         <a href="/admin/audit-logs" class="nav-link"
            th:classappend="${active == 'audit-logs'} ? 'active'"
            sec:authorize="hasRole('ADMIN')">
