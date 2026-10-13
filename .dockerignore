@@ -1,0 +1,11 @@
+.git
+.github
+.vscode
+Archives
+finalizedrequirements.md
+SQL queries RathnayakeTM should add.md
+lenzora/DMS_projectreport
+lenzora/target
+lenzora/.env
+lenzora/.env.*
+*.log
