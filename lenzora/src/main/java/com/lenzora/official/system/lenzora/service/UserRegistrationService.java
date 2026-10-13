@@ -71,7 +71,9 @@ public class UserRegistrationService {
         user.setEmail(email);
         user.setPasswordHash(passwordEncoder.encode(password));
         user.setRole("ORTHOPTIST");
-        user.setAccountStatus(AccountStatus.PENDING);
+        // New sign-ups are usable straight away, like a normal app account.
+        user.setAccountStatus(AccountStatus.ACTIVE);
+        user.setProfileCompleted(true);
 
         LocalDateTime now = LocalDateTime.now();
         user.setCreatedAt(now);
