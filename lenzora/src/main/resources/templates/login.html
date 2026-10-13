@@ -402,7 +402,8 @@
         <!-- GOOGLE LOGIN -->
 
         <a href="/oauth2/authorization/google"
-           class="google-login-button">
+           class="google-login-button"
+           th:if="${googleLoginEnabled}">
 
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
                  alt="Google"
@@ -418,6 +419,11 @@
         <div class="login-error"
              th:if="${param.error != null}">
             Email or password is incorrect. Use the email address you registered with.
+        </div>
+
+        <div class="login-error"
+             th:if="${param.oauthError != null}">
+            Google sign-in did not finish. Please try again, or log in with your email and password.
         </div>
 
         <div class="login-notice"
