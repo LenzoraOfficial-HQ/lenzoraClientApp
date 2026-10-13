@@ -86,7 +86,7 @@ public class SecurityConfig {
                             if (user == null || user.getAccountStatus() == AccountStatus.REJECTED) {
                                 return new AuthorizationDecision(false);
                             }
-                            if (!user.isProfileCompleted()) {
+                            if (!user.hasProfessionalProfile()) {
                                 return new AuthorizationDecision(
                                         "/orthoptist/profile".equals(context.getRequest().getRequestURI()));
                             }
@@ -138,7 +138,7 @@ public class SecurityConfig {
         } else if ("ORTHOPTIST".equals(user.getRole())
                 && user.getAccountStatus() == AccountStatus.REJECTED) {
             response.sendRedirect("/registration/rejected");
-        } else if ("ORTHOPTIST".equals(user.getRole()) && !user.isProfileCompleted()) {
+        } else if ("ORTHOPTIST".equals(user.getRole()) && !user.hasProfessionalProfile()) {
             response.sendRedirect("/orthoptist/profile");
         } else if ("ORTHOPTIST".equals(user.getRole())
                 && user.getAccountStatus() == AccountStatus.PENDING) {
@@ -167,7 +167,7 @@ public class SecurityConfig {
                     response.sendRedirect("/registration/rejected");
                     return;
                 }
-                if (!user.isProfileCompleted()) {
+                if (!user.hasProfessionalProfile()) {
                     response.sendRedirect("/orthoptist/profile");
                     return;
                 }

@@ -43,11 +43,14 @@ class OrthoptistProfileServiceTest {
     @Test
     void profileCanOnlyBeCompletedOnce() {
         User user = pendingOrthoptist();
+        user.setLicenseNumber("ORTH-123");
+        user.setPhone("0771234567");
+        user.setBranch("Colombo");
         user.setProfileCompleted(true);
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
         assertThrows(IllegalArgumentException.class,
-            () -> profileService.completeProfile(user.getEmail(), "ORTH-123", "0771234567", "Colombo"));
+            () -> profileService.completeProfile(user.getEmail(), "ORTH-456", "0779876543", "Kandy"));
     }
 
     private User pendingOrthoptist() {

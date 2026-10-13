@@ -45,7 +45,7 @@ public class OrthoptistApprovalService {
 
         if (!"ORTHOPTIST".equals(orthoptist.getRole())
                 || orthoptist.getAccountStatus() != AccountStatus.PENDING
-                || !orthoptist.isProfileCompleted()) {
+                || !orthoptist.hasProfessionalProfile()) {
             throw new IllegalArgumentException(
                     "Only pending Orthoptist accounts with a completed profile can be updated.");
         }

@@ -32,7 +32,7 @@ public class OrthoptistProfileController {
         if (user.getAccountStatus() == AccountStatus.REJECTED) {
             return "redirect:/registration/rejected";
         }
-        if (user.isProfileCompleted()) {
+        if (user.hasProfessionalProfile()) {
             return user.getAccountStatus() == AccountStatus.PENDING
                     ? "redirect:/registration/pending" : "redirect:/";
         }
@@ -56,6 +56,11 @@ public class OrthoptistProfileController {
             model.addAttribute("phone", phone);
             model.addAttribute("branch", branch);
             return "orthoptist-profile";
+        }
+
+        User saved = userRepository.findByEmail(authentication.getName()).orElse(null);
+        if (saved != null && saved.getAccountStatus() != AccountStatus.PENDING) {
+            return "redirect:/";
         }
         return "redirect:/registration/pending";
     }

@@ -144,6 +144,25 @@ public class User extends BaseAuditableEntity {
         return profileCompleted;
     }
 
+    /**
+     * Tells whether the account carries a saved, usable professional profile.
+     * The stored flag on its own is not enough - an account only counts as
+     * complete once the license number, contact number and branch are all there.
+     *
+     * @return true when the flag is set and every professional detail is present
+     */
+    public boolean hasProfessionalProfile() {
+        return profileCompleted
+                && hasText(licenseNumber)
+                && hasText(phone)
+                && hasText(branch);
+    }
+
+    /** @return true when the text is present and not blank */
+    private static boolean hasText(String pValue) {
+        return pValue != null && !pValue.isBlank();
+    }
+
     public void setProfileCompleted(boolean profileCompleted) {
         this.profileCompleted = profileCompleted;
     }

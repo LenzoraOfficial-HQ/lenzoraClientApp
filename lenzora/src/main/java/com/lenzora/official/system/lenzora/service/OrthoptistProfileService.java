@@ -26,7 +26,7 @@ public class OrthoptistProfileService {
                 || user.getAccountStatus() == AccountStatus.REJECTED) {
             throw new IllegalArgumentException("This account cannot complete an Orthoptist profile.");
         }
-        if (user.isProfileCompleted()) {
+        if (user.hasProfessionalProfile()) {
             throw new IllegalArgumentException("The Orthoptist profile has already been completed.");
         }
 
