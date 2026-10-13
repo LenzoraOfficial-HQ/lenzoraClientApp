@@ -1,4 +1,4 @@
-package com.lenzora.official.system.lenzora;
+package com.lenzora.official.system.lenzora.controller;
 
 import com.lenzora.official.system.lenzora.catalogue.infrastructure.FrameRepository;
 import com.lenzora.official.system.lenzora.catalogue.infrastructure.LensOptionRepository;
@@ -8,8 +8,12 @@ import com.lenzora.official.system.lenzora.ordering.Order;
 import com.lenzora.official.system.lenzora.ordering.OrderRepository;
 import com.lenzora.official.system.lenzora.ordering.OrderResult;
 import com.lenzora.official.system.lenzora.ordering.OrderService;
+import com.lenzora.official.system.lenzora.repository.AuditLogRepository;
 import com.lenzora.official.system.lenzora.repository.UserRepository;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -47,10 +51,13 @@ public class AdminController {
     /** Keeps the hospital details the orders are sent to. */
     private final HospitalSettings hospitalSettings;
 
+    /** Reads the system audit logs. */
+    private final AuditLogRepository auditLogRepository;
+
     public AdminController(UserRepository pUserRepository, OrderRepository pOrderRepository,
                            OrderService pOrderService, FrameRepository pFrameRepository,
                            LensOptionRepository pLensOptionRepository, SupplierRepository pSupplierRepository,
-                           HospitalSettings pHospitalSettings) {
+                           HospitalSettings pHospitalSettings, AuditLogRepository pAuditLogRepository) {
 
         this.userRepository = pUserRepository;
         this.orderRepository = pOrderRepository;
@@ -59,6 +66,7 @@ public class AdminController {
         this.lensOptionRepository = pLensOptionRepository;
         this.supplierRepository = pSupplierRepository;
         this.hospitalSettings = pHospitalSettings;
+        this.auditLogRepository = pAuditLogRepository;
     }
 
     /**
@@ -98,6 +106,25 @@ public class AdminController {
                 orderRepository.findByStatusOrderByOrderDateDescIdDesc(Order.OrderStatus.REVIEWED));
 
         return "admin-orders";
+    }
+
+    /**
+     * Shows the audit logs page with recorded system events.
+     *
+     * @param pageable pagination parameters
+     * @param model the data handed to admin-audit-logs.html
+     * @return the name of the page to show
+     */
+    @GetMapping("/admin/audit-logs")
+    public String showAuditLogs(
+            @PageableDefault(size = 15) Pageable pageable,
+            Model model) {
+        
+        long totalLogs = auditLogRepository.count();
+        System.out.println(">>> DEBUG: Total audit logs found in DB = " + totalLogs);
+
+        model.addAttribute("auditLogs", auditLogRepository.findAllByOrderByCreatedAtDesc(pageable));
+        return "admin-audit-logs";
     }
 
     /**

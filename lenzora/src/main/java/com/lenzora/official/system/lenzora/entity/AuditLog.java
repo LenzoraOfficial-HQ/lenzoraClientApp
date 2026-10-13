@@ -71,6 +71,14 @@ public class AuditLog {
          this.user = user; 
     }
 
+    /** Returns the ID of the associated user, or null if unassigned. */
+    public Long getUserId() {
+        if (user != null) {
+            return user.getUserId();
+        }
+        return null;
+    }
+
     public String getUsername() {
         if (user != null) {
             return user.getEmail();
