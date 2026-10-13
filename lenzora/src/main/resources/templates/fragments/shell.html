@@ -50,6 +50,11 @@
                 <i class="bi bi-clipboard-check"></i> Order Review
             </a>
 
+            <a href="/admin/order-status" class="nav-link"
+               th:classappend="${active == 'order-status'} ? 'active'">
+                <i class="bi bi-clock-history"></i> Order Status
+            </a>
+
             <a href="/admin/notifications" class="nav-link"
                th:classappend="${active == 'notifications'} ? 'active'">
                 <i class="bi bi-bell"></i> Notification Management
