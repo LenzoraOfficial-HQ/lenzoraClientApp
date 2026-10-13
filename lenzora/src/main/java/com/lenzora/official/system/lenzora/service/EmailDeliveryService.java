@@ -4,6 +4,10 @@ import com.lenzora.official.system.lenzora.entity.EmailDelivery;
 import com.lenzora.official.system.lenzora.repository.EmailDeliveryRepository;
 import org.springframework.stereotype.Service;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +18,11 @@ public class EmailDeliveryService {
 
     private final EmailDeliveryRepository emailDeliveryRepository;
 
+    private final JavaMailSender mailSender;
+
+    @Value("${spring.mail.from:}")
+    private String fromEmail;
+
     /**
      * Creates the email delivery service.
      *
@@ -21,8 +30,11 @@ public class EmailDeliveryService {
      *                                 email delivery records
      */
     public EmailDeliveryService(
-            EmailDeliveryRepository emailDeliveryRepository) {
+            EmailDeliveryRepository emailDeliveryRepository,
+            JavaMailSender mailSender) {
+
         this.emailDeliveryRepository = emailDeliveryRepository;
+        this.mailSender = mailSender;
     }
 
     /**
@@ -172,6 +184,64 @@ public class EmailDeliveryService {
      */
     public void deleteEmailDelivery(Long emailId) {
         emailDeliveryRepository.deleteById(emailId);
+    }
+
+    public boolean sendEmail(Long emailId) {
+
+        EmailDelivery emailDelivery = emailDeliveryRepository
+                .findById(emailId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "Email delivery record not found: " + emailId
+                        )
+                );
+
+        // Prevent sending an email that has already been sent.
+        if ("SENT".equals(emailDelivery.getStatus())) {
+            return false;
+        }
+
+        try {
+            if (fromEmail == null || fromEmail.isBlank()) {
+                throw new IllegalStateException(
+                        "Email sender is not configured. Please configure MAIL_FROM."
+                );
+            }
+
+            if (emailDelivery.getRecipientEmail() == null
+                    || emailDelivery.getRecipientEmail().isBlank()) {
+                throw new IllegalArgumentException(
+                        "Recipient email address is missing."
+                );
+            }
+
+            SimpleMailMessage message = new SimpleMailMessage();
+
+            message.setFrom(fromEmail);
+            message.setTo(emailDelivery.getRecipientEmail());
+            message.setSubject(emailDelivery.getSubject());
+            message.setText(emailDelivery.getBody());
+
+            // Attempt to send the actual email.
+            mailSender.send(message);
+
+            // Update the existing database record.
+            markAsSent(emailId);
+
+            return true;
+
+        } catch (Exception exception) {
+
+            String errorMessage = exception.getMessage();
+
+            if (errorMessage == null || errorMessage.isBlank()) {
+                errorMessage = exception.getClass().getSimpleName();
+            }
+
+            markAsFailed(emailId, errorMessage);
+
+            return false;
+        }
     }
 }
 

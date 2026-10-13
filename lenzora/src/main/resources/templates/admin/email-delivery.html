@@ -219,6 +219,31 @@
 
             <main class="main-content">
 
+                <!-- Email delivery feedback -->
+                <div th:if="${successMessage}"
+                     class="alert alert-success alert-dismissible fade show"
+                     role="alert">
+
+                    <span th:text="${successMessage}"></span>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+                </div>
+
+                <div th:if="${errorMessage}"
+                     class="alert alert-danger alert-dismissible fade show"
+                     role="alert">
+
+                    <span th:text="${errorMessage}"></span>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+                </div>
+
                 <!-- Page heading -->
                 <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
@@ -234,11 +259,23 @@
                         </p>
                     </div>
 
-                    <a th:href="@{/admin/email-delivery/create}"
-                       class="btn btn-gold">
-                        <i class="bi bi-send me-2"></i>
-                        Create Email
-                    </a>
+                    <div class="d-flex flex-wrap gap-2">
+
+                        <a th:href="@{/admin/email-delivery/orders}"
+                           class="btn btn-gold">
+
+                            <i class="bi bi-box-seam me-2"></i>
+                            Select Order
+                        </a>
+
+                        <a th:href="@{/admin/email-delivery/create}"
+                           class="btn btn-outline-secondary">
+
+                            <i class="bi bi-pencil-square me-2"></i>
+                            Create Email Manually
+                        </a>
+
+                    </div>
 
                 </div>
 
@@ -337,6 +374,7 @@
                                 <th>Attempts</th>
                                 <th>Sent At</th>
                                 <th>Last Error</th>
+                                <th>Action</th>
                             </tr>
                             </thead>
 
@@ -393,6 +431,25 @@
 
                                     <span th:if="${email.lastError == null or #strings.isEmpty(email.lastError)}"
                                           class="text-muted">—</span>
+                                </td>
+
+                                <td>
+                                    <form th:if="${email.status != 'SENT'}"
+                                          th:action="@{/admin/email-delivery/send/{id}(id=${email.emailId})}"
+                                          method="post"
+                                          onsubmit="return confirm('Are you sure you want to send this email?');">
+
+                                        <button type="submit" class="btn btn-sm btn-gold">
+                                            <i class="bi bi-send me-1"></i>
+                                            Send Email
+                                        </button>
+                                    </form>
+
+                                    <span th:if="${email.status == 'SENT'}"
+                                          class="text-success">
+                                        <i class="bi bi-check-circle me-1"></i>
+                                        Sent
+                                    </span>
                                 </td>
 
                             </tr>

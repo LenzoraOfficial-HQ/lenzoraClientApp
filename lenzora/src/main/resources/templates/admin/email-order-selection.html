@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Select Order | Lenzora</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/lenzora-theme.css}">
+
+    <style>
+        body {
+            background-color: var(--lenzora-bg);
+            background-image: var(--lenzora-app-image);
+            background-size: cover;
+            background-position: center top;
+            background-attachment: fixed;
+            color: var(--lenzora-text);
+            font-family: var(--lenzora-font);
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #202b3e;
+        }
+
+        .content-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 5px 18px rgba(25, 41, 67, 0.05);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #efd477, #bd941b);
+            color: #111;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-weight: bold;
+        }
+
+        .btn-gold:hover {
+            background: #d4ad32;
+            color: #111;
+        }
+
+        .table thead th {
+            background: #f5f7fa;
+            color: #75849d;
+            font-size: 12px;
+            text-transform: uppercase;
+            white-space: nowrap;
+            padding: 15px;
+        }
+
+        .table tbody td {
+            padding: 15px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <!-- Shared Lenzora sidebar -->
+        <div th:replace="~{fragments/shell :: sidebar('email-delivery')}"></div>
+
+        <div class="col-md-10 p-0">
+
+            <!-- Shared Lenzora top navigation -->
+            <div th:replace="~{fragments/shell :: topbar}"></div>
+
+            <main class="main-content">
+
+                <div class="mb-4">
+                    <h1 class="page-title">Select an Order</h1>
+
+                    <p class="text-secondary">
+                        Choose an order to prepare an email for its relevant suppliers.
+                    </p>
+                </div>
+
+                <section class="content-panel">
+
+                    <div class="table-responsive"
+                         th:if="${orders != null and !#lists.isEmpty(orders)}">
+
+                        <table class="table align-middle">
+
+                            <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Order Number</th>
+                                <th>Hospital</th>
+                                <th>Order Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            <tr th:each="order : ${orders}">
+
+                                <td th:text="${order.id}">1</td>
+
+                                <td th:text="${order.orderNumber}">
+                                    ORD-001
+                                </td>
+
+                                <td th:text="${order.hospitalName}">
+                                    Hospital
+                                </td>
+
+                                <td th:text="${order.orderDate != null
+                                    ? #temporals.format(order.orderDate, 'dd MMM yyyy')
+                                    : '—'}">
+                                    Date
+                                </td>
+
+                                <td th:text="${order.status}">
+                                    SUBMITTED
+                                </td>
+
+                                <td>
+                                    <a th:href="@{/admin/email-delivery/orders/{id}/generate(id=${order.id})}"
+                                       class="btn btn-gold">
+
+                                        <i class="bi bi-envelope me-1"></i>
+                                        Generate Email
+                                    </a>
+                                </td>
+
+                            </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div th:if="${orders == null or #lists.isEmpty(orders)}"
+                         class="text-center py-5">
+
+                        <h5>No orders available</h5>
+
+                        <p class="text-secondary mb-0">
+                            Orders will appear here when they are available.
+                        </p>
+
+                    </div>
+
+                    <a th:href="@{/admin/email-delivery}"
+                       class="btn btn-outline-secondary mt-3">
+
+                        Back to Email Delivery
+                    </a>
+
+                </section>
+
+            </main>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
